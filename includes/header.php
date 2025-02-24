@@ -84,12 +84,12 @@
     </div>
     <nav>
         <ul class="nav-links">
-            <li><a href="/RESCUENET/personel/personel_index.php">PERSONNELS</a></li>
-            <li><a href="/RESCUENET/incidents/reports.php">REPORTS</a></li>
-            <li><a href="/RESCUENET/asset/item_index.php">ASSETS</a></li>
+            <li><a href="/rescueflow/personel/personel_index.php">PERSONNELS</a></li>
+            <li><a href="/rescueflow/incidents/reports.php">REPORTS</a></li>
+            <li><a href="/rescueflow/asset/item_index.php">ASSETS</a></li>
             <li><a href="">ATTENDANCE</a></li>
-            <li><a href="/RESCUENET/shift/shift_index.php">SHIFTS</a></li>
-            <li><a href="/RESCUENET/trainings/training_index.php">TRAINING SCHEDULE</a></li>
+            <li><a href="/rescueflow/shift/shift_index.php">SHIFTS</a></li>
+            <li><a href="/rescueflow/trainings/training_index.php">TRAINING SCHEDULE</a></li>
         </ul>
     </nav>
     <div class="user-icons">
@@ -97,11 +97,11 @@
         <div class="dropdown">
             <a href="#" title="Settings" class="icon dropdown-toggle">&#9881;</a> <!-- Settings icon -->
             <div class="dropdown-menu">
-                <a href="/RESCUENET/personel/index.php">add personel</a>
-                <a href="/RESCUENET/trainings/index.php">add training</a>
-                <a href="/RESCUENET/asset/index.php">add asset</a>
-                <a href="/RESCUENET/shift/index.php">add shifts</a>
-                <a href="/RESCUENET/incidents/index.php">add incidents</a>
+                <a href="/rescueflow/personel/index.php">add personel</a>
+                <a href="/rescueflow/trainings/index.php">add training</a>
+                <a href="/rescueflow/asset/index.php">add asset</a>
+                <a href="/rescueflow/shift/index.php">add shifts</a>
+                <a href="/rescueflow/incidents/index.php">add incidents</a>
             </div>
         </div>
     </div>
