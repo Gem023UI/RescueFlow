@@ -84,7 +84,7 @@
     </div>
     <nav>
         <ul class="nav-links">
-            <li><a href="/rescueflow/personel/personel_index.php">PERSONNELS</a></li>
+            <li><a href="/rescueflow/personnel/personel_index.php">PERSONNELS</a></li>
             <li><a href="/rescueflow/incidents/reports.php">REPORTS</a></li>
             <li><a href="/rescueflow/asset/item_index.php">ASSETS</a></li>
             <li><a href="">ATTENDANCE</a></li>
