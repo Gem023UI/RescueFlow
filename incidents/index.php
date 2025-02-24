@@ -1,8 +1,7 @@
 <?php
-ob_start(); // Prevent output before headers
-
-require '../includes/config.php';
-include '../includes/header.php';
+session_start(); // Prevent output before headers
+include('../includes/config.php');
+include('../includes/header.php');
 
 // Handle Create & Update
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -112,8 +111,7 @@ $result = $conn->query($sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Incident Reports</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body class="container mt-4">
     <h1 class="mb-4">Incident Reports</h1>

@@ -79,8 +79,8 @@
 <body>
 <header>
     <div class="logo-container">
-        <img src="user/images/BFP STATION 1 LOGO.png" alt="BFP Logo" class="logo">
-        <div class="title">BFP NCR - STATION 1</div>
+        <img src="user/images/BFP STATION 1 LOGO.png" alt="BFP Logo" class="logo" href="/rescueflow/index.php">
+        <div class="title" href="/rescueflow/index.php">BFP NCR - STATION 1</div>
     </div>
     <nav>
         <ul class="nav-links">
@@ -89,7 +89,8 @@
             <li><a href="/rescueflow/asset/item_index.php">ASSETS</a></li>
             <li><a href="">ATTENDANCE</a></li>
             <li><a href="/rescueflow/shift/shift_index.php">SHIFTS</a></li>
-            <li><a href="/rescueflow/trainings/training_index.php">TRAINING SCHEDULE</a></li>
+            <li><a href="/rescueflow/trainings/training_index.php">ACTIVITIES</a></li>
+            <li><a href="/rescueflow/dispatch/dispatchIndex.php">DISPATCH</a></li>
         </ul>
     </nav>
     <div class="user-icons">
