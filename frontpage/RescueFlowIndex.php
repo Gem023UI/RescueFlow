@@ -1,7 +1,7 @@
 <?php
 session_start();
-include('./includes/config.php');
-include('./includes/check_admin.php');
+include('../includes/config.php');
+include('../includes/check_admin.php');
 
 if (!isset($conn)) {
     die("Database connection failed.");
