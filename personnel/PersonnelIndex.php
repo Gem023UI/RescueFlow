@@ -2,33 +2,28 @@
 session_start();
 include('../includes/config.php');
 
-if (!isset($conn)) {
-    die("Database connection failed.");
-}
+// Fetch members data
+$sql = "SELECT members.member_id, members.first_name, members.last_name, members.email, members.phone, members.image, 
+               ranks.rank_name, roles.role_name 
+        FROM members
+        LEFT JOIN ranks ON members.rank_id = ranks.rank_id
+        LEFT JOIN roles ON members.role_id = roles.role_id";
 
-$sql = "SELECT * FROM dispatches WHERE status_id != 3 ORDER BY dispatched_at DESC"; 
 $result = $conn->query($sql);
-
-$locations = [];
-while ($row = $result->fetch_assoc()) {
-    $locations[] = $row;
-}
-
-$conn->close();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="5"> <!-- Refresh page every 5 seconds -->
-  <title>BFP NCR Taguig City</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="5"> <!-- Refresh page every 5 seconds -->
+    <title>Personnel Management</title>
+    <link rel="stylesheet" href="style.css">
   <script type="text/javascript" src="app.js" defer></script>
 </head>
 <body>
-  <nav id="sidebar">
+    <nav id="sidebar">
     <ul>
       <li>
         <span class="logo">BFP NCR Taguig S1</span>
@@ -36,8 +31,8 @@ $conn->close();
           <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z"/></svg>
         </button>
       </li>
-      <li class="active">
-        <a href="RescueFlowIndex.php" >
+      <li>
+        <a href="../dashboard/RescueFlowIndex.php" >
           <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M240-200h120v-200q0-17 11.5-28.5T400-440h160q17 0 28.5 11.5T600-400v200h120v-360L480-740 240-560v360Zm-80 0v-360q0-19 8.5-36t23.5-28l240-180q21-16 48-16t48 16l240 180q15 11 23.5 28t8.5 36v360q0 33-23.5 56.5T720-120H560q-17 0-28.5-11.5T520-160v-200h-80v200q0 17-11.5 28.5T400-120H240q-33 0-56.5-23.5T160-200Zm320-270Z"/></svg>
           <span>Dashboard</span>
         </a>
@@ -83,7 +78,7 @@ $conn->close();
           </div>
         </ul>
       </li>
-      <li>
+      <li class="active">
         <a href="../personnel/PersonnelIndex.php">
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="M440-280h320v-22q0-45-44-71.5T600-400q-72 0-116 26.5T440-302v22Zm160-160q33 0 56.5-23.5T680-520q0-33-23.5-56.5T600-600q-33 0-56.5 23.5T520-520q0 33 23.5 56.5T600-440ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Z"/></svg>
           <span>Personnels</span>
@@ -96,34 +91,46 @@ $conn->close();
         </a>
       </li>
     </ul>
-  </nav>
-  <main>
-    <div class="container">
-      <h2>DISPATCH DASHBOARD</h2>
-      <?php if (empty($locations)): ?>
-        <p>The incident has been resolved.</p>
-        <?php else: ?>
-        <ul>
-            <?php foreach ($locations as $location): ?>
-                <li>
-                    <strong><?php echo htmlspecialchars($location['location']); ?></strong> 
-                    (Submitted on <?php echo $location['dispatched_at']; ?>)
-                    <br>
-                    <iframe width="100%" height="300" src="https://maps.google.com/maps?q=<?php echo urlencode($location['location']); ?>&output=embed"></iframe>
-                </li>
-                <hr>
-            <?php endforeach; ?>
-        </ul>
-        <?php endif; ?>
+    </nav>
+    <main>
+    <div class="container mt-5">
+    <h1 class="mb-4">Personnel Management</h1>
+    <table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Image</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Rank</th>
+            <th>Role</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php while ($row = $result->fetch_assoc()): ?>
+            <tr>
+                <td><?= $row['member_id']; ?></td>
+                <td>
+                    <?php if (!empty($row['image']) && file_exists("../personel/images/" . $row['image'])): ?>
+                        <img src="../personel/images/<?= htmlspecialchars($row['image']); ?>" width="50" height="50" class="rounded-circle">
+                    <?php else: ?>
+                        <img src="../personel/images/default.jpg" width="50" height="50" class="rounded-circle">
+                    <?php endif; ?>
+                </td>
+                <td><?= $row['first_name']; ?></td>
+                <td><?= $row['last_name']; ?></td>
+                <td><?= $row['email']; ?></td>
+                <td><?= $row['phone']; ?></td>
+                <td><?= $row['rank_name'] ?? 'N/A'; ?></td>
+                <td><?= $row['role_name'] ?? 'N/A'; ?></td>
+            </tr>
+        <?php endwhile; ?>
+    </tbody>
+    </table>
+    </main>
     </div>
-    <div class="container">
-      <h2>ACTIVITY TODAY</h2>
-      <p>Lists of activities scheduled to be held today.</p>
-    </div>
-    <div class="container">
-      <h2>ON SHIFT PERSONNELS</h2>
-      <p>Lists of personnels on duty as of today.</p>
-    </div>
-  </main>
 </body>
 </html>
+?>

@@ -1,8 +1,5 @@
 <?php
-ob_start(); // Prevent output before headers
-
-require '../includes/config.php';
-include('../includes/check_admin.php');
+include('../includes/config.php');
 require_once('../vendor/tecnickcom/tcpdf/tcpdf.php');
 
 // Handle Create & Update
@@ -111,8 +108,10 @@ $result = $conn->query($sql);
     <title>Incident Reports</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" src="app.js" defer></script>
 </head>
 <body class="container mt-4">
+    
     <h1 class="mb-4">Incident Reports</h1>
     <a href="create.php" class="btn btn-success mb-3">Add New Incident</a>
     <a href="generate_pdf.php" class="btn btn-primary mb-3">Download PDF</a>
@@ -175,5 +174,4 @@ $result = $conn->query($sql);
 
 <?php
 $conn->close();
-ob_end_flush();
 ?>
