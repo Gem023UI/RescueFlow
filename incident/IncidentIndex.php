@@ -10,12 +10,12 @@ $result = $conn->query($sql);
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="5"> <!-- Refresh page every 5 seconds -->
-    <link rel="stylesheet" href="style.css">
-    <script type="text/javascript" src="app.js" defer></script>
-    <title>Incident Table</title>
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="5"> <!-- Refresh page every 5 seconds -->
+  <title>BFP NCR Taguig City</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="text/javascript" src="app.js" defer></script>
 </head>
 <body>
     <nav id="sidebar">
