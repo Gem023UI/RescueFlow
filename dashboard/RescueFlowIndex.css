@@ -38,21 +38,9 @@ body{
   overflow: hidden;
   text-wrap: nowrap;
 }
-#sidebar.close {
+#sidebar.close{
   padding: 5px;
   width: 60px;
-  overflow: visible; /* Ensures icons remain visible */
-}
-#sidebar.close ul li a, 
-#sidebar.close ul li .dropdown-btn {
-  display: flex;
-  justify-content: center;
-  padding: 10px;
-}
-#sidebar.close a svg, 
-#sidebar.close .dropdown-btn svg {
-  margin: 0 auto; /* Centers icons */
-  display: block;
 }
 #sidebar ul{
   list-style: none;

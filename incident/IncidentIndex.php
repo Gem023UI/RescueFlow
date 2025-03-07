@@ -14,7 +14,7 @@ $result = $conn->query($sql);
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="refresh" content="5"> <!-- Refresh page every 5 seconds -->
   <title>BFP NCR Taguig City</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="IncidentIndex.css">
   <script type="text/javascript" src="app.js" defer></script>
 </head>
 <body>
