@@ -69,14 +69,15 @@ $result = $conn->query($sql);
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z"/></svg>
             </button>
             <ul class="sub-menu">
-            <div>
-                <li><a href="#">Fire Truck 1</a></li>
-                <li><a href="#">Fire Truck 2</a></li>
-                <li><a href="#">Fire Truck 3</a></li>
-                <li><a href="#">Fire Truck 4</a></li>
-                <li><a href="#">Emergency Vehicle</a></li>
-            </div>
-            </ul>
+          <div>
+            <li><a href="../assets/FireTruck1.php">Fire Truck 1</a></li>
+            <li><a href="../assets/FireTruck2.php">Fire Truck 2</a></li>
+            <li><a href="../assets/FireTruck3.php">Fire Truck 3</a></li>
+            <li><a href="../assets/FireTruck4.php">Fire Truck 4</a></li>
+            <li><a href="../assets/EmergencyVehicle.php">Emergency Vehicle</a></li>
+            <li><a href="../assets/Stationary.php">Stationary</a></li>
+          </div>
+        </ul>
         </li>
         <li>
             <a href="../personnel/PersonnelIndex.php">

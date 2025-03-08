@@ -75,11 +75,12 @@ $conn->close();
         </button>
         <ul class="sub-menu">
           <div>
-            <li><a href="#">Fire Truck 1</a></li>
-            <li><a href="#">Fire Truck 2</a></li>
-            <li><a href="#">Fire Truck 3</a></li>
-            <li><a href="#">Fire Truck 4</a></li>
-            <li><a href="#">Emergency Vehicle</a></li>
+            <li><a href="../assets/FireTruck1.php">Fire Truck 1</a></li>
+            <li><a href="../assets/FireTruck2.php">Fire Truck 2</a></li>
+            <li><a href="../assets/FireTruck3.php">Fire Truck 3</a></li>
+            <li><a href="../assets/FireTruck4.php">Fire Truck 4</a></li>
+            <li><a href="../assets/EmergencyVehicle.php">Emergency Vehicle</a></li>
+            <li><a href="../assets/Stationary.php">Stationary</a></li>
           </div>
         </ul>
       </li>

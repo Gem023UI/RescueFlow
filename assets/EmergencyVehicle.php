@@ -2,26 +2,39 @@
 session_start();
 include('../includes/config.php');
 
-// SQL query to fetch personnel with office and position details
-$sql = "SELECT p.PersonnelID, CONCAT(p.FirstName, ' ', p.LastName) AS FullName, o.Office, pos.Position, p.Designated, p.Picture 
-        FROM personnel p
-        JOIN office o ON p.OfficeID = o.OfficeID
-        JOIN position pos ON p.PositionID = pos.PositionID";
-$result = $conn->query($sql);
+if (!isset($conn)) {
+    die("Database connection failed.");
+}
+
+// Set the desired CategoryID manually
+$categoryID = 6; // Change this value to filter by a different category
+
+// SQL query to fetch assets with related details, filtering by CategoryID
+$sql = "SELECT a.AssetID, asst.AssetStatus, acnd.AssetCondition, a.Name, a.Description, a.PreviousMaintenance, a.ScheduledMaintenance, a.Attachments 
+        FROM assets a
+        JOIN assetcategory ac ON a.CategoryID = ac.AssetCategoryID
+        JOIN assetstatus asst ON a.StatusID = asst.AssetStatusID
+        JOIN assetcondition acnd ON a.ConditionID = acnd.AssetConditionID
+        WHERE a.CategoryID = ?";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $categoryID);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="5"> <!-- Refresh page every 5 seconds -->
-    <title>Personnel Management</title>
-    <link rel="stylesheet" href="PersonnelIndex.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="5"> <!-- Refresh page every 5 seconds -->
+  <title>BFP NCR Taguig City</title>
+  <link rel="stylesheet" href="AssetsIndex.css">
   <script type="text/javascript" src="app.js" defer></script>
 </head>
 <body>
-    <nav id="sidebar">
+  <nav id="sidebar">
     <ul>
       <li>
         <span class="logo">BFP NCR Taguig S1</span>
@@ -29,8 +42,8 @@ $result = $conn->query($sql);
           <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z"/></svg>
         </button>
       </li>
-      <li>
-        <a href="../dashboard/RescueFlowIndex.php" >
+      <li class="active">
+        <a href="RescueFlowIndex.php" >
           <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M240-200h120v-200q0-17 11.5-28.5T400-440h160q17 0 28.5 11.5T600-400v200h120v-360L480-740 240-560v360Zm-80 0v-360q0-19 8.5-36t23.5-28l240-180q21-16 48-16t48 16l240 180q15 11 23.5 28t8.5 36v360q0 33-23.5 56.5T720-120H560q-17 0-28.5-11.5T520-160v-200h-80v200q0 17-11.5 28.5T400-120H240q-33 0-56.5-23.5T160-200Zm320-270Z"/></svg>
           <span>Dashboard</span>
         </a>
@@ -77,7 +90,7 @@ $result = $conn->query($sql);
           </div>
         </ul>
       </li>
-      <li class="active">
+      <li>
         <a href="../personnel/PersonnelIndex.php">
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="M440-280h320v-22q0-45-44-71.5T600-400q-72 0-116 26.5T440-302v22Zm160-160q33 0 56.5-23.5T680-520q0-33-23.5-56.5T600-600q-33 0-56.5 23.5T520-520q0 33 23.5 56.5T600-440ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Z"/></svg>
           <span>Personnels</span>
@@ -90,36 +103,39 @@ $result = $conn->query($sql);
         </a>
       </li>
     </ul>
-    </nav>
-    <main>
-    <div class="container mt-5">
-    <h2>Personnel List</h2>
+  </nav>
+  <main>
+    <div class="container">
+    <h2>Asset List (Category ID: <?= $categoryID ?>)</h2>
     <table border='1'>
         <tr>
-            <th>Personnel ID</th>
-            <th>Full Name</th>
-            <th>Office</th>
-            <th>Position</th>
-            <th>Designated</th>
-            <th>Picture</th>
+            <th>Asset ID</th>
+            <th>Status</th>
+            <th>Condition</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Previous Maintenance</th>
+            <th>Scheduled Maintenance</th>
+            <th>Attachments</th>
         </tr>
         <?php if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) { ?>
                 <tr>
-                    <td><?= $row["PersonnelID"] ?></td>
-                    <td><?= $row["FullName"] ?></td>
-                    <td><?= $row["Office"] ?></td>
-                    <td><?= $row["Position"] ?></td>
-                    <td><?= $row["Designated"] ?></td>
-                    <td><img src='<?= $row["Picture"] ?>' alt='Personnel Picture' width='100'></td>
+                    <td><?= $row["AssetID"] ?></td>
+                    <td><?= $row["AssetStatus"] ?></td>
+                    <td><?= $row["AssetCondition"] ?></td>
+                    <td><?= $row["Name"] ?></td>
+                    <td><?= $row["Description"] ?></td>
+                    <td><?= $row["PreviousMaintenance"] ?></td>
+                    <td><?= $row["ScheduledMaintenance"] ?></td>
+                    <td><a href='<?= $row["Attachments"] ?>' target='_blank'>View</a></td>
                 </tr>
             <?php }
         } else { ?>
-            <tr><td colspan='6'>No records found</td></tr>
+            <tr><td colspan='9'>No records found</td></tr>
         <?php } ?>
     </table>
-    </main>
     </div>
+  </main>
 </body>
 </html>
-?>
