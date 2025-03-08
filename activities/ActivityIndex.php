@@ -2,26 +2,29 @@
 session_start();
 include('../includes/config.php');
 
-// SQL query to fetch personnel with office and position details
-$sql = "SELECT p.PersonnelID, CONCAT(p.FirstName, ' ', p.LastName) AS FullName, o.Office, pos.Position, p.Designated, p.Picture 
-        FROM personnel p
-        JOIN office o ON p.OfficeID = o.OfficeID
-        JOIN position pos ON p.PositionID = pos.PositionID";
+if (!isset($conn)) {
+    die("Database connection failed.");
+}
+
+// SQL query to fetch activities with facilitator details
+$sql = "SELECT a.ActivityID, CONCAT(f.FirstName, ' ', f.LastName) AS FacilitatorName, a.Title, a.Description, a.DueDate, a.DueTime, a.Setting, a.Attachments 
+        FROM activities a
+        JOIN facilitator f ON a.FacilitatorID = f.FacilitatorID";
 $result = $conn->query($sql);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="5"> <!-- Refresh page every 5 seconds -->
-    <title>Personnel Management</title>
-    <link rel="stylesheet" href="PersonnelIndex.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="5"> <!-- Refresh page every 5 seconds -->
+  <title>BFP NCR Taguig City</title>
+  <link rel="stylesheet" href="ActivityIndex.css">
   <script type="text/javascript" src="app.js" defer></script>
 </head>
 <body>
-    <nav id="sidebar">
+  <nav id="sidebar">
     <ul>
       <li>
         <span class="logo">BFP NCR Taguig S1</span>
@@ -35,7 +38,7 @@ $result = $conn->query($sql);
           <span>Dashboard</span>
         </a>
       </li>
-      <li>
+      <li class="active">
         <a href="../activities/ActivityIndex.php">
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v200h-80v-40H200v400h280v80H200Zm0-560h560v-80H200v80Zm0 0v-80 80ZM560-80v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T903-300L683-80H560Zm300-263-37-37 37 37ZM620-140h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg>
           <span>Activities</span>
@@ -76,7 +79,7 @@ $result = $conn->query($sql);
           </div>
         </ul>
       </li>
-      <li class="active">
+      <li>
         <a href="../personnel/PersonnelIndex.php">
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="M440-280h320v-22q0-45-44-71.5T600-400q-72 0-116 26.5T440-302v22Zm160-160q33 0 56.5-23.5T680-520q0-33-23.5-56.5T600-600q-33 0-56.5 23.5T520-520q0 33 23.5 56.5T600-440ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Z"/></svg>
           <span>Personnels</span>
@@ -89,36 +92,38 @@ $result = $conn->query($sql);
         </a>
       </li>
     </ul>
-    </nav>
-    <main>
-    <div class="container mt-5">
-    <h2>Personnel List</h2>
+  </nav>
+  <main>
+    <div class="container">
+    <h2>Activities List</h2>
     <table border='1'>
         <tr>
-            <th>Personnel ID</th>
-            <th>Full Name</th>
-            <th>Office</th>
-            <th>Position</th>
-            <th>Designated</th>
-            <th>Picture</th>
+            <th>Activity ID</th>
+            <th>Facilitator</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Due Date</th>
+            <th>Due Time</th>
+            <th>Setting</th>
+            <th>Attachments</th>
         </tr>
         <?php if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) { ?>
                 <tr>
-                    <td><?= $row["PersonnelID"] ?></td>
-                    <td><?= $row["FullName"] ?></td>
-                    <td><?= $row["Office"] ?></td>
-                    <td><?= $row["Position"] ?></td>
-                    <td><?= $row["Designated"] ?></td>
-                    <td><img src='<?= $row["Picture"] ?>' alt='Personnel Picture' width='100'></td>
+                    <td><?= $row["ActivityID"] ?></td>
+                    <td><?= $row["FacilitatorName"] ?></td>
+                    <td><?= $row["Title"] ?></td>
+                    <td><?= $row["Description"] ?></td>
+                    <td><?= $row["DueDate"] ?></td>
+                    <td><?= $row["DueTime"] ?></td>
+                    <td><?= $row["Setting"] ?></td>
+                    <td><?= $row["Attachments"] ?></td>
                 </tr>
             <?php }
         } else { ?>
-            <tr><td colspan='6'>No records found</td></tr>
+            <tr><td colspan='8'>No records found</td></tr>
         <?php } ?>
     </table>
-    </main>
-    </div>
+  </main>
 </body>
 </html>
-?>

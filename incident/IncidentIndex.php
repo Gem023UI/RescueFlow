@@ -2,8 +2,13 @@
 include('../includes/config.php');
 require_once('../vendor/tecnickcom/tcpdf/tcpdf.php');
 
-// Query to fetch incidents
-$sql = "SELECT ID, type, severity, baranggay, address, cause, time, date, attachment FROM incident";
+// SQL query to fetch incidents with related details
+$sql = "SELECT i.IncidentID, e.What AS Emergency, s.Severity, c.CauseCategory, b.Baranggay, i.Address, i.Date, i.Time, i.Attachments 
+        FROM incidents i
+        JOIN emergency e ON i.EmergencyID = e.EmergencyID
+        JOIN severity s ON i.SeverityID = s.SeverityID
+        JOIN causecategory c ON i.CauseCategoryID = c.CauseCategoryID
+        JOIN baranggay b ON i.BaranggayID = b.BaranggayID";
 $result = $conn->query($sql);
 ?>
 
@@ -88,45 +93,39 @@ $result = $conn->query($sql);
         </ul>
     </nav>
     <main>
-        <div>
-        <h2>Incident Table</h2>
-        <table>
-            <thead>
+    <div>
+    <h2>Incident List</h2>
+    <table border='1'>
+        <tr>
+            <th>Incident ID</th>
+            <th>Emergency</th>
+            <th>Severity</th>
+            <th>Cause Category</th>
+            <th>Baranggay</th>
+            <th>Address</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Attachments</th>
+        </tr>
+        <?php if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) { ?>
                 <tr>
-                    <th>ID</th>
-                    <th>Type</th>
-                    <th>Severity</th>
-                    <th>Baranggay</th>
-                    <th>Address</th>
-                    <th>Cause</th>
-                    <th>Time</th>
-                    <th>Date</th>
-                    <th>Attachment</th>
+                    <td><?= $row["IncidentID"] ?></td>
+                    <td><?= $row["Emergency"] ?></td>
+                    <td><?= $row["Severity"] ?></td>
+                    <td><?= $row["CauseCategory"] ?></td>
+                    <td><?= $row["Baranggay"] ?></td>
+                    <td><?= $row["Address"] ?></td>
+                    <td><?= $row["Date"] ?></td>
+                    <td><?= $row["Time"] ?></td>
+                    <td><a href='<?= $row["Attachments"] ?>' target='_blank'>View</a></td>
                 </tr>
-            </thead>
-            <tbody>
-                <?php
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>" . htmlspecialchars($row['ID']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['type']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['severity']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['barangay']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['address']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['cause']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['time']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['date']) . "</td>";
-                        echo "<td><a href='" . htmlspecialchars($row['attachment']) . "' target='_blank'>View</a></td>";
-                        echo "</tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='9'>No incidents found</td></tr>";
-                }
-                ?>
-            </tbody>
-        </table>
-        </div>
+            <?php }
+        } else { ?>
+            <tr><td colspan='9'>No records found</td></tr>
+        <?php } ?>
+    </table>
+    </div>
     </main>
 </body>
 </html>

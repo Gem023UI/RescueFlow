@@ -7,6 +7,6 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 // echo "Connection established.\n";
-$db_name = "rescueflow";
+$db_name = "rescueflow(1)";
 mysqli_select_db($conn, $db_name) or die("Could not select the database $dbname!\n". mysqli_error($conn));
 ?>
