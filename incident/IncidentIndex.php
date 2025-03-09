@@ -94,7 +94,7 @@ $result = $conn->query($sql);
         </ul>
     </nav>
     <main>
-    <div>
+    <div class="container">
     <h2>Incident List</h2>
     <table border='1'>
         <tr>
