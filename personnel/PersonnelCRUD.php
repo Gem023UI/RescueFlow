@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BFP NCR Taguig City</title>
-  <link rel="stylesheet" href="PersonnelButton.css">
+  <link rel="stylesheet" href="PersonnelCRUD.css">
+  <script type="text/javascript" src="PersonnelCRUD.js"></script>
 </head>
 <body>
   <!-- PDF Button -->
@@ -15,7 +16,7 @@
   </a>
 
   <!-- Add Button -->
-  <a href="javascript:void(0)" class="floating-btn-add" onclick="openModal('addModal')">
+  <a href="javascript:void(0)" class="floating-btn-add" onclick="openModal('addPersonnelModal')">
     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
       <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/>
     </svg>
@@ -44,14 +45,54 @@
     </div>
   </div>
 
-  <!-- Add Modal -->
-  <div id="addModal" class="modal" onclick="closeOutside(event, 'addModal')">
+  <!-- Add Personnel Modal -->
+  <div id="addPersonnelModal" class="modal" onclick="closeOutside(event, 'addPersonnelModal')">
     <div class="modal-content">
-      <span class="close" onclick="closeModal('addModal')">&times;</span>
-      <h2>Add Activity</h2>
-      <p>Form for adding activity goes here.</p>
+      <span class="close" onclick="closeModal('addPersonnelModal')">&times;</span>
+      <h2>Add Personnel</h2>
+      <form id="addPersonnelForm" enctype="multipart/form-data">
+        
+        <!-- Office Dropdown -->
+        <div class="mb-3">
+          <label for="officeId" class="form-label">Office</label>
+          <select class="form-select" id="officeId" name="OfficeID" required>
+            <option value="">Select an Office</option>
+          </select>
+        </div>
+
+        <!-- Position Dropdown (Changes Based on Office Selection) -->
+        <div class="mb-3">
+          <label for="positionId" class="form-label">Position</label>
+          <select class="form-select" id="positionId" name="PositionID" required>
+            <option value="">Select a Position</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="firstName" class="form-label">First Name</label>
+          <input type="text" class="form-control" id="firstName" name="FirstName" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="lastName" class="form-label">Last Name</label>
+          <input type="text" class="form-control" id="lastName" name="LastName" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="designated" class="form-label">Designated Date</label>
+          <input type="datetime-local" class="form-control" id="designated" name="Designated" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="picture" class="form-label">Picture</label>
+          <input type="file" class="form-control" id="picture" name="Picture" accept="image/*" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add Personnel</button>
+      </form>
     </div>
   </div>
+
 
   <!-- Edit Modal -->
   <div id="editModal" class="modal" onclick="closeOutside(event, 'editModal')">
@@ -70,32 +111,5 @@
       <p>Confirmation for deleting activity goes here.</p>
     </div>
   </div>
-
-  <script>
-    function openModal(modalId) {
-      // Ensure modal is visible before adding 'show'
-      const modal = document.getElementById(modalId);
-      modal.style.display = 'block';
-      requestAnimationFrame(() => {
-        modal.classList.add('show');
-      });
-    }
-
-    function closeModal(modalId) {
-      const modal = document.getElementById(modalId);
-      modal.classList.remove('show');
-      // Wait for CSS transition to finish, then hide
-      setTimeout(() => {
-        modal.style.display = 'none';
-      }, 300);
-    }
-
-    function closeOutside(event, modalId) {
-      // If user clicks the semi-transparent background, close the modal
-      if (event.target.classList.contains('modal')) {
-        closeModal(modalId);
-      }
-    }
-  </script>
 </body>
 </html>

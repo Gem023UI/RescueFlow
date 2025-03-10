@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('../includes/config.php');
-include('../personnel/personnelbutton.html');
+include('../personnel/PersonnelCRUD.php');
 include('../dispatch/dispatchbutton.html');
 
 // SQL query to fetch personnel with office and position details
@@ -21,7 +21,7 @@ $result = $conn->query($sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personnel Management</title>
     <link rel="stylesheet" href="PersonnelIndex.css">
-  <script type="text/javascript" src="app.js" defer></script>
+    <script type="text/javascript" src="app.js" defer></script>
 </head>
 <body>
 <nav id="sidebar">
