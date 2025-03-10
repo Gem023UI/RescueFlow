@@ -5,10 +5,12 @@ include('../personnel/personnelbutton.html');
 include('../dispatch/dispatchbutton.html');
 
 // SQL query to fetch personnel with office and position details
-$sql = "SELECT p.PersonnelID, CONCAT(p.FirstName, ' ', p.LastName) AS FullName, o.Office, pos.Position, p.Designated, p.Picture 
+$sql = "SELECT p.PersonnelID, CONCAT(p.FirstName, ' ', p.LastName) AS FullName, 
+        pos.Position, o.Office, p.Designated, p.Picture 
         FROM personnel p
-        JOIN office o ON p.OfficeID = o.OfficeID
-        JOIN position pos ON p.PositionID = pos.PositionID";
+        JOIN position pos ON p.PositionID = pos.PositionID
+        JOIN office o ON pos.OfficeID = o.OfficeID";
+
 $result = $conn->query($sql);
 ?>
 
@@ -17,7 +19,6 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="5"> <!-- Refresh page every 5 seconds -->
     <title>Personnel Management</title>
     <link rel="stylesheet" href="PersonnelIndex.css">
   <script type="text/javascript" src="app.js" defer></script>
@@ -95,21 +96,27 @@ $result = $conn->query($sql);
     </nav>
     <main>
     <div class="container">
-    <div class="personnel-container">
+        <div class="personnel-container">
         <?php while ($row = $result->fetch_assoc()): ?>
             <div class="personnel-card">
                 <div class="personnel-image">
-                    <img src="<?= $row['Picture'] ? $row['Picture'] : '../images/default-avatar.png' ?>" alt="Profile Picture">
+                    <?php 
+                    $imagePath = "../personnel/images/" . $row['Picture']; // Corrected folder name
+                    if (!empty($row['Picture']) && file_exists(__DIR__ . "/../personnel/images/" . $row['Picture'])): ?>
+                        <img src="<?= htmlspecialchars($imagePath); ?>" width="150px" height="150px">
+                    <?php else: ?>
+                        <img src="../personnel/images/default.jpg"> 
+                    <?php endif; ?>
                 </div>
                 <div class="personnel-info">
                     <h2><?= htmlspecialchars($row['FullName']) ?></h2>
-                    <p><?= htmlspecialchars($row['Office']) ?></p>
-                    <p><?= htmlspecialchars($row['Position']) ?></p>
-                    <p><?= htmlspecialchars($row['Designated']) ?></p>
+                    <p>Office: <?= htmlspecialchars($row['Office']) ?></p>
+                    <p>Rank: <?= htmlspecialchars($row['Position']) ?></p>
+                    <p>Assigned On: <?= htmlspecialchars($row['Designated']) ?></p>
                 </div>
             </div>
         <?php endwhile; ?>
-    </div>
+        </div>
     </div>
 </body>
 </html>
