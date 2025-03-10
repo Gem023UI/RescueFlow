@@ -1,6 +1,8 @@
 <?php
 session_start();
 include('../includes/config.php');
+include('../personnel/personnelbutton.html');
+include('../dispatch/dispatchbutton.html');
 
 // SQL query to fetch personnel with office and position details
 $sql = "SELECT p.PersonnelID, CONCAT(p.FirstName, ' ', p.LastName) AS FullName, o.Office, pos.Position, p.Designated, p.Picture 
@@ -92,34 +94,22 @@ $result = $conn->query($sql);
         </ul>
     </nav>
     <main>
-    <div class="container mt-5">
-    <h2>Personnel List</h2>
-    <table border='1'>
-        <tr>
-            <th>Personnel ID</th>
-            <th>Full Name</th>
-            <th>Office</th>
-            <th>Position</th>
-            <th>Designated</th>
-            <th>Picture</th>
-        </tr>
-        <?php if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) { ?>
-                <tr>
-                    <td><?= $row["PersonnelID"] ?></td>
-                    <td><?= $row["FullName"] ?></td>
-                    <td><?= $row["Office"] ?></td>
-                    <td><?= $row["Position"] ?></td>
-                    <td><?= $row["Designated"] ?></td>
-                    <td><img src='<?= $row["Picture"] ?>' alt='Personnel Picture' width='100'></td>
-                </tr>
-            <?php }
-        } else { ?>
-            <tr><td colspan='6'>No records found</td></tr>
-        <?php } ?>
-    </table>
-    </main>
+    <div class="container">
+    <div class="personnel-container">
+        <?php while ($row = $result->fetch_assoc()): ?>
+            <div class="personnel-card">
+                <div class="personnel-image">
+                    <img src="<?= $row['Picture'] ? $row['Picture'] : '../images/default-avatar.png' ?>" alt="Profile Picture">
+                </div>
+                <div class="personnel-info">
+                    <h2><?= htmlspecialchars($row['FullName']) ?></h2>
+                    <p><?= htmlspecialchars($row['Office']) ?></p>
+                    <p><?= htmlspecialchars($row['Position']) ?></p>
+                    <p><?= htmlspecialchars($row['Designated']) ?></p>
+                </div>
+            </div>
+        <?php endwhile; ?>
+    </div>
     </div>
 </body>
 </html>
-?>

@@ -213,3 +213,33 @@ main p{
     }
   }
 }
+/*PERSONNEL DISPLAY*/
+.personnel-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+}
+.personnel-card {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  max-width: 400px;
+}
+.personnel-image img {
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  margin-right: 15px;
+}
+.personnel-info h2 {
+  margin: 0;
+  font-size: 1.2em;
+}
+.personnel-info p {
+  margin: 2px 0;
+  color: #555;
+}
