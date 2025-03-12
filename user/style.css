@@ -208,3 +208,23 @@ body{
 .container.active .toggle-right{
     transform: translateX(200%);
 }
+
+.input-box, .dropdown-btn {
+    width: 100%;
+    max-width: 300px;
+    margin: 2px auto;
+}
+.form-control {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+    font-size: 16px;
+    color: #555;
+    outline: none;
+}
+.form-control:focus {
+    border-color: #bbb;
+    background-color: #fff;
+}
