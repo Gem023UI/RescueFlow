@@ -11,14 +11,14 @@ $role_id = $_POST['role_id']; // fetch role_id directly
 // Validate email format
 if (!preg_match("/^\w+@\w+\.\w+/", $email)) {
     $_SESSION['message'] = 'Invalid email format';
-    header("Location: register.php");
+    header("Location: LoginRegister.php");
     exit();
 } 
 
 // Validate password length
 if (strlen($password) < 3) {
     $_SESSION['message'] = 'Password should be at least 3 characters';
-    header("Location: register.php");
+    header("Location: LoginRegister.php");
     exit();
 }
 
@@ -26,7 +26,7 @@ if (strlen($password) < 3) {
 $confirmPass = trim($_POST['confirmPass']);
 if ($password !== $confirmPass) {
     $_SESSION['message'] = 'Passwords do not match';
-    header("Location: register.php");
+    header("Location: LoginRegister.php");
     exit();
 }
 
@@ -40,14 +40,14 @@ if ($stmt) {
 
     if (mysqli_stmt_num_rows($stmt) == 0) {
         $_SESSION['message'] = 'Invalid role selected';
-        header("Location: register.php");
+        header("Location: LoginRegister.php");
         exit();
     }
 
     mysqli_stmt_close($stmt);
 } else {
     $_SESSION['message'] = 'Database error: Unable to check role';
-    header("Location: register.php");
+    header("Location: LoginRegister.php");
     exit();
 }
 
@@ -64,17 +64,17 @@ if ($stmt) {
 
     if ($execute) {
         $_SESSION['message'] = 'Registration successful';
-        header("Location: login.php");
+        header("Location: LoginRegister.php");
         exit();
     } else {
         $_SESSION['message'] = 'Error during registration';
-        header("Location: register.php");
+        header("Location: LoginRegister.php");
         exit();
     }
     mysqli_stmt_close($stmt);
 } else {
     $_SESSION['message'] = 'Database error';
-    header("Location: register.php");
+    header("Location: LoginRegister.php");
     exit();
 }
 ?>

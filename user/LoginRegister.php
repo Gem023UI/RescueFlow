@@ -6,6 +6,42 @@ if (isset($_SESSION['message'])) {
     echo "<p>{$_SESSION['message']}</p>";
     unset($_SESSION['message']);
 }
+
+if (isset($_POST['submit'])) {
+
+$uname = trim($_POST['uname']); // Match with form input name
+$pass = sha1(trim($_POST['password'])); // Match with form input name
+
+// Corrected query to match the actual table name and column names
+$sql = "SELECT user_id, username, role_id, member_id FROM users WHERE username = ? AND password_hash = ? LIMIT 1";
+$stmt = mysqli_prepare($conn, $sql);
+
+if ($stmt) {
+    mysqli_stmt_bind_param($stmt, "ss", $uname, $pass);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_store_result($stmt);
+
+    if (mysqli_stmt_num_rows($stmt) === 1) {
+        mysqli_stmt_bind_result($stmt, $user_id, $username, $role_id, $member_id);
+        mysqli_stmt_fetch($stmt);
+
+        // Store user data in session
+        $_SESSION['username'] = $username;
+        $_SESSION['user_id'] = $user_id;
+        $_SESSION['role'] = $role_id;
+        $_SESSION['member_id'] = $member_id;
+
+        header("Location: ../dashboard/RescueFlowIndex.php");
+        exit();
+    } else {
+        $_SESSION['message'] = 'Wrong username or password';
+    }
+
+    mysqli_stmt_close($stmt);
+} else {
+    $_SESSION['message'] = 'Database error';
+}
+}
 ?>
 
 <!DOCTYPE html>
@@ -15,19 +51,22 @@ if (isset($_SESSION['message'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="LoginRegister.css">
     <title>BFP - Login / Register</title>
 </head>
 
 <body>
     <div class="container" id="container">
         <div class="form-container sign-up">
-            <form>
-                <h1>LOG IN</h1>
-                <input type="text" placeholder="Name">
-                <input type="email" placeholder="Email">
-                <input type="password" placeholder="Password">
-                <button>LOG IN</button>
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+                <h1>LOGIN</h1>
+                <!-- Username input -->
+                <div class="input-box">
+                    <input type="text" name="uname" placeholder="Name" required />
+                    <input type="password" name="password" placeholder="Password" required />
+                    <i class='bx bxs-user-circle'></i>
+                </div>
+                <button type="submit" class="btn" name="submit">LOGIN</button>
             </form>
         </div>
         <div class="form-container sign-in">
@@ -104,6 +143,6 @@ if (isset($_SESSION['message'])) {
             </div>
         </div>
     </div>
-    <script src="script.js"></script>
+    <script src="LoginRegister.js"></script>
 </body>
 </html>
