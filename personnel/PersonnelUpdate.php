@@ -1,8 +1,8 @@
 <?php
-ob_start(); // Start output buffering
+
 session_start();
 include('../includes/config.php');
-include('../includes/restrict_admin.php');
+//balik restrict admin
 // Check if the request method is POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Ensure all required fields are set
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             mysqli_stmt_close($stmt);
             mysqli_close($conn);
             // Redirect to index.php with success message
-            header("Location: index.php?status=success");
+            header("Location: PersonnelIndex.php?status=success");
             exit;
         } else {
             echo "Error updating record: " . mysqli_error($conn);
