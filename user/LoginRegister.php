@@ -64,7 +64,6 @@ if ($stmt) {
                 <div class="input-box">
                     <input type="text" name="uname" placeholder="Name" required />
                     <input type="password" name="password" placeholder="Password" required />
-                    <i class='bx bxs-user-circle'></i>
                 </div>
                 <button type="submit" class="btn" name="submit">LOGIN</button>
             </form>
@@ -76,13 +75,11 @@ if ($stmt) {
                 <div class="input-box">
                     <input type="text" class="form-control" id="uname" name="uname" placeholder="Name" required />
                     <input type="email" class="form-control" id="email" name="email" placeholder="Email" required />
-                    <i class='bx bxs-user-circle'></i>
                 </div>
                 <!-- Password input -->
                 <div class="input-box">
                     <input type="password" class="form-control" id="password" name="password" placeholder="Password" required />
                     <input type="password" class="form-control" id="password2" name="confirmPass" placeholder="Confirm Password" required />
-                    <i class='bx bxs-lock-alt'></i>
                 </div>
                 <!-- Role selection -->
                 <div class="dropdown-btn">
