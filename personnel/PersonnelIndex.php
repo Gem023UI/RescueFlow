@@ -3,6 +3,19 @@ session_start();
 include('../includes/config.php');
 include('../dispatch/dispatchbutton.html');
 
+$user_id = $_SESSION['user_id'] ?? null;
+$role_id = null;
+
+if ($user_id) {
+    $query = "SELECT role_id FROM users WHERE user_id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $stmt->bind_result($role_id);
+    $stmt->fetch();
+    $stmt->close();
+}
+
 $sql = "SELECT members.member_id, members.first_name, members.last_name, members.email, members.phone, members.image, 
                ranks.rank_name, roles.role_name 
         FROM members
@@ -10,6 +23,8 @@ $sql = "SELECT members.member_id, members.first_name, members.last_name, members
         LEFT JOIN roles ON members.role_id = roles.role_id";
 
 $result = $conn->query($sql);
+
+
 ?>
 
 <!DOCTYPE html>
@@ -113,6 +128,11 @@ $result = $conn->query($sql);
                     <p><strong>Phone:</strong> <?= htmlspecialchars($row['phone']); ?></p>
                     <p><strong>Rank:</strong> <?= $row['rank_name'] ?? 'N/A'; ?></p>
                     <p><strong>Role:</strong> <?= $row['role_name'] ?? 'N/A'; ?></p>
+
+                    <?php if ($role_id == 4): // Only show for admin ?>
+                        <a href="edit.php?member_id=<?= $row['member_id']; ?>" class="btn edit-btn">Edit</a>
+                        <a href="delete.php?member_id=<?= $row['member_id']; ?>" class="btn delete-btn" onclick="return confirm('Are you sure?');">Delete</a>
+                    <?php endif; ?>
                 </div>
             </div>
         <?php endwhile; ?>
