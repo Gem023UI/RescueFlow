@@ -1,7 +1,6 @@
 <?php
 session_start();
 include('../includes/config.php');
-include('PersonnelCRUD.php');
 
 $sql = "SELECT members.member_id, members.first_name, members.last_name, members.email, members.phone, members.image, 
                ranks.rank_name, roles.role_name 
@@ -22,7 +21,7 @@ $result = $conn->query($sql);
     <script type="text/javascript" src="PersonnelIndex.js" defer></script>
 </head>
 <body>
-<nav id="sidebar">
+    <nav id="sidebar">
         <ul>
         <li>
             <span class="logo">BFP NCR Taguig S1</span>
