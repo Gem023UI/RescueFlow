@@ -20,7 +20,7 @@ $result = $conn->query($sql);
   <meta http-equiv="refresh" content="5"> <!-- Refresh page every 5 seconds -->
   <title>BFP NCR Taguig City</title>
   <link rel="stylesheet" href="IncidentIndex.css">
-  <script type="text/javascript" src="app.js" defer></script>
+  <script type="text/javascript" src="IncidentIndex.js" defer></script>
 </head>
 <body>
     <nav id="sidebar">

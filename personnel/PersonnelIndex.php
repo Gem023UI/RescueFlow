@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('../includes/config.php');
+include('../dispatch/dispatchbutton.html');
 
 $sql = "SELECT members.member_id, members.first_name, members.last_name, members.email, members.phone, members.image, 
                ranks.rank_name, roles.role_name 
@@ -92,43 +93,30 @@ $result = $conn->query($sql);
         </ul>
     </nav>
     <main>
-    <div class="container mt-5">
-        <h1 class="mb-4">Personnel Management</h1>
-        
-        <table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Image</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Rank</th>
-            <th>Role</th>
-        </tr>
-    </thead>
-    <tbody>
+    <div class="personnel-header">PERSONNEL MANAGEMENT</div>
+    <div class="personnel-container">
         <?php while ($row = $result->fetch_assoc()): ?>
-            <tr>
-            <td><?= $row['member_id']; ?></td>
-            <td>
-                <?php if (!empty($row['image']) && file_exists("../personnel/images/" . $row['image'])): ?>
-                    <img src="../personnel/images/"<?= htmlspecialchars($row['image']); ?>" width="50" height="50" class="rounded-circle">
-                <?php else: ?>
-                    <img src="../personnel/images/default.jpg" width="50" height="50" class="rounded-circle">
-                <?php endif; ?>
-            </td>
-                <td><?= $row['first_name']; ?></td>
-                <td><?= $row['last_name']; ?></td>
-                <td><?= $row['email']; ?></td>
-                <td><?= $row['phone']; ?></td>
-                <td><?= $row['rank_name'] ?? 'N/A'; ?></td>
-                <td><?= $row['role_name'] ?? 'N/A'; ?></td>
-            </tr>
-                    <?php endwhile; ?>
-    </tbody>
-        </table>
+            <div class="card">
+                <!-- Image Section -->
+                <div class="personnel-image">
+                    <?php if (!empty($row['image']) && file_exists("../personnel/images/" . $row['image'])): ?>
+                        <img src="../personnel/images/<?= htmlspecialchars($row['image']); ?>" alt="Personnel Image">
+                    <?php else: ?>
+                        <img src="../personnel/images/default.jpg" alt="Default Image">
+                    <?php endif; ?>
+                </div>
+
+                <!-- Details Section -->
+                <div class="personnel-details">
+                    <h2><?= htmlspecialchars($row['first_name'] . " " . $row['last_name']); ?></h2>
+                    <p><strong>Email:</strong> <?= htmlspecialchars($row['email']); ?></p>
+                    <p><strong>Phone:</strong> <?= htmlspecialchars($row['phone']); ?></p>
+                    <p><strong>Rank:</strong> <?= $row['rank_name'] ?? 'N/A'; ?></p>
+                    <p><strong>Role:</strong> <?= $row['role_name'] ?? 'N/A'; ?></p>
+                </div>
+            </div>
+        <?php endwhile; ?>
     </div>
+    </main>
 </body>
 </html>

@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('../includes/config.php');
+include('../dispatch/dispatchbutton.html');
 
 if (!isset($conn)) {
     die("Database connection failed.");
@@ -25,7 +26,7 @@ $conn->close();
   <meta http-equiv="refresh" content="5"> <!-- Refresh page every 5 seconds -->
   <title>BFP NCR Taguig City</title>
   <link rel="stylesheet" href="RescueFlowIndex.css">
-  <script type="text/javascript" src="app.js" defer></script>
+  <script type="text/javascript" src="RescueFlowIndex.js" defer></script>
 </head>
 <body>
   <nav id="sidebar">

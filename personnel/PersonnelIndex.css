@@ -2,7 +2,7 @@
 :root{
   --base-clr: orangered;
   --line-clr: white;
-  --hover-clr: white;
+  --hover-clr: black;
   --text-clr: #e6e6ef;
   --accent-clr: #5e63ff;
   --secondary-text-clr: #b0b3c1;
@@ -20,7 +20,7 @@ body{
   min-height: 100vh;
   min-height: 100dvh;
   
-  color: var(--text-clr);
+  
   display: grid;
   grid-template-columns: auto 1fr;
 }
@@ -124,6 +124,7 @@ body{
 }
 #toggle-btn:hover{
   background-color: var(--hover-clr);
+  color: black;
 }
 
 main{
@@ -134,14 +135,15 @@ main p{
   margin-top: 5px;
   margin-bottom: 15px;
 }
-.container{
+.container {
   border: 3px solid var(--line-clr);
   border-radius: 1em;
   margin-bottom: 20px;
   padding: min(3em, 15%);
-
+  background-color: rgba(0, 0, 0, 0.2); /* Black with 60% opacity */
   h2, p { margin-top: 1em }
 }
+
 
 @media(max-width: 800px){
   body{
@@ -213,4 +215,60 @@ main p{
       }
     }
   }
+}
+
+/*CARD STYLING*/
+.personnel-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Card styling */
+.card {
+  width: 250px; /* Fixed size */
+  height: 280px; /* Fixed size */
+  background: rgba(10, 0, 0, 0.274);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  text-align: center;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Image styling */
+.personnel-image img {
+  width: 100px; /* Adjust size */
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid white;
+}
+
+/* Name styling */
+.personnel-details h2 {
+  margin-top: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+/* Text styling */
+.personnel-details p {
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+.personnel-header {
+  font-size: 50px;
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  color: white;
 }
