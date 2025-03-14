@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('../includes/config.php');
+include('../includes/restrict_admin.php');
 include('../dispatch/dispatchbutton.html');
 
 $user_id = $_SESSION['user_id'] ?? null;

@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('../includes/config.php');
+include('../includes/restrict_admin.php');
 // Fetch roles and ranks for dropdowns
 $roles = $conn->query("SELECT role_id, role_name FROM roles");
 $ranks = $conn->query("SELECT rank_id, rank_name FROM ranks");

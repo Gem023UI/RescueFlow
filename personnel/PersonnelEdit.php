@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('../includes/config.php');
+include('../includes/restrict_admin.php');
 
 // Get the member details
 $member_id = $_GET['member_id'] ?? null;

@@ -1,8 +1,8 @@
 <?php
-
 session_start();
 include('../includes/config.php');
-//balik restrict admin
+include('../includes/restrict_admin.php');
+
 // Check if the request method is POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Ensure all required fields are set
