@@ -120,7 +120,6 @@ $result = $conn->query($sql);
                         <img src="../personnel/images/default.jpg" alt="Default Image">
                     <?php endif; ?>
                 </div>
-
                 <!-- Details Section -->
                 <div class="personnel-details">
                     <h2><?= htmlspecialchars($row['first_name'] . " " . $row['last_name']); ?></h2>
