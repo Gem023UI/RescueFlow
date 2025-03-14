@@ -109,7 +109,9 @@ $result = $conn->query($sql);
         </ul>
     </nav>
     <main>
-    <div class="personnel-header">PERSONNEL MANAGEMENT</div>
+    <div class="personnel-header">PERSONNEL MANAGEMENT
+        <a href="PersonnelCreate.php" class="custom-button">ADD PERSONNEL</a>
+    </div>
     <div class="personnel-container">
         <?php while ($row = $result->fetch_assoc()): ?>
             <div class="card">

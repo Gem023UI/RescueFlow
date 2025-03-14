@@ -294,3 +294,34 @@ main p{
   color: white;
   transform: scale(1.05);
 }
+
+/* Center the button container */
+.button-container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100vh; /* Full viewport height to center vertically */
+}
+
+/* Button styling */
+.custom-button {
+  display: inline-block;
+  justify-content: center; /* Center horizontally */
+  padding: 15px 30px; /* Adjust padding to change the size */
+  font-size: 18px; /* Adjust font size */
+  color: white; /* Text color */
+  background-color: black; /* Button color */
+  color: white;
+  border-radius: 5px; /* Rounded corners */
+  text-align: center;
+  text-decoration: none; /* Remove underline */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover effect */
+  width: 300px;
+  margin-top: 25px;
+}
+
+.custom-button:hover {
+  background-color: white; /* Darker shade on hover */
+  color: black;
+  transform: scale(1.05); /* Slightly enlarge the button on hover */
+}
