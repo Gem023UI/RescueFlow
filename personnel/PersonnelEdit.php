@@ -1,8 +1,5 @@
 <?php
-
 session_start();
-
-
 include('../includes/config.php');
 
 // Get the member details
@@ -79,6 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="PersonnelEdit.css">
+    <script type="text/javascript" src="PersonnelIndex.js" defer></script>
     <title>Edit Personnel</title>
 </head>
 <body>
@@ -96,12 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <span>Dashboard</span>
             </a>
         </li>
-        <li>
-            <a href="../activities/ActivityIndex.php">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v200h-80v-40H200v400h280v80H200Zm0-560h560v-80H200v80Zm0 0v-80 80ZM560-80v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T903-300L683-80H560Zm300-263-37-37 37 37ZM620-140h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg>
-            <span>Activities</span>
-            </a>
-        </li>
+         
         <li>
             <a href="../incident/IncidentIndex.php">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="M240-400q0 52 21 98.5t60 81.5q-1-5-1-9v-9q0-32 12-60t35-51l113-111 113 111q23 23 35 51t12 60v9q0 4-1 9 39-35 60-81.5t21-98.5q0-50-18.5-94.5T648-574q-20 13-42 19.5t-45 6.5q-62 0-107.5-41T401-690q-39 33-69 68.5t-50.5 72Q261-513 250.5-475T240-400Zm240 52-57 56q-11 11-17 25t-6 29q0 32 23.5 55t56.5 23q33 0 56.5-23t23.5-55q0-16-6-29.5T537-292l-57-56Zm0-492v132q0 34 23.5 57t57.5 23q18 0 33.5-7.5T622-658l18-22q74 42 117 117t43 163q0 134-93 227T480-80q-134 0-227-93t-93-227q0-129 86.5-245T480-840Z"/></svg>
@@ -152,62 +146,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </li>
         </ul>
     </nav>
-    <h2>Edit Personnel</h2>
-    <div class="container">
-    <form method="POST" action="" enctype="multipart/form-data">
-        <input type="hidden" name="member_id" value="<?= htmlspecialchars($member_id) ?>">
-
-        <div class="mb-3">
-            <label for="first_name" class="form-label">First Name</label>
-            <input type="text" name="first_name" class="form-control" value="<?= htmlspecialchars($first_name) ?>" required>
+    <div class="personnel-header">EDIT PERSONNEL</div>
+    <div class="personnel-container">
+        <div class="personnel-picture">
+            <label>Profile Picture</label>
+            <img src="../personnel/images/<?= $old_image ?>" alt="Profile Picture">
+            <input type="file" name="image">
         </div>
-        <div class="mb-3">
-            <label for="last_name" class="form-label">Last Name</label>
-            <input type="text" name="last_name" class="form-control" value="<?= htmlspecialchars($last_name) ?>" required>
+        <div class="personnel-content">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" name="first_name" value="<?= htmlspecialchars($first_name) ?>" required>
+                    <label>Last Name</label>
+                    <input type="text" name="last_name" value="<?= htmlspecialchars($last_name) ?>" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" value="<?= htmlspecialchars($email) ?>" required>
+                </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <select name="role_id">
+                        <option value="1" <?= $role_id == 1 ? 'selected' : '' ?>>Role 1</option>
+                        <option value="2" <?= $role_id == 2 ? 'selected' : '' ?>>Role 2</option>
+                    </select>
+                    <label>Rank</label>
+                    <select name="rank_id">
+                        <option value="1" <?= $rank_id == 1 ? 'selected' : '' ?>>Rank 1</option>
+                        <option value="2" <?= $rank_id == 2 ? 'selected' : '' ?>>Rank 2</option>
+                    </select>
+                </div>
+                <div class="btn-container">
+                    <button type="submit" class="btn">Update</button>
+                    <a href="PersonnelIndex.php" class="btn cancel-btn">Cancel</a>
+                </div>
+            </form>
         </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" name="email" class="form-control" value="<?= htmlspecialchars($email) ?>" required>
-        </div>
-        <div class="mb-3">
-            <label for="role_id" class="form-label">Role</label>
-            <select name="role_id" class="form-select" required>
-                <option value="">Select Role</option>
-                <?php
-                $roles_query = "SELECT * FROM roles";
-                $roles_result = mysqli_query($conn, $roles_query);
-                while ($role = mysqli_fetch_assoc($roles_result)) {
-                    $selected = ($role['role_id'] == $role_id) ? "selected" : "";
-                    echo "<option value='{$role['role_id']}' $selected>{$role['role_name']}</option>";
-                }
-                ?>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label for="rank_id" class="form-label">Rank</label>
-            <select name="rank_id" class="form-select" required>
-                <option value="">Select Rank</option>
-                <?php
-                $ranks_query = "SELECT * FROM ranks";
-                $ranks_result = mysqli_query($conn, $ranks_query);
-                while ($rank = mysqli_fetch_assoc($ranks_result)) {
-                    $selected = ($rank['rank_id'] == $rank_id) ? "selected" : "";
-                    echo "<option value='{$rank['rank_id']}' $selected>{$rank['rank_name']}</option>";
-                }
-                ?>
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label for="image" class="form-label">Update Image</label>
-            <input type="file" name="image" class="form-control" accept="image/*">
-            <label>Current Profile Picture:</label><br>
-            <img src="../personnel/images/<?= htmlspecialchars($old_image) ?>" width="100" height="100" class="rounded-circle">
-        </div>
-
-        <button type="submit" class="btn btn-primary">Update</button>
-        <a href="PersonnelIndex.php" class="btn btn-secondary">Cancel</a>
-    </form>
     </div>
 </body>
 </html>

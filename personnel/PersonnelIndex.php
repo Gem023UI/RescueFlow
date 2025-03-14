@@ -93,7 +93,7 @@ $result = $conn->query($sql);
             </ul>
         </li>
         </li>
-        <li class="active">
+        <li>
             <a href="../personnel/PersonnelIndex.php">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="M440-280h320v-22q0-45-44-71.5T600-400q-72 0-116 26.5T440-302v22Zm160-160q33 0 56.5-23.5T680-520q0-33-23.5-56.5T600-600q-33 0-56.5 23.5T520-520q0 33 23.5 56.5T600-440ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Z"/></svg>
             <span>Personnels</span>
@@ -124,14 +124,14 @@ $result = $conn->query($sql);
                 <!-- Details Section -->
                 <div class="personnel-details">
                     <h2><?= htmlspecialchars($row['first_name'] . " " . $row['last_name']); ?></h2>
-                    <p><strong>Email:</strong> <?= htmlspecialchars($row['email']); ?></p>
+                    <p><?= htmlspecialchars($row['email']); ?></p>
                     <p><strong>Phone:</strong> <?= htmlspecialchars($row['phone']); ?></p>
                     <p><strong>Rank:</strong> <?= $row['rank_name'] ?? 'N/A'; ?></p>
                     <p><strong>Role:</strong> <?= $row['role_name'] ?? 'N/A'; ?></p>
 
                     <?php if ($role_id == 4): // Only show for admin ?>
-                        <a href="edit.php?member_id=<?= $row['member_id']; ?>" class="btn edit-btn">Edit</a>
-                        <a href="delete.php?member_id=<?= $row['member_id']; ?>" class="btn delete-btn" onclick="return confirm('Are you sure?');">Delete</a>
+                        <a href="personneledit.php?member_id=<?= $row['member_id']; ?>" class="btn edit-btn">Edit</a>
+                        <a href="personneldelete.php?member_id=<?= $row['member_id']; ?>" class="btn delete-btn" onclick="return confirm('Are you sure?');">Delete</a>
                     <?php endif; ?>
                 </div>
             </div>
