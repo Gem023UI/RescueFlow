@@ -112,23 +112,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="personnel-header">ADD PERSONNEL</div>
         <div class="personnel-container">
             <form method="POST" action="PersonnelStore.php" enctype="multipart/form-data">
-                <div class="mb-3">
-                    <label for="first_name" class="form-label">First Name</label>
-                    <input type="text" name="first_name" id="first_name" class="form-control" required>
+                <div class="personnel-picture">
+                    <input type="file" name="image" id="image" class="custom-file-upload" accept="image/*">
                 </div>
-                <div class="mb-3">
-                    <label for="last_name" class="form-label">Last Name</label>
-                    <input type="text" name="last_name" id="last_name" class="form-control" required>
+                <div class="personnel-info">
+                    <div class="form-group">
+                        <label for="first_name" class="form-label">First Name</label>
+                        <input type="text" name="first_name" id="first_name" class="form-control" required>
+                        <label for="last_name" class="form-label">Last Name</label>
+                        <input type="text" name="last_name" id="last_name" class="form-control" required>
+                    </div>
                 </div>
-                <div class="mb-3">
+                <div class="form-group">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" name="email" id="email" class="form-control" required>
-                </div>
-                <div class="mb-3">
                     <label for="phone" class="form-label">Phone</label>
                     <input type="text" name="phone" id="phone" class="form-control" required>
                 </div>
-                <div class="mb-3">
+                <div class="form-group">
                     <label for="rank_id" class="form-label">Rank</label>
                     <select name="rank_id" id="rank_id" class="form-select" required>
                         <option value="">Select Rank</option>
@@ -136,8 +137,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <option value="<?= $rank['rank_id']; ?>"><?= $rank['rank_name']; ?></option>
                         <?php endwhile; ?>
                     </select>
-                </div>
-                <div class="mb-3">
                     <label for="role_id" class="form-label">Role</label>
                     <select name="role_id" id="role_id" class="form-select" required>
                         <option value="">Select Role</option>
@@ -146,12 +145,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <?php endwhile; ?>
                     </select>
                 </div>
-                <div class="mb-3">
-                    <label for="image" class="form-label">Upload Image</label>
-                    <input type="file" name="image" id="image" class="form-control" accept="image/*">
-                </div>
-                <button type="submit" class="btn btn-success">Save</button>
-                <a href="PersonnelIndex.php" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn">Add</button>
+                <a href="PersonnelIndex.php" class="btn cancel-btn">Cancel</a>
             </form>
         </div>
     </div>

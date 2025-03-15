@@ -9,7 +9,7 @@ if (!$member_id) {
     die("Error: Invalid or missing member ID.");
 }
 
-$query = "SELECT first_name, last_name, email, role_id, rank_id, image FROM members WHERE member_id = ?";
+$query = "SELECT first_name, last_name, email, phone, role_id, rank_id, image FROM members WHERE member_id = ?";
 $stmt = mysqli_prepare($conn, $query);
 mysqli_stmt_bind_param($stmt, "i", $member_id);
 mysqli_stmt_execute($stmt);
@@ -19,6 +19,7 @@ if ($row = mysqli_fetch_assoc($result)) {
     $first_name = $row['first_name'];
     $last_name = $row['last_name'];
     $email = $row['email'];
+    $phone = $row['phone'];
     $role_id = $row['role_id'];
     $rank_id = $row['rank_id'];
     $old_image = $row['image']; // Store the old image
@@ -32,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $first_name = $_POST['first_name'];
     $last_name = $_POST['last_name'];
     $email = $_POST['email'];
+    $phone = $_POST['phone'];
     $role_id = $_POST['role_id'];
     $rank_id = $_POST['rank_id'];
 
@@ -58,9 +60,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Update database with new values
-    $update_query = "UPDATE members SET first_name=?, last_name=?, email=?, role_id=?, rank_id=?, image=? WHERE member_id=?";
+    $update_query = "UPDATE members SET first_name=?, last_name=?, email=?, phone=?, role_id=?, rank_id=?, image=? WHERE member_id=?";
     $stmt = mysqli_prepare($conn, $update_query);
-    mysqli_stmt_bind_param($stmt, "sssissi", $first_name, $last_name, $email, $role_id, $rank_id, $image, $member_id);
+    mysqli_stmt_bind_param($stmt, "sssiissi", $first_name, $last_name, $email, $phone, $role_id, $rank_id, $image, $member_id);
 
     if (mysqli_stmt_execute($stmt)) {
         header("Location: PersonnelIndex.php?status=updated");
@@ -174,6 +176,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-group">
                         <label>Email</label>
                         <input type="email" name="email" value="<?= htmlspecialchars($email) ?>" required>
+                        <label>Phone</label>
+                        <input type="phone" name="phone" value="<?= htmlspecialchars($phone) ?>" required>
                     </div>
                     <div class="form-group">
                         <label>Role</label>
