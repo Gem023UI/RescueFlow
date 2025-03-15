@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add New Personnel</title>
-    <link rel="stylesheet" href="PersonnelIndex.css">
+    <link rel="stylesheet" href="PersonnelCreate.css">
     <script type="text/javascript" src="PersonnelIndex.js" defer></script>
 </head>
 <body>
@@ -108,52 +108,52 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </li>
         </ul>
     </nav>
-    <div class="container">
-    <div class="container mt-5">
-        <h1 class="mb-4">Add New Personnel</h1>
-        <form method="POST" action="PersonnelStore.php" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label for="first_name" class="form-label">First Name</label>
-                <input type="text" name="first_name" id="first_name" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="last_name" class="form-label">Last Name</label>
-                <input type="text" name="last_name" id="last_name" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" name="email" id="email" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="phone" class="form-label">Phone</label>
-                <input type="text" name="phone" id="phone" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="rank_id" class="form-label">Rank</label>
-                <select name="rank_id" id="rank_id" class="form-select" required>
-                    <option value="">Select Rank</option>
-                    <?php while ($rank = $ranks->fetch_assoc()): ?>
-                        <option value="<?= $rank['rank_id']; ?>"><?= $rank['rank_name']; ?></option>
-                    <?php endwhile; ?>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="role_id" class="form-label">Role</label>
-                <select name="role_id" id="role_id" class="form-select" required>
-                    <option value="">Select Role</option>
-                    <?php while ($role = $roles->fetch_assoc()): ?>
-                        <option value="<?= $role['role_id']; ?>"><?= $role['role_name']; ?></option>
-                    <?php endwhile; ?>
-                </select>
-            </div>
-            <div class="mb-3">
-        <label for="image" class="form-label">Upload Image</label>
-        <input type="file" name="image" id="image" class="form-control" accept="image/*">
-    </div>
-            <button type="submit" class="btn btn-success">Save</button>
-            <a href="index.php" class="btn btn-secondary">Cancel</a>
-        </form>
-    </div>
+    <div class="personnel-content">
+    <div class="personnel-header">ADD PERSONNEL</div>
+        <div class="personnel-container">
+            <form method="POST" action="PersonnelStore.php" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="first_name" class="form-label">First Name</label>
+                    <input type="text" name="first_name" id="first_name" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="last_name" class="form-label">Last Name</label>
+                    <input type="text" name="last_name" id="last_name" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" name="email" id="email" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input type="text" name="phone" id="phone" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="rank_id" class="form-label">Rank</label>
+                    <select name="rank_id" id="rank_id" class="form-select" required>
+                        <option value="">Select Rank</option>
+                        <?php while ($rank = $ranks->fetch_assoc()): ?>
+                            <option value="<?= $rank['rank_id']; ?>"><?= $rank['rank_name']; ?></option>
+                        <?php endwhile; ?>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="role_id" class="form-label">Role</label>
+                    <select name="role_id" id="role_id" class="form-select" required>
+                        <option value="">Select Role</option>
+                        <?php while ($role = $roles->fetch_assoc()): ?>
+                            <option value="<?= $role['role_id']; ?>"><?= $role['role_name']; ?></option>
+                        <?php endwhile; ?>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="image" class="form-label">Upload Image</label>
+                    <input type="file" name="image" id="image" class="form-control" accept="image/*">
+                </div>
+                <button type="submit" class="btn btn-success">Save</button>
+                <a href="PersonnelIndex.php" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
     </div>
 </body>
 </html>

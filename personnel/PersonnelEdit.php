@@ -153,49 +153,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </ul>
     </nav>
     <div class="personnel-content">
-    <div class="personnel-header">EDIT PERSONNEL</div>
-    <div class="personnel-container">
-        <div class="personnel-picture">
-            <img src="../personnel/images/<?= $old_image ?>" alt="Profile Picture">
-            <div class="profile-input">
-                <input type="file" name="image" id="image-upload">
-                <label for="image-upload" class="custom-file-upload">Choose File</label>
-            </div>
+        <div class="personnel-header">EDIT PERSONNEL</div>
+        <div class="personnel-container">
+            <form method="POST" enctype="multipart/form-data" class="personnel-form">
+                <input type="hidden" name="member_id" value="<?= htmlspecialchars($member_id) ?>">
+                <div class="personnel-picture">
+                    <img src="../personnel/images/<?= htmlspecialchars($old_image) ?>" alt="Profile Picture">
+                    <div class="profile-input">
+                        <input type="file" name="image" id="image-upload" accept="image/*">
+                        <label for="image-upload" class="custom-file-upload">Choose File</label>
+                    </div>
+                </div>
+                <div class="personnel-info">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" name="first_name" value="<?= htmlspecialchars($first_name) ?>" required>
+                        <label>Last Name</label>
+                        <input type="text" name="last_name" value="<?= htmlspecialchars($last_name) ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" value="<?= htmlspecialchars($email) ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Role</label>
+                        <select name="role_id">
+                            <option value="1" <?= $role_id == 1 ? 'selected' : '' ?>>Fire Fighter</option>
+                            <option value="2" <?= $role_id == 2 ? 'selected' : '' ?>>Team Leader</option>
+                            <option value="3" <?= $role_id == 3 ? 'selected' : '' ?>>Dispatcher</option>
+                            <option value="4" <?= $role_id == 4 ? 'selected' : '' ?>>Administrator</option>
+                        </select>
+                        <label>Rank</label>
+                        <select name="rank_id">
+                            <option value="1" <?= $rank_id == 1 ? 'selected' : '' ?>>Probationary Firefighter</option>
+                            <option value="2" <?= $rank_id == 2 ? 'selected' : '' ?>>Firefighter First Class</option>
+                            <option value="3" <?= $rank_id == 3 ? 'selected' : '' ?>>Lieutenant</option>
+                            <option value="4" <?= $rank_id == 4 ? 'selected' : '' ?>>Captain</option>
+                            <option value="5" <?= $rank_id == 5 ? 'selected' : '' ?>>Chief</option>
+                        </select>
+                    </div>
+                    <div class="btn-container">
+                        <button type="submit" class="btn">Update</button>
+                        <a href="PersonnelIndex.php" class="btn cancel-btn">Cancel</a>
+                    </div>
+                </div>
+            </form>
         </div>
-        <form method="POST" enctype="multipart/form-data" class="personnel-form">
-            <div class="form-group">
-                <label>First Name</label>
-                <input type="text" name="first_name" value="<?= htmlspecialchars($first_name) ?>" required>
-                <label>Last Name</label>
-                <input type="text" name="last_name" value="<?= htmlspecialchars($last_name) ?>" required>
-            </div>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" name="email" value="<?= htmlspecialchars($email) ?>" required>
-            </div>
-            <div class="form-group">
-                <label>Role</label>
-                <select name="role_id">
-                    <option value="1" <?= $role_id == 1 ? 'selected' : '' ?>>Fire Fighter</option>
-                    <option value="2" <?= $role_id == 2 ? 'selected' : '' ?>>Team Leader</option>
-                    <option value="2" <?= $role_id == 3 ? 'selected' : '' ?>>Dispatcher</option>
-                    <option value="2" <?= $role_id == 4 ? 'selected' : '' ?>>Administrator</option>
-                </select>
-                <label>Rank</label>
-                <select name="rank_id">
-                    <option value="1" <?= $rank_id == 1 ? 'selected' : '' ?>>Probationary Firefighter</option>
-                    <option value="2" <?= $rank_id == 2 ? 'selected' : '' ?>>Firefighter First Class</option>
-                    <option value="2" <?= $rank_id == 3 ? 'selected' : '' ?>>Lieutenant</option>
-                    <option value="2" <?= $rank_id == 4 ? 'selected' : '' ?>>Captain</option>
-                    <option value="2" <?= $rank_id == 5 ? 'selected' : '' ?>>Chief</option>
-                </select>
-            </div>
-            <div class="btn-container">
-                <button type="submit" class="btn">Update</button>
-                <a href="PersonnelIndex.php" class="btn cancel-btn">Cancel</a>
-            </div>
-        </form>
-    </div>
     </div>
 </body>
 </html>
