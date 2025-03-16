@@ -181,15 +181,11 @@ $result = $conn->query($sql);
         </ul>
     </nav>
     <main>
-    <h1 class="mb-4">Incident Reports</h1>
-    <a href="create.php" class="btn btn-success mb-3">Add New Incident</a>
-    <a href="generate_pdf.php" class="btn btn-primary mb-3">Download PDF</a>
-    <div class="row">
+    <h1 class="incident-header">Incident Reports</h1>
+    <a href="create.php" class="add-button">Add New Incident</a>
+    <a href="generate_pdf.php" class="pdf-button">Download PDF</a>
+    <div class="incident-container">
         <?php while ($row = $result->fetch_assoc()): ?>
-            <div class="col-md-6 mb-4">
-                <div class="card h-100">
-                    <div class="row g-0">
-                        <!-- Image on the left -->
                         <div class="col-md-4">
                             <?php if (!empty($row['attachments'])): ?>
                                 <?php 
@@ -225,7 +221,7 @@ $result = $conn->query($sql);
                                 </p>
 
                                 <!-- Buttons under the header -->
-                                <div class="mb-3">
+                                <div class="crud-button">
                                     <a href="edit.php?id=<?php echo $row['incident_id']; ?>" class="btn btn-warning btn-sm">Edit</a>
                                     <a href="?delete=<?php echo $row['incident_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">Delete</a>
                                 </div>
@@ -249,9 +245,7 @@ $result = $conn->query($sql);
                                 <?php endif; ?>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
+                    
         <?php endwhile; ?>
     </div>
     </main>
