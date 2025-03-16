@@ -218,13 +218,39 @@ main p{
 }
 
 /*INCIDENTS STYLING*/
-.incident-header h1{
+.incident-header {
   font-size: 50px;
   text-align: center;
   font-weight: 600;
   margin-bottom: 20px;
   margin-top: 20px;
   color: white;
+}
+
+.admin-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.add-button, .pdf-button {
+  display: inline-block;
+  justify-items: center;
+  color: white;
+  background-color: black;
+  border-radius: 5px;
+  padding: 18px;
+  margin: 10px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  text-decoration: none;
+  width: 100%;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.add-button:hover, .pdf-button:hover {
+  color: black;
+  background-color: white;
 }
 
 /* Card Styles */
@@ -235,114 +261,13 @@ main p{
   overflow: hidden;
   margin-bottom: 1.5rem;
   background-color: rgba(0, 0, 0, 0.5);
-}
-
-.card .row {
   display: flex;
-  align-items: stretch;
+  flex-direction: row;
 }
 
-.card .col-md-4 {
-  flex: 0 0 40%;
-  max-width: 40%;
-  background-color: #f1f1f1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-}
-
-.card .col-md-8 {
-  flex: 0 0 60%;
-  max-width: 60%;
-  padding: 1.5rem;
-}
-
-.card img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-}
-
-/* Card Body Styles */
-.card-body {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-}
-
-.card-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
-
-.card-text {
-  font-size: 1rem;
-  line-height: 1.5;
-  margin-bottom: 1.5rem;
-}
-
-.card-text strong {
-  font-weight: bold;
-  color: #555;
-}
-
-/* Button Styles */
-.btn {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
-  font-weight: bold;
-  text-align: center;
-  border-radius: 5px;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-}
-
-.btn-warning {
-  background-color: #ffc107;
-  color: #000;
-  border: none;
-}
-
-.btn-warning:hover {
-  background-color: #e0a800;
-}
-
-.btn-danger {
-  background-color: #dc3545;
-  color: #fff;
-  border: none;
-}
-
-.btn-danger:hover {
-  background-color: #c82333;
-}
-
-/* Additional Attachments Styles */
-.mt-3 {
-  margin-top: 1rem;
-}
-
-.mt-3 strong {
-  font-size: 1rem;
-  color: #555;
-}
-
-.mt-3 img {
-  max-width: 50px;
-  max-height: 50px;
-  margin-right: 5px;
-  border-radius: 5px;
-}
-
-.mt-3 a {
-  color: #007bff;
-  text-decoration: none;
-}
-
-.mt-3 a:hover {
-  text-decoration: underline;
+.incident-picture {
+  height: 200px;
+  width: 200px;
+  padding: 20px;
+  
 }

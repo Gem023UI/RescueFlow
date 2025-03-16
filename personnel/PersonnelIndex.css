@@ -312,7 +312,6 @@ main p{
   font-size: 18px; /* Adjust font size */
   color: white; /* Text color */
   background-color: black; /* Button color */
-  color: white;
   border-radius: 5px; /* Rounded corners */
   text-align: center;
   text-decoration: none; /* Remove underline */
