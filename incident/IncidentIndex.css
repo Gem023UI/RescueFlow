@@ -216,3 +216,146 @@ main p{
     }
   }
 }
+
+/*INCIDENTS STYLING*/
+h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+/* Card Styles */
+.card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  background-color: #fff;
+}
+
+.card .row {
+  display: flex;
+  align-items: stretch;
+}
+
+.card .col-md-4 {
+  flex: 0 0 40%;
+  max-width: 40%;
+  background-color: #f1f1f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.card .col-md-8 {
+  flex: 0 0 60%;
+  max-width: 60%;
+  padding: 1.5rem;
+}
+
+.card img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* Card Body Styles */
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.card-text {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.card-text strong {
+  font-weight: bold;
+  color: #555;
+}
+
+/* Button Styles */
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-warning {
+  background-color: #ffc107;
+  color: #000;
+  border: none;
+}
+
+.btn-warning:hover {
+  background-color: #e0a800;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+/* Additional Attachments Styles */
+.mt-3 {
+  margin-top: 1rem;
+}
+
+.mt-3 strong {
+  font-size: 1rem;
+  color: #555;
+}
+
+.mt-3 img {
+  max-width: 50px;
+  max-height: 50px;
+  margin-right: 5px;
+  border-radius: 5px;
+}
+
+.mt-3 a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.mt-3 a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .card .row {
+      flex-direction: column;
+  }
+
+  .card .col-md-4, .card .col-md-8 {
+      flex: 0 0 100%;
+      max-width: 100%;
+  }
+
+  .card .col-md-4 {
+      height: 200px; /* Adjust height for mobile view */
+  }
+}

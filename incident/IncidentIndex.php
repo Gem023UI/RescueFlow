@@ -130,7 +130,7 @@ $result = $conn->query($sql);
             <span>Activities</span>
             </a>
         </li>
-        <li class="active">
+        <li>
             <a href="../incident/IncidentIndex.php">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="M240-400q0 52 21 98.5t60 81.5q-1-5-1-9v-9q0-32 12-60t35-51l113-111 113 111q23 23 35 51t12 60v9q0 4-1 9 39-35 60-81.5t21-98.5q0-50-18.5-94.5T648-574q-20 13-42 19.5t-45 6.5q-62 0-107.5-41T401-690q-39 33-69 68.5t-50.5 72Q261-513 250.5-475T240-400Zm240 52-57 56q-11 11-17 25t-6 29q0 32 23.5 55t56.5 23q33 0 56.5-23t23.5-55q0-16-6-29.5T537-292l-57-56Zm0-492v132q0 34 23.5 57t57.5 23q18 0 33.5-7.5T622-658l18-22q74 42 117 117t43 163q0 134-93 227T480-80q-134 0-227-93t-93-227q0-129 86.5-245T480-840Z"/></svg>
             <span>Incidents</span>
@@ -184,58 +184,75 @@ $result = $conn->query($sql);
     <h1 class="mb-4">Incident Reports</h1>
     <a href="create.php" class="btn btn-success mb-3">Add New Incident</a>
     <a href="generate_pdf.php" class="btn btn-primary mb-3">Download PDF</a>
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Type</th>
-                    <th>Severity</th>
-                    <th>Barangay</th>
-                    <th>Address</th>
-                    <th>Reported By</th>
-                    <th>Time</th>
-                    <th>Cause</th>
-                    <th>Attachments</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($row = $result->fetch_assoc()): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($row['incident_id']); ?></td>
-                        <td><?php echo htmlspecialchars($row['incident_type']); ?></td>
-                        <td><?php echo htmlspecialchars($row['severity'] ?? 'Not Specified'); ?></td>
-                        <td><?php echo htmlspecialchars($row['barangay']); ?></td>
-                        <td><?php echo htmlspecialchars($row['address']); ?></td>
-                        <td><?php echo htmlspecialchars($row['reporter_name']); ?></td>
-                        <td><?php echo htmlspecialchars($row['reported_time']); ?></td>
-                        <td><?php echo htmlspecialchars($row['cause'] ?? 'No cause recorded.'); ?></td>
-                        <td>
-                            <?php 
-                            if (!empty($row['attachments'])) {
+    <div class="row">
+        <?php while ($row = $result->fetch_assoc()): ?>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="row g-0">
+                        <!-- Image on the left -->
+                        <div class="col-md-4">
+                            <?php if (!empty($row['attachments'])): ?>
+                                <?php 
                                 $files = explode(',', $row['attachments']);
-                                foreach ($files as $file) {
-                                    $file_ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-                                    if (in_array($file_ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
-                                        echo '<img src="' . htmlspecialchars(trim($file)) . '" alt="Attachment" style="max-width: 100px; max-height: 100px; margin-right: 5px;">';
-                                    } else {
-                                        echo '<a href="' . htmlspecialchars(trim($file)) . '" target="_blank">View File</a><br>';
-                                    }
-                                }
-                            } else {
-                                echo 'No Attachments';
-                            }
-                            ?>
-                        </td>
-                        <td>
-                            <a href="edit.php?id=<?php echo $row['incident_id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                            <a href="?delete=<?php echo $row['incident_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">Delete</a>
-                        </td>
-                    </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
+                                $firstFile = trim($files[0]);
+                                $file_ext = strtolower(pathinfo($firstFile, PATHINFO_EXTENSION));
+                                if (in_array($file_ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])): ?>
+                                    <img src="<?php echo htmlspecialchars($firstFile); ?>" class="img-fluid rounded-start" alt="Incident Image" style="width: 100%; height: 100%; object-fit: cover;">
+                                <?php else: ?>
+                                    <div class="d-flex align-items-center justify-content-center bg-light" style="height: 100%;">
+                                        <p class="text-muted mb-0">No Image Available</p>
+                                    </div>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <div class="d-flex align-items-center justify-content-center bg-light" style="height: 100%;">
+                                    <p class="text-muted mb-0">No Attachments</p>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Details on the right -->
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Incident ID: <?php echo htmlspecialchars($row['incident_id']); ?></h5>
+                                <p class="card-text">
+                                    <strong>Type:</strong> <?php echo htmlspecialchars($row['incident_type']); ?><br>
+                                    <strong>Severity:</strong> <?php echo htmlspecialchars($row['severity'] ?? 'Not Specified'); ?><br>
+                                    <strong>Barangay:</strong> <?php echo htmlspecialchars($row['barangay']); ?><br>
+                                    <strong>Address:</strong> <?php echo htmlspecialchars($row['address']); ?><br>
+                                    <strong>Reported By:</strong> <?php echo htmlspecialchars($row['reporter_name']); ?><br>
+                                    <strong>Time:</strong> <?php echo htmlspecialchars($row['reported_time']); ?><br>
+                                    <strong>Cause:</strong> <?php echo htmlspecialchars($row['cause'] ?? 'No cause recorded.'); ?><br>
+                                </p>
+
+                                <!-- Buttons under the header -->
+                                <div class="mb-3">
+                                    <a href="edit.php?id=<?php echo $row['incident_id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="?delete=<?php echo $row['incident_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">Delete</a>
+                                </div>
+
+                                <!-- Additional attachments (if any) -->
+                                <?php if (!empty($row['attachments']) && count($files) > 1): ?>
+                                    <div class="mt-3">
+                                        <strong>Additional Attachments:</strong><br>
+                                        <?php 
+                                        for ($i = 1; $i < count($files); $i++) {
+                                            $file = trim($files[$i]);
+                                            $file_ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                                            if (in_array($file_ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                                                echo '<img src="' . htmlspecialchars($file) . '" alt="Attachment" style="max-width: 50px; max-height: 50px; margin-right: 5px;">';
+                                            } else {
+                                                echo '<a href="' . htmlspecialchars($file) . '" target="_blank">View File</a><br>';
+                                            }
+                                        }
+                                        ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endwhile; ?>
     </div>
     </main>
 </body>
