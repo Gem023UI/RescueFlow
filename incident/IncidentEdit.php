@@ -53,8 +53,9 @@ $causes = $matches[1]; // Extract ENUM values
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Incident Report</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="IncidentEdit.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" src="IncidentIndex.js" defer></script>
 </head>
 <body class="container mt-4">
 <nav id="sidebar">
