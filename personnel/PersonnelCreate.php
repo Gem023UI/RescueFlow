@@ -89,8 +89,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </button>
             <ul class="sub-menu">
             <div>
-                <li><a href="#">Cause of Fire</a></li>
-                <li><a href="#">Fire Hotspot</a></li>
+                <li><a href="../analysis/AnalysisCauses.php">Cause of Fire</a></li>
+                <li><a href="../analysis/AnalysisHotspot.php">Fire Hotspot</a></li>
             </div>
             </ul>
         </li>
