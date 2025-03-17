@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('../includes/config.php');
 include('../dispatch/dispatchbutton.html');
 require_once('../vendor/tecnickcom/tcpdf/tcpdf.php');
@@ -80,9 +81,23 @@ if (isset($_GET['delete'])) {
     $stmt->bind_param("i", $incident_id);
     if ($stmt->execute()) {
         $stmt->close();
-        header("Location: index.php");
+        header("Location: IncidentIndex.php");
         exit();
     }
+}
+
+// Restrict if not Admin Function
+$user_id = $_SESSION['user_id'] ?? null;
+$role_id = null;
+
+if ($user_id) {
+    $query = "SELECT role_id FROM users WHERE user_id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $stmt->bind_result($role_id);
+    $stmt->fetch();
+    $stmt->close();
 }
 
 // Fetch incidents with barangay name instead of location
@@ -98,19 +113,6 @@ $sql = "SELECT i.*,
         LEFT JOIN barangays b ON i.barangay_id = b.barangay_id 
         ORDER BY i.reported_time DESC";
 
-//Restrict if not Admin Function
-$user_id = $_SESSION['user_id'] ?? null;
-$role_id = null;
-
-if ($user_id) {
-    $query = "SELECT role_id FROM users WHERE user_id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    $stmt->bind_result($role_id);
-    $stmt->fetch();
-    $stmt->close();
-}
 
 $result = $conn->query($sql);
 ?>
@@ -193,32 +195,32 @@ $result = $conn->query($sql);
     <h1 class="incident-header">INCIDENT REPORTS</h1>
     <?php if ($role_id == 4): // Only show for admin ?>
         <div class="admin-button">
-            <a href="create.php" class="add-button">ADD INCIDENT</a>
-            <a href="generate_pdf.php" class="pdf-button">GENERATE PDF</a>
+            <a href="IncidentCreate.php" class="add-button">ADD INCIDENT</a>
+            <a href="IncidentPDF.php" class="pdf-button">GENERATE PDF</a>
         </div>
     <?php endif; ?>
     <div class="incident-container">
         <?php while ($row = $result->fetch_assoc()): ?>
-            <div class="incident-picture">
-                <?php if (!empty($row['attachments'])): ?>
-                <?php 
-                $files = explode(',', $row['attachments']);
-                $firstFile = trim($files[0]);
-                $file_ext = strtolower(pathinfo($firstFile, PATHINFO_EXTENSION));
-                if (in_array($file_ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])): ?>
-                    <img src="<?php echo htmlspecialchars($firstFile); ?>" class="img-fluid rounded-start" alt="Incident Image" style="width: 100%; height: 100%; object-fit: cover;">
-                    <?php else: ?>
-                        <div class="d-flex align-items-center justify-content-center bg-light" style="height: 100%;">
-                            <p class="text-muted mb-0">No Image Available</p>
-                        </div>
-                    <?php endif; ?>
-                    <?php else: ?>
-                        <div class="d-flex align-items-center justify-content-center bg-light" style="height: 100%;">
-                            <p class="text-muted mb-0">No Attachments</p>
-                        </div>
-                    <?php endif; ?>
-            </div>
-            <div class="col-md-8">
+            <div class="incident-structure">
+                <div class="incident-picture">
+                    <?php if (!empty($row['attachments'])): ?>
+                    <?php 
+                    $files = explode(',', $row['attachments']);
+                    $firstFile = trim($files[0]);
+                    $file_ext = strtolower(pathinfo($firstFile, PATHINFO_EXTENSION));
+                    if (in_array($file_ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])): ?>
+                        <img src="<?php echo htmlspecialchars($firstFile); ?>" class="img-fluid rounded-start" alt="Incident Image" style="width: 100%; height: 100%; object-fit: cover;">
+                        <?php else: ?>
+                            <div class="d-flex align-items-center justify-content-center bg-light" style="height: 100%;">
+                                <p class="text-muted mb-0">No Image Available</p>
+                            </div>
+                        <?php endif; ?>
+                        <?php else: ?>
+                            <div class="d-flex align-items-center justify-content-center bg-light" style="height: 100%;">
+                                <p class="text-muted mb-0">No Attachments</p>
+                            </div>
+                        <?php endif; ?>
+                </div>
                 <div class="incident-info">
                     <h5 class="card-title">Incident ID: <?php echo htmlspecialchars($row['incident_id']); ?></h5>
                     <p class="card-text">
