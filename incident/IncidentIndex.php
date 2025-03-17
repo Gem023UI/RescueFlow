@@ -1,5 +1,6 @@
 <?php
 include('../includes/config.php');
+include('../dispatch/dispatchbutton.html');
 require_once('../vendor/tecnickcom/tcpdf/tcpdf.php');
 
 // Handle Create & Update
@@ -97,6 +98,20 @@ $sql = "SELECT i.*,
         LEFT JOIN barangays b ON i.barangay_id = b.barangay_id 
         ORDER BY i.reported_time DESC";
 
+//Restrict if not Admin Function
+$user_id = $_SESSION['user_id'] ?? null;
+$role_id = null;
+
+if ($user_id) {
+    $query = "SELECT role_id FROM users WHERE user_id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $stmt->bind_result($role_id);
+    $stmt->fetch();
+    $stmt->close();
+}
+
 $result = $conn->query($sql);
 ?>
 
@@ -122,12 +137,6 @@ $result = $conn->query($sql);
             <a href="../dashboard/RescueFlowIndex.php" >
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M240-200h120v-200q0-17 11.5-28.5T400-440h160q17 0 28.5 11.5T600-400v200h120v-360L480-740 240-560v360Zm-80 0v-360q0-19 8.5-36t23.5-28l240-180q21-16 48-16t48 16l240 180q15 11 23.5 28t8.5 36v360q0 33-23.5 56.5T720-120H560q-17 0-28.5-11.5T520-160v-200h-80v200q0 17-11.5 28.5T400-120H240q-33 0-56.5-23.5T160-200Zm320-270Z"/></svg>
             <span>Dashboard</span>
-            </a>
-        </li>
-        <li>
-            <a href="../activities/ActivityIndex.php">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v200h-80v-40H200v400h280v80H200Zm0-560h560v-80H200v80Zm0 0v-80 80ZM560-80v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T903-300L683-80H560Zm300-263-37-37 37 37ZM620-140h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg>
-            <span>Activities</span>
             </a>
         </li>
         <li>
@@ -182,10 +191,12 @@ $result = $conn->query($sql);
     </nav>
     <main>
     <h1 class="incident-header">INCIDENT REPORTS</h1>
-    <div class="admin-button">
-        <a href="create.php" class="add-button">ADD INCIDENT</a>
-        <a href="generate_pdf.php" class="pdf-button">GENERATE PDF</a>
-    </div>
+    <?php if ($role_id == 4): // Only show for admin ?>
+        <div class="admin-button">
+            <a href="create.php" class="add-button">ADD INCIDENT</a>
+            <a href="generate_pdf.php" class="pdf-button">GENERATE PDF</a>
+        </div>
+    <?php endif; ?>
     <div class="incident-container">
         <?php while ($row = $result->fetch_assoc()): ?>
             <div class="incident-picture">
@@ -221,10 +232,12 @@ $result = $conn->query($sql);
                             <strong>Time:</strong> <?php echo htmlspecialchars($row['reported_time']); ?><br>
                         </div>
                     </p>
-                    <div class="crud-button">
-                        <a href="edit.php?id=<?php echo $row['incident_id']; ?>" class="edit-button">Edit</a>
-                        <a href="?delete=<?php echo $row['incident_id']; ?>" class="delete-button" onclick="return confirm('Are you sure?');">Delete</a>
-                    </div>
+                    <?php if ($role_id == 4): // Only show for admin ?>
+                        <div class="crud-button">
+                            <a href="edit.php?id=<?php echo $row['incident_id']; ?>" class="edit-button">Edit</a>
+                            <a href="?delete=<?php echo $row['incident_id']; ?>" class="delete-button" onclick="return confirm('Are you sure?');">Delete</a>
+                        </div>
+                    <?php endif; ?>
                     <?php if (!empty($row['attachments']) && count($files) > 1): ?>
                     <div class="incident-additional">
                         <strong>Additional Attachments:</strong><br>

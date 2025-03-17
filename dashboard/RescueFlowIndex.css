@@ -2,7 +2,7 @@
 :root{
   --base-clr: orangered;
   --line-clr: white;
-  --hover-clr: white;
+  --hover-clr: black;
   --text-clr: #e6e6ef;
   --accent-clr: #5e63ff;
   --secondary-text-clr: #b0b3c1;
@@ -88,7 +88,6 @@ body{
 }
 #sidebar a:hover, #sidebar .dropdown-btn:hover{
   background-color: var(--hover-clr);
-  color: black;
 }
 #sidebar .sub-menu{
   display: grid;
@@ -136,14 +135,15 @@ main p{
   margin-top: 5px;
   margin-bottom: 15px;
 }
-.container{
+.container {
   border: 3px solid var(--line-clr);
   border-radius: 1em;
   margin-bottom: 20px;
   padding: min(3em, 15%);
-
+  background-color: rgba(0, 0, 0, 0.2); /* Black with 60% opacity */
   h2, p { margin-top: 1em }
 }
+
 
 @media(max-width: 800px){
   body{
