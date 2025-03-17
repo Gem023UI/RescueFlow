@@ -25,8 +25,8 @@ $conn->close();
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="refresh" content="5"> <!-- Refresh page every 5 seconds -->
   <title>BFP NCR Taguig City</title>
-  <link rel="stylesheet" href="RescueFlowIndex.css">
-  <script type="text/javascript" src="RescueFlowIndex.js" defer></script>
+  <link rel="stylesheet" href="AnalysisHotspot.css">
+  <script type="text/javascript" src="AnalysisIndex.js" defer></script>
 </head>
 <body>
   <nav id="sidebar">
