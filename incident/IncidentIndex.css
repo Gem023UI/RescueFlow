@@ -234,13 +234,15 @@ main p{
 }
 
 .add-button, .pdf-button {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
   justify-items: center;
+  align-items: center;
   color: white;
   background-color: black;
   border-radius: 5px;
-  padding: 18px;
   margin: 10px;
+  padding: 15px 30px;
   transition: background-color 0.3s ease, transform 0.2s ease;
   text-decoration: none;
   width: 100%;
@@ -253,7 +255,6 @@ main p{
   background-color: white;
 }
 
-/* Card Styles */
 .incident-container {
   border: 1px solid #ddd;
   border-radius: 10px;
@@ -269,5 +270,40 @@ main p{
   height: 200px;
   width: 200px;
   padding: 20px;
-  
+}
+
+.incident-info {
+
+}
+
+.incident-details {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  gap: 10px;
+  color: white;
+  font-weight: 200;
+}
+
+.crud-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.edit-button, .delete-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  margin: 10px;
+  text-decoration: none;
+  font-weight: 400;
+  color: white;
+  background-color: black;
+  border-radius: 5px;
+  width: 100%;
 }

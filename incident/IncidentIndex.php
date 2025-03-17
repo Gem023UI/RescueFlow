@@ -215,13 +215,15 @@ $result = $conn->query($sql);
                         <strong>Severity:</strong> <?php echo htmlspecialchars($row['severity'] ?? 'Not Specified'); ?><br>
                         <strong>Barangay:</strong> <?php echo htmlspecialchars($row['barangay']); ?><br>
                         <strong>Address:</strong> <?php echo htmlspecialchars($row['address']); ?><br>
-                        <strong>Reported By:</strong> <?php echo htmlspecialchars($row['reporter_name']); ?><br>
-                        <strong>Time:</strong> <?php echo htmlspecialchars($row['reported_time']); ?><br>
                         <strong>Cause:</strong> <?php echo htmlspecialchars($row['cause'] ?? 'No cause recorded.'); ?><br>
+                        <div class="incident-details">
+                            <strong>Reported By:</strong> <?php echo htmlspecialchars($row['reporter_name']); ?><br>
+                            <strong>Time:</strong> <?php echo htmlspecialchars($row['reported_time']); ?><br>
+                        </div>
                     </p>
                     <div class="crud-button">
-                        <a href="edit.php?id=<?php echo $row['incident_id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                        <a href="?delete=<?php echo $row['incident_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">Delete</a>
+                        <a href="edit.php?id=<?php echo $row['incident_id']; ?>" class="edit-button">Edit</a>
+                        <a href="?delete=<?php echo $row['incident_id']; ?>" class="delete-button" onclick="return confirm('Are you sure?');">Delete</a>
                     </div>
                     <?php if (!empty($row['attachments']) && count($files) > 1): ?>
                     <div class="incident-additional">
