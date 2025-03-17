@@ -234,7 +234,7 @@ $result = $conn->query($sql);
                     </p>
                     <?php if ($role_id == 4): // Only show for admin ?>
                         <div class="crud-button">
-                            <a href="edit.php?id=<?php echo $row['incident_id']; ?>" class="edit-button">Edit</a>
+                            <a href="IncidentEdit.php?id=<?php echo $row['incident_id']; ?>" class="edit-button">Edit</a>
                             <a href="?delete=<?php echo $row['incident_id']; ?>" class="delete-button" onclick="return confirm('Are you sure?');">Delete</a>
                         </div>
                     <?php endif; ?>
