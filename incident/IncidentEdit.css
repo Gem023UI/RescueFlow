@@ -216,3 +216,56 @@ main p{
     }
   }
 }
+
+/*INCIDENTS STYLING*/
+.incident-header {
+  font-size: 50px;
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  color: white;
+}
+
+.incident-info {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+  padding: 20px;
+  margin: 10px;
+  color: white;
+}
+
+.incident-details {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 15px;
+  gap: 30px;
+  color: white;
+  font: 50px;
+  font-weight: 200;
+  width: 100%;
+}
+
+.crud-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.update-btn, .cancel-btn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  margin: 10px;
+  text-decoration: none;
+  font-weight: 400;
+  color: white;
+  background-color: black;
+  border-radius: 5px;
+  width: 100px;
+}

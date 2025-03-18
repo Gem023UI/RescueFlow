@@ -54,11 +54,11 @@ $causes = $matches[1]; // Extract ENUM values
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Incident Report</title>
     <link rel="stylesheet" href="IncidentEdit.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script type="text/javascript" src="IncidentIndex.js" defer></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="container mt-4">
-<nav id="sidebar">
+<body">
+    <nav id="sidebar">
         <ul>
         <li>
             <span class="logo">BFP NCR Taguig S1</span>
@@ -123,20 +123,28 @@ $causes = $matches[1]; // Extract ENUM values
         </ul>
     </nav>
     <main>
-    <h1 class="mb-4">Edit Incident Report</h1>
-    <a href="index.php" class="btn btn-secondary mb-3">Back to List</a>
-    
+    <h1 class="incident-header">EDIT INCIDENT REPORT</h1>
     <form action="update.php" method="POST" class="needs-validation" novalidate>
         <input type="hidden" name="incident_id" value="<?php echo $incident['incident_id']; ?>">
-        
-        <div class="mb-3">
-            <label for="incident_type" class="form-label">Incident Type</label>
+        <!-- Incident, Severity Type -->
+        <div class="incident-details">
+            <label for="incident_type" class="form-label"><strong>Incident Type</strong></label>
             <input type="text" class="form-control" id="incident_type" name="incident_type" value="<?php echo htmlspecialchars($incident['incident_type']); ?>" required>
-        </div>
-        
-         <!-- Replace Location with Barangay Dropdown -->
-         <div class="mb-3">
-            <label for="barangay_id" class="form-label">Barangay</label>
+            <label for="severity_id" class="form-label"><strong>Severity</strong></label>
+            <select class="form-control" id="severity_id" name="severity_id" required>
+                <option value="">Select Severity</option>
+                <?php while ($severity = $severity_result->fetch_assoc()): ?>
+                    <option value="<?php echo $severity['id']; ?>" <?php echo ($incident['severity_id'] == $severity['id']) ? 'selected' : ''; ?>>
+                        <?php echo htmlspecialchars($severity['level']); ?>
+                    </option>
+                <?php endwhile; ?>
+            </select>
+        </div>  
+        <!-- Address, Baranggay -->
+        <div class="incident-details">
+        <label for="address" class="form-label"><strong>Address</strong><</label>
+        <input type="text" class="form-control" id="address" name="address" value="<?php echo htmlspecialchars($incident['address']); ?>" required>
+            <label for="barangay_id" class="form-label"><strong>Baranggay</strong></label>
             <select class="form-control" id="barangay_id" name="barangay_id" required>
                 <option value="">Select Barangay</option>
                 <?php while ($barangay = $barangay_result->fetch_assoc()): ?>
@@ -147,32 +155,11 @@ $causes = $matches[1]; // Extract ENUM values
                 <?php endwhile; ?>
             </select>
         </div>
-        
-         <!-- Add Address Field -->
-         <div class="mb-3">
-            <label for="address" class="form-label">Address</label>
-            <input type="text" class="form-control" id="address" name="address" value="<?php echo htmlspecialchars($incident['address']); ?>" required>
-        </div>
-        <div class="mb-3">
-    <label for="reported_by" class="form-label">Reported By</label>
-    <input type="text" class="form-control" id="reported_by" name="reported_by" value="<?php echo htmlspecialchars($incident['reported_by'] ?? ''); ?>" required>
-</div>
-
-        
-        <div class="mb-3">
-            <label for="severity_id" class="form-label">Severity Level</label>
-            <select class="form-control" id="severity_id" name="severity_id" required>
-                <option value="">Select Severity</option>
-                <?php while ($severity = $severity_result->fetch_assoc()): ?>
-                    <option value="<?php echo $severity['id']; ?>" <?php echo ($incident['severity_id'] == $severity['id']) ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($severity['level']); ?>
-                    </option>
-                <?php endwhile; ?>
-            </select>
-        </div>
-        
-        <div class="mb-3">
-            <label for="cause" class="form-label">Cause</label>
+        <!-- reporter, cause -->
+        <div class="incident-details">
+            <label for="reported_by" class="form-label"><strong>Reported By</strong></label>
+            <input type="text" class="form-control" id="reported_by" name="reported_by" value="<?php echo htmlspecialchars($incident['reported_by'] ?? ''); ?>" required>
+            <label for="cause" class="form-label"><strong>Cause</strong></label>
             <select class="form-control" id="cause" name="cause" required>
                 <option value="">Select Cause</option>
                 <?php foreach ($causes as $cause_option): ?>
@@ -182,15 +169,10 @@ $causes = $matches[1]; // Extract ENUM values
                 <?php endforeach; ?>
             </select>
         </div>
-
-        
-       
-        
-        <button type="submit" class="btn btn-primary">Update</button>
+        <button type="submit" class="update-btn">UPDATE</button>
+        <a href="IncidentIndex.php" class="cancel-btn">CANCEL</a>
     </form>
     </main>
-    
-    
     <script>
         (function() {
             'use strict';
@@ -205,12 +187,6 @@ $causes = $matches[1]; // Extract ENUM values
                 }, false);
             });
         })();
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </script>    
 </body>
 </html>
-
-<?php
-$conn->close();
-ob_end_flush();
-?>

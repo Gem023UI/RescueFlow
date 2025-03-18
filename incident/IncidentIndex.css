@@ -256,12 +256,8 @@ main p{
 }
 
 .incident-container {
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   margin-bottom: 1.5rem;
-  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
 }
@@ -271,6 +267,7 @@ main p{
   flex-direction: row;
   border: 1px solid white;
   border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.5);
   margin: 25px;
   padding: 5px;
 }
