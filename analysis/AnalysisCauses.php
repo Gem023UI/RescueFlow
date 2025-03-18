@@ -23,10 +23,11 @@ $conn->close();
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="5"> <!-- Refresh page every 5 seconds -->
   <title>BFP NCR Taguig City</title>
   <link rel="stylesheet" href="AnalysisCauses.css">
   <script type="text/javascript" src="AnalysisIndex.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 </head>
 <body>
   <nav id="sidebar">
@@ -73,8 +74,8 @@ $conn->close();
             </button>
             <ul class="sub-menu">
             <div>
-                <li><a href="#">Cause of Fire</a></li>
-                <li><a href="#">Fire Hotspot</a></li>
+                <li><a href="../analysis/AnalysisCauses.php">Cause of Fire</a></li>
+                <li><a href="../analysis/AnalysisHotspot.php">Fire Hotspot</a></li>
             </div>
             </ul>
         </li>
@@ -94,31 +95,74 @@ $conn->close();
         </ul>
     </nav>
   <main>
-    <div class="container">
-      <h2>DISPATCH DASHBOARD</h2>
-      <?php if (empty($locations)): ?>
-        <p>The incident has been resolved.</p>
-        <?php else: ?>
-        <ul>
-            <?php foreach ($locations as $location): ?>
-                <li>
-                    <strong><?php echo htmlspecialchars($location['location']); ?></strong> 
-                    (Submitted on <?php echo $location['dispatched_at']; ?>)
-                    <br>
-                    <iframe width="100%" height="300" src="https://maps.google.com/maps?q=<?php echo urlencode($location['location']); ?>&output=embed"></iframe>
-                </li>
-                <hr>
-            <?php endforeach; ?>
-        </ul>
-        <?php endif; ?>
+  <h2>INCIDENT ANALYSIS</h2>
+    <div class="chart-container">
+        <!-- Pie Chart -->
+        <div class="chart-box">
+            <h3>Leading Causes of Incidents in Taguig City</h3>
+            <canvas id="causeChart"></canvas>
+        </div>
     </div>
-    <div class="container">
-      <h2>ACTIVITY TODAY</h2>
-      <p>Lists of activities scheduled to be held today.</p>
-    </div>
-    <div class="container">
-      <h2>ON SHIFT PERSONNELS</h2>
-      <p>Lists of personnels on duty as of today.</p>
+    <div class="chart-data">
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('AnalysisFetchData.php')
+                .then(response => response.json())
+                .then(data => {
+                  // ===== PIE CHART =====
+                    let causes = [];
+                    let counts = [];
+                    let totalIncidents = 0;
+
+                    let colors = [
+                        "#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0",
+                        "#9966FF", "#FF9F40", "#C9CBCF", "#2A9D8F"
+                    ];
+                    data.causes.forEach((row, index) => {
+                        causes.push(row.cause);
+                        counts.push(row.count);
+                        totalIncidents += row.count;
+                    });
+                    new Chart(document.getElementById('causeChart'), {
+                        type: 'doughnut',
+                        data: {
+                            labels: causes,
+                            datasets: [{
+                                data: counts,
+                                backgroundColor: colors.slice(0, causes.length),
+                                hoverOffset: 10
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { display: true, position: 'right' },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(tooltipItem) {
+                                            let value = tooltipItem.raw;
+                                            let percentage = ((value / totalIncidents) * 100).toFixed(1);
+                                            return ` ${tooltipItem.label}: ${value} (${percentage}%)`;
+                                        }
+                                    }
+                                },
+                                datalabels: {
+                                    color: '#fff',
+                                    formatter: (value, context) => {
+                                        let percentage = ((value / totalIncidents) * 100).toFixed(1);
+                                        return `${percentage}%`;
+                                    }
+                                }
+                            },
+                            animation: {
+                                animateRotate: true,
+                                animateScale: true
+                            }
+                        }
+                    });
+                });
+        });
+      </script>
     </div>
   </main>
 </body>

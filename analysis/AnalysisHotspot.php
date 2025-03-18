@@ -23,10 +23,11 @@ $conn->close();
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="5"> <!-- Refresh page every 5 seconds -->
   <title>BFP NCR Taguig City</title>
   <link rel="stylesheet" href="AnalysisHotspot.css">
   <script type="text/javascript" src="AnalysisIndex.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 </head>
 <body>
   <nav id="sidebar">
@@ -73,8 +74,8 @@ $conn->close();
             </button>
             <ul class="sub-menu">
             <div>
-                <li><a href="#">Cause of Fire</a></li>
-                <li><a href="#">Fire Hotspot</a></li>
+                <li><a href="../analysis/AnalysisCauses.php">Cause of Fire</a></li>
+                <li><a href="../analysis/AnalysisHotspot.php">Fire Hotspot</a></li>
             </div>
             </ul>
         </li>
@@ -94,31 +95,67 @@ $conn->close();
         </ul>
     </nav>
   <main>
-    <div class="container">
-      <h2>DISPATCH DASHBOARD</h2>
-      <?php if (empty($locations)): ?>
-        <p>The incident has been resolved.</p>
-        <?php else: ?>
-        <ul>
-            <?php foreach ($locations as $location): ?>
-                <li>
-                    <strong><?php echo htmlspecialchars($location['location']); ?></strong> 
-                    (Submitted on <?php echo $location['dispatched_at']; ?>)
-                    <br>
-                    <iframe width="100%" height="300" src="https://maps.google.com/maps?q=<?php echo urlencode($location['location']); ?>&output=embed"></iframe>
-                </li>
-                <hr>
-            <?php endforeach; ?>
-        </ul>
-        <?php endif; ?>
+  <h2>INCIDENT ANALYSIS</h2>
+    <div class="chart-container">
+        <!-- Bar Chart -->
+        <div class="chart-box">
+            <h3>Incident Hotspot in Taguig City</h3>
+            <canvas id="incidentChart"></canvas>
+        </div>
     </div>
-    <div class="container">
-      <h2>ACTIVITY TODAY</h2>
-      <p>Lists of activities scheduled to be held today.</p>
-    </div>
-    <div class="container">
-      <h2>ON SHIFT PERSONNELS</h2>
-      <p>Lists of personnels on duty as of today.</p>
+    <div class="chart-data">
+      <script>
+          document.addEventListener("DOMContentLoaded", function() {
+              fetch('AnalysisFetchData.php')
+                  .then(response => response.json())
+                  .then(data => {
+                      // ===== BAR CHART =====
+                      let dates = [];
+                      let barangays = {};
+                      let barangayColors = {};
+                      // Assign random colors
+                      const getRandomColor = () => '#' + Math.floor(Math.random()*16777215).toString(16);
+                      data.incidents.forEach(row => {
+                          if (!dates.includes(row.incident_date)) {
+                              dates.push(row.incident_date);
+                          }
+                          if (!barangays[row.barangay]) {
+                              barangays[row.barangay] = {};
+                              barangayColors[row.barangay] = getRandomColor();
+                          }
+                          barangays[row.barangay][row.incident_date] = row.count;
+                      });
+                      let datasets = Object.keys(barangays).map(barangay => ({
+                          label: barangay,
+                          backgroundColor: barangayColors[barangay],
+                          data: dates.map(date => barangays[barangay][date] || 0)
+                      }));
+                      new Chart(document.getElementById('incidentChart'), {
+                          type: 'bar',
+                          data: {
+                              labels: dates,
+                              datasets: datasets
+                          },
+                          options: {
+                              responsive: true,
+                              plugins: {
+                                  legend: { display: true, position: 'top' },
+                                  tooltip: {
+                                      enabled: true,
+                                      callbacks: {
+                                          label: tooltipItem => ` ${tooltipItem.dataset.label}: ${tooltipItem.raw} incidents`
+                                      }
+                                  }
+                              },
+                              scales: {
+                                  x: { title: { display: true, text: 'Date of Incidents' } },
+                                  y: { beginAtZero: true, title: { display: true, text: 'Number of Incidents' } }
+                              }
+                          }
+                      });
+                  });
+          });
+      </script>
     </div>
   </main>
 </body>

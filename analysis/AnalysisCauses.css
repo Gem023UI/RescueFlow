@@ -216,3 +216,32 @@ main p{
     }
   }
 }
+
+h2 {
+  font-size: 50px;
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 50px;
+  margin-top: 20px;
+  color: white;
+}
+
+/* Center the chart container */
+.chart-container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100vh; /* Full viewport height to center vertically */
+  margin: 0 auto; /* Center horizontally */
+  border: 1px solid white;
+  border-radius: 10px;
+  margin: 10px;
+}
+
+/* Set the dimensions of the chart box */
+.chart-box {
+  width: 700px; /* Fixed width */
+  height: 700px; /* Fixed height */
+  text-align: center; /* Center the text inside the box */
+  color: white;
+}
