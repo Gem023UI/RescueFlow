@@ -73,8 +73,8 @@ $conn->close();
             </button>
             <ul class="sub-menu">
             <div>
-                <li><a href="#">Cause of Fire</a></li>
-                <li><a href="#">Fire Hotspot</a></li>
+                <li><a href="../analysis/AnalysisCauses.php">Cause of Fire</a></li>
+                <li><a href="../analysis/AnalysisHotspot.php">Fire Hotspot</a></li>
             </div>
             </ul>
         </li>
@@ -113,8 +113,8 @@ $conn->close();
         <?php endif; ?>
     </div>
     <div class="container">
-      <h2>ACTIVITY TODAY</h2>
-      <p>Lists of activities scheduled to be held today.</p>
+      <h2>TRAINING TODAY</h2>
+      <p>Lists of training scheduled to be held today.</p>
     </div>
     <div class="container">
       <h2>ON SHIFT PERSONNELS</h2>

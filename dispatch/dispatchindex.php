@@ -65,7 +65,8 @@ if (isset($_POST["submit_location"])) {
                 $mail->send();
                 $mail->clearAddresses();  // Clear addresses for the next email
             }
-            echo "<p style='color: green;'>Emails sent successfully!</p>";
+            $_SESSION['success_message'] = "Personnels Notified Successfully!";
+            header("Location: DispatchIndex.php");
         } catch (Exception $e) {
             echo "<p style='color: red;'>Mailer Error: " . $mail->ErrorInfo . "</p>";
         }
@@ -82,9 +83,11 @@ if (isset($_POST["update_status"])) {
     $updateSql = "UPDATE dispatches SET status_id = '$new_status' WHERE disp_id = '$dispatch_id'";
 
     if (mysqli_query($conn, $updateSql)) {
-        echo "<p style='color: green;'>Status updated successfully!</p>";
+        $_SESSION['success_message'] = "Status Updated Successfully!";
+        header("Location: DispatchIndex.php");
     } else {
         echo "<p style='color: red;'>Error: " . mysqli_error($conn) . "</p>";
+        header("Location: DispatchIndex.php");
     }
 }
 
@@ -108,8 +111,6 @@ if (isset($_POST['submit_emergency_info'])) {
 }
 ?>
 
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -118,34 +119,9 @@ if (isset($_POST['submit_emergency_info'])) {
     <title>Firefighter Dispatch System</title>
     <link rel="stylesheet" href="DispatchIndex.css">
     <script type="text/javascript" src="DispatchIndex.js" defer></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .container {
-            max-width: 900px;
-        }
-        h2 {
-            margin-top: 30px;
-        }
-        form {
-            margin-bottom: 20px;
-        }
-        textarea {
-            width: 100%;
-            height: 100px;
-            padding: 10px;
-        }
-        .form-control {
-            margin-bottom: 10px;
-        }
-        .alert {
-            margin-top: 20px;
-        }
-        .carousel-item {
-            padding: 10px;
-        }
-    </style>
+    
 </head>
-<body class="bg-light">
+<body>
     <nav id="sidebar">
         <ul>
         <li>
@@ -158,12 +134,6 @@ if (isset($_POST['submit_emergency_info'])) {
             <a href="../dashboard/RescueFlowIndex.php" >
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M240-200h120v-200q0-17 11.5-28.5T400-440h160q17 0 28.5 11.5T600-400v200h120v-360L480-740 240-560v360Zm-80 0v-360q0-19 8.5-36t23.5-28l240-180q21-16 48-16t48 16l240 180q15 11 23.5 28t8.5 36v360q0 33-23.5 56.5T720-120H560q-17 0-28.5-11.5T520-160v-200h-80v200q0 17-11.5 28.5T400-120H240q-33 0-56.5-23.5T160-200Zm320-270Z"/></svg>
             <span>Dashboard</span>
-            </a>
-        </li>
-        <li>
-            <a href="../activities/ActivityIndex.php">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v200h-80v-40H200v400h280v80H200Zm0-560h560v-80H200v80Zm0 0v-80 80ZM560-80v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T903-300L683-80H560Zm300-263-37-37 37 37ZM620-140h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg>
-            <span>Activities</span>
             </a>
         </li>
         <li>
@@ -216,11 +186,11 @@ if (isset($_POST['submit_emergency_info'])) {
         </li>
         </ul>
     </nav>
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">Firefighter Dispatch System</h1>
-
+    <div class="dispatch-container">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <h1 class="dispatch-header">DISPATCH ON GOING</h1>
         <!-- Dispatch Location Form -->
-        <div class="card p-4 mb-4">
+        <div class="dispatch-form">
             <h2>Dispatch Location</h2>
             <form method="POST">
                 <div class="mb-3">
@@ -231,7 +201,7 @@ if (isset($_POST['submit_emergency_info'])) {
         </div>
 
         <!-- Update Dispatch Status Form -->
-        <div class="card p-4 mb-4">
+        <div class="dispatch-form">
             <h2>Update Dispatch Status</h2>
             <form method="POST">
                 <div class="mb-3">
@@ -257,7 +227,7 @@ if (isset($_POST['submit_emergency_info'])) {
         </div>
 
         <!-- Emergency Details Form -->
-        <div class="card p-4 mb-4">
+        <div class="dispatch-form">
             <h2>Emergency Details Input</h2>
             <form method="POST">
                 <input type="hidden" name="dispatch_id" value="1">
@@ -286,7 +256,7 @@ if (isset($_POST['submit_emergency_info'])) {
         </div>
 
         <!-- Button to trigger emergency history view -->
-        <div class="card p-4 mb-4">
+        <div class="dispatch-form">
             <h2>View Emergency History</h2>
             <button class="btn btn-info w-100" data-bs-toggle="collapse" data-bs-target="#emergencyHistory" aria-expanded="false" aria-controls="emergencyHistory">
                 View Emergency History
@@ -326,7 +296,6 @@ if (isset($_POST['submit_emergency_info'])) {
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Scroll to previous item in the carousel
         document.getElementById('scrollPrev').addEventListener('click', function () {
