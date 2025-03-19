@@ -121,71 +121,56 @@ $causes = $matches[1]; // Extract ENUM values
         </li>
         </ul>
     </nav>
-    <main>
-    <h1 class="incident-header">EDIT INCIDENT REPORT</h1>
-    <form action="update.php" method="POST" class="needs-validation" novalidate>
-        <input type="hidden" name="incident_id" value="<?php echo $incident['incident_id']; ?>">
-        <!-- Incident, Severity Type -->
-        <div class="incident-details">
-            <label for="incident_type" class="form-label"><strong>Incident Type</strong></label>
-            <input type="text" class="form-control" id="incident_type" name="incident_type" value="<?php echo htmlspecialchars($incident['incident_type']); ?>" required>
-            <label for="severity_id" class="form-label"><strong>Severity</strong></label>
-            <select class="form-control" id="severity_id" name="severity_id" required>
-                <option value="">Select Severity</option>
-                <?php while ($severity = $severity_result->fetch_assoc()): ?>
-                    <option value="<?php echo $severity['id']; ?>" <?php echo ($incident['severity_id'] == $severity['id']) ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($severity['level']); ?>
-                    </option>
-                <?php endwhile; ?>
-            </select>
-        </div>  
-        <!-- Address, Baranggay -->
-        <div class="incident-details">
-        <label for="address" class="form-label"><strong>Address</strong><</label>
-        <input type="text" class="form-control" id="address" name="address" value="<?php echo htmlspecialchars($incident['address']); ?>" required>
-            <label for="barangay_id" class="form-label"><strong>Baranggay</strong></label>
-            <select class="form-control" id="barangay_id" name="barangay_id" required>
-                <option value="">Select Barangay</option>
-                <?php while ($barangay = $barangay_result->fetch_assoc()): ?>
-                    <option value="<?php echo $barangay['barangay_id']; ?>" 
-                        <?php echo ($incident['barangay_id'] == $barangay['barangay_id']) ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($barangay['barangay_name']); ?>
-                    </option>
-                <?php endwhile; ?>
-            </select>
-        </div>
-        <!-- reporter, cause -->
-        <div class="incident-details">
-            <label for="reported_by" class="form-label"><strong>Reported By</strong></label>
-            <input type="text" class="form-control" id="reported_by" name="reported_by" value="<?php echo htmlspecialchars($incident['reported_by'] ?? ''); ?>" required>
-            <label for="cause" class="form-label"><strong>Cause</strong></label>
-            <select class="form-control" id="cause" name="cause" required>
-                <option value="">Select Cause</option>
-                <?php foreach ($causes as $cause_option): ?>
-                    <option value="<?php echo htmlspecialchars($cause_option); ?>" <?php echo ($incident['cause'] == $cause_option) ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($cause_option); ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-        <button type="submit" class="update-btn">UPDATE</button>
-        <a href="IncidentIndex.php" class="cancel-btn">CANCEL</a>
-    </form>
-    </main>
-    <script>
-        (function() {
-            'use strict';
-            var forms = document.querySelectorAll('.needs-validation');
-            Array.prototype.slice.call(forms).forEach(function(form) {
-                form.addEventListener('submit', function(event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        })();
-    </script>    
+    <div class="incident-container">
+        <h1 class="incident-header">EDIT INCIDENT REPORT</h1>
+        <form action="IncidentUpdate.php" method="POST" class="incident-info" novalidate>
+            <input type="hidden" name="incident_id" value="<?php echo $incident['incident_id']; ?>">
+            <!-- Incident, Severity Type -->
+            <div class="incident-details">
+                <label for="incident_type" class="form-label"><strong>Incident Type</strong></label>
+                <input type="text" class="form-control" id="incident_type" name="incident_type" value="<?php echo htmlspecialchars($incident['incident_type']); ?>" required>
+                <label for="severity_id" class="form-label"><strong>Severity</strong></label>
+                <select class="form-control" id="severity_id" name="severity_id" required>
+                    <option value="">Select Severity</option>
+                    <?php while ($severity = $severity_result->fetch_assoc()): ?>
+                        <option value="<?php echo $severity['id']; ?>" <?php echo ($incident['severity_id'] == $severity['id']) ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($severity['level']); ?>
+                        </option>
+                    <?php endwhile; ?>
+                </select>
+            </div>  
+            <!-- Address, Baranggay -->
+            <div class="incident-details">
+            <label for="address" class="form-label"><strong>Address</strong><</label>
+            <input type="text" class="form-control" id="address" name="address" value="<?php echo htmlspecialchars($incident['address']); ?>" required>
+                <label for="barangay_id" class="form-label"><strong>Baranggay</strong></label>
+                <select class="form-control" id="barangay_id" name="barangay_id" required>
+                    <option value="">Select Barangay</option>
+                    <?php while ($barangay = $barangay_result->fetch_assoc()): ?>
+                        <option value="<?php echo $barangay['barangay_id']; ?>" 
+                            <?php echo ($incident['barangay_id'] == $barangay['barangay_id']) ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($barangay['barangay_name']); ?>
+                        </option>
+                    <?php endwhile; ?>
+                </select>
+            </div>
+            <!-- reporter, cause -->
+            <div class="incident-details">
+                <label for="reported_by" class="form-label"><strong>Reported By</strong></label>
+                <input type="text" class="form-control" id="reported_by" name="reported_by" value="<?php echo htmlspecialchars($incident['reported_by'] ?? ''); ?>" required>
+                <label for="cause" class="form-label"><strong>Cause</strong></label>
+                <select class="form-control" id="cause" name="cause" required>
+                    <option value="">Select Cause</option>
+                    <?php foreach ($causes as $cause_option): ?>
+                        <option value="<?php echo htmlspecialchars($cause_option); ?>" <?php echo ($incident['cause'] == $cause_option) ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($cause_option); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <button type="submit" class="update-btn">UPDATE</button>
+            <a href="IncidentIndex.php" class="cancel-btn">CANCEL</a>
+        </form>
+    </div>  
 </body>
 </html>

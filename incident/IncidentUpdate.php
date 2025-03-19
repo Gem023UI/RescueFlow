@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Execute the update
     if ($stmt->execute()) {
-        header("Location: index.php?id=" . $incident_id);
+        header("Location: IncidentIndex.php?id=" . $incident_id);
         exit();
     } else {
         echo "Error updating the incident.";

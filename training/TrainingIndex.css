@@ -17,12 +17,12 @@ html{
 }
 body{
   background: url('LoginRegister.png') no-repeat center center/cover;
-  min-height: 100vh;
-  min-height: 100dvh;
-  
-  
-  display: grid;
-  grid-template-columns: auto 1fr;
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 #sidebar{
   box-sizing: border-box;
@@ -219,22 +219,22 @@ main p{
 
 .training-header {
   font-size: 50px;
-  text-align: center;
   font-weight: 600;
   margin-bottom: 20px;
-  margin-top: 20px;
   color: white;
-}
-
-.training-container {
-  border: 1px solid white;
-  border-radius: 5px;
   padding: 20px;
-  margin: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.training-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
 }
 
 .training-info {
@@ -248,4 +248,5 @@ main p{
   margin: 10px;
   color: white;
   background: rgba(0, 0, 0, 0.5);
+  width: 100%; /* Ensure the training info spans the full width of the container */
 }
