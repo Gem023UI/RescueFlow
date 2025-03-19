@@ -36,8 +36,8 @@ $result = $stmt->get_result();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BFP NCR Taguig City</title>
-  <link rel="stylesheet" href="AssetsIndex.css">
-  <script type="text/javascript" src="app.js" defer></script>
+  <link rel="stylesheet" href="AssetIndex.css">
+  <script type="text/javascript" src="AssetIndex.js" defer></script>
 </head>
 <body>
     <nav id="sidebar">
@@ -122,7 +122,7 @@ $result = $stmt->get_result();
                         $img_result = $conn->query($img_query);
                         
                         while ($img_row = $img_result->fetch_assoc()) {
-                            echo '<img src="../' . $img_row['img_path'] . '" width="100" height="100" style="margin:5px;">';
+                            echo '<img src="../' . $img_row['img_path'] . '">';
                         }
                     ?>
                 </div>

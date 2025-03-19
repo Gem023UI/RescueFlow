@@ -284,10 +284,22 @@ h2 {
 
 .asset-picture {
   height: 150px;
-  width: 150px;
+  width: 150px; 
   padding: 10px;
   margin-right: 10px;
+  overflow: hidden; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
 }
+
+.asset-picture img {
+  width: 100%;
+  height: 100%; 
+  object-fit: cover; 
+  border-radius: 8px;
+}
+
 
 .asset-details {
   gap: 15px;
