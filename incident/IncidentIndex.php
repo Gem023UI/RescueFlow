@@ -240,22 +240,6 @@ $result = $conn->query($sql);
                             <a href="?delete=<?php echo $row['incident_id']; ?>" class="delete-button" onclick="return confirm('Are you sure?');">Delete</a>
                         </div>
                     <?php endif; ?>
-                    <?php if (!empty($row['attachments']) && count($files) > 1): ?>
-                    <div class="incident-additional">
-                        <strong>Additional Attachments:</strong><br>
-                        <?php 
-                        for ($i = 1; $i < count($files); $i++) {
-                            $file = trim($files[$i]);
-                            $file_ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-                            if (in_array($file_ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
-                                echo '<img src="' . htmlspecialchars($file) . '" alt="Attachment" style="max-width: 50px; max-height: 50px; margin-right: 5px;">';
-                                } else {
-                                     echo '<a href="' . htmlspecialchars($file) . '" target="_blank">View File</a><br>';
-                                }
-                            }
-                            ?>
-                        </div>
-                    <?php endif; ?>
                 </div>
             </div>
         <?php endwhile; ?>
