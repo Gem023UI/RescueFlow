@@ -117,75 +117,77 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+    <div class="incident-container">
     <h1 class="incident-header">INSERT INCIDENT REPORT</h1>
-    <form action="" method="POST" enctype="multipart/form-data" class="incident-info" novalidate>
-        <input type="hidden" name="incident_id" value="<?php echo $incident['incident_id'] ?? ''; ?>">
-        <!-- Incident, Severity Type -->
-        <div class="incident-details">
-            <label for="incident_type" class="form-label"><strong>Incident Type</strong></label>
-            <input type="text" class="form-control" id="incident_type" name="incident_type" value="<?php echo htmlspecialchars($incident['incident_type'] ?? ''); ?>" required>
-            <label for="severity_id" class="form-label"><strong>Severity</strong></label>
-            <select class="form-control" id="severity_id" name="severity_id" required>
-                <option value="">Select Severity Level</option>
-                <?php while ($severity = $severity_result->fetch_assoc()): ?>
-                    <option value="<?php echo $severity['id']; ?>" <?php echo isset($incident['severity_id']) && $incident['severity_id'] == $severity['id'] ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($severity['level']); ?>
-                    </option>
-                <?php endwhile; ?>
-            </select>
-        </div>
-        <!-- Address, Baranggay -->
-        <div class="incident-details">
-            <label for="address" class="form-label"><strong>Address</strong></label>
-            <input type="text" class="form-control" id="address" name="address" value="<?php echo htmlspecialchars($incident['address'] ?? ''); ?>" required>
-            <label for="barangay_id"><strong>Baranggay</strong></label>
-            <select name="barangay_id" required>
-                <option value="">Select Barangay</option>
-                <?php while ($barangay = $barangay_result->fetch_assoc()): ?>
-                    <option value="<?php echo $barangay['barangay_id']; ?>" <?php echo (isset($incident['barangay_id']) && $incident['barangay_id'] == $barangay['barangay_id']) ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($barangay['barangay_name']); ?>
-                    </option>
-                <?php endwhile; ?>
-            </select>
-        </div>
-        <!-- reporter, cause -->
-        <div class="incident-details">
-            <label for="reported_by" class="form-label"><strong>Reported By</strong></label>
-            <input type="text" class="form-control" id="reported_by" name="reported_by" value="<?php echo htmlspecialchars($incident['reported_by'] ?? ''); ?>" required>
-            <label for="cause" class="form-label"><strong>Cause</strong></label>
-            <select class="form-control" id="cause" name="cause" required>
-                <option value="">Select a Cause</option>
-                <?php
-                $causes = [
-                    'Electrical Faults', 'Unattended Cooking', 'Candles & Open Flames',
-                    'Smoking Indoors', 'Gas Leaks', 'Flammable Liquids',
-                    'Children Playing with Fire', 'Heating Equipment',
-                    'Faulty Appliances', 'Arson'
-                ];
-                foreach ($causes as $cause_option): ?>
-                    <option value="<?php echo $cause_option; ?>" <?php echo (isset($incident['cause']) && $incident['cause'] == $cause_option) ? 'selected' : ''; ?>>
-                        <?php echo $cause_option; ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-        <div class="incident-picture">
-            <label for="attachments" class="form-label"><strong>Attachments</strong></label>
-            <input type="file" class="form-control" id="attachments" name="attachments[]" multiple>
-            <?php if (!empty($incident['attachments'])): ?>
-                <p>Existing Attachments:</p>
-                <?php
-                $files = explode(',', $incident['attachments']);
-                foreach ($files as $file): ?>
-                    <a href="<?php echo htmlspecialchars($file); ?>" target="_blank">View File</a><br>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </div>
-        <div class="CRUD-buttons">
-            <button type="submit" class="submit-btn">SUBMIT</button>
-            <a href="IncidentIndex.php" class="cancel-btn">CANCEL</a>
-        </div>
-    </form>
+        <form action="" method="POST" enctype="multipart/form-data" class="incident-info" novalidate>
+            <input type="hidden" name="incident_id" value="<?php echo $incident['incident_id'] ?? ''; ?>">
+            <!-- Incident, Severity Type -->
+            <div class="incident-details">
+                <label for="incident_type" class="form-label"><strong>Incident Type</strong></label>
+                <input type="text" class="form-control" id="incident_type" name="incident_type" value="<?php echo htmlspecialchars($incident['incident_type'] ?? ''); ?>" required>
+                <label for="severity_id" class="form-label"><strong>Severity</strong></label>
+                <select class="form-control" id="severity_id" name="severity_id" required>
+                    <option value="">Select Severity Level</option>
+                    <?php while ($severity = $severity_result->fetch_assoc()): ?>
+                        <option value="<?php echo $severity['id']; ?>" <?php echo isset($incident['severity_id']) && $incident['severity_id'] == $severity['id'] ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($severity['level']); ?>
+                        </option>
+                    <?php endwhile; ?>
+                </select>
+            </div>
+            <!-- Address, Baranggay -->
+            <div class="incident-details">
+                <label for="address" class="form-label"><strong>Address</strong></label>
+                <input type="text" class="form-control" id="address" name="address" value="<?php echo htmlspecialchars($incident['address'] ?? ''); ?>" required>
+                <label for="barangay_id"><strong>Baranggay</strong></label>
+                <select name="barangay_id" required>
+                    <option value="">Select Barangay</option>
+                    <?php while ($barangay = $barangay_result->fetch_assoc()): ?>
+                        <option value="<?php echo $barangay['barangay_id']; ?>" <?php echo (isset($incident['barangay_id']) && $incident['barangay_id'] == $barangay['barangay_id']) ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($barangay['barangay_name']); ?>
+                        </option>
+                    <?php endwhile; ?>
+                </select>
+            </div>
+            <!-- reporter, cause -->
+            <div class="incident-details">
+                <label for="reported_by" class="form-label"><strong>Reported By</strong></label>
+                <input type="text" class="form-control" id="reported_by" name="reported_by" value="<?php echo htmlspecialchars($incident['reported_by'] ?? ''); ?>" required>
+                <label for="cause" class="form-label"><strong>Cause</strong></label>
+                <select class="form-control" id="cause" name="cause" required>
+                    <option value="">Select a Cause</option>
+                    <?php
+                    $causes = [
+                        'Electrical Faults', 'Unattended Cooking', 'Candles & Open Flames',
+                        'Smoking Indoors', 'Gas Leaks', 'Flammable Liquids',
+                        'Children Playing with Fire', 'Heating Equipment',
+                        'Faulty Appliances', 'Arson'
+                    ];
+                    foreach ($causes as $cause_option): ?>
+                        <option value="<?php echo $cause_option; ?>" <?php echo (isset($incident['cause']) && $incident['cause'] == $cause_option) ? 'selected' : ''; ?>>
+                            <?php echo $cause_option; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="incident-picture">
+                <label for="attachments" class="form-label"><strong>Attachments</strong></label>
+                <input type="file" class="form-control" id="attachments" name="attachments[]" multiple>
+                <?php if (!empty($incident['attachments'])): ?>
+                    <p>Existing Attachments:</p>
+                    <?php
+                    $files = explode(',', $incident['attachments']);
+                    foreach ($files as $file): ?>
+                        <a href="<?php echo htmlspecialchars($file); ?>" target="_blank">View File</a><br>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+            <div class="incident-button">
+                <button type="submit" class="submit-btn">SUBMIT</button>
+                <a href="IncidentIndex.php" class="cancel-btn">CANCEL</a>
+            </div>
+        </form>
+    </div>
     <script>
         (function() {
             'use strict';

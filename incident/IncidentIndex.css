@@ -227,6 +227,11 @@ main p{
   color: white;
 }
 
+h2 {
+  margin-top: 10px;
+  color: white;
+}
+
 .admin-button {
   display: flex;
   flex-direction: row;
@@ -239,7 +244,7 @@ main p{
   justify-items: center;
   align-items: center;
   color: white;
-  background-color: black;
+  background-color: orangered;
   border-radius: 5px;
   margin: 10px;
   padding: 15px 30px;
@@ -273,16 +278,17 @@ main p{
 }
 
 .incident-picture {
-  height: 200px;
-  width: 200px;
-  padding: 20px;
+  height: 250px;
+  width: 250px;
+  padding: 10px;
+  margin-right: 10px;
 }
 
 .incident-details {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: left;
   margin-right: 15px;
   gap: 10px;
   color: white;
@@ -292,7 +298,7 @@ main p{
 .crud-button {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: left;
 }
 
 .delete-button {
