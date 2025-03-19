@@ -271,6 +271,10 @@ main p{
   margin-bottom: 20px;
   margin-top: 20px;
   color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 /*Button Styling*/
@@ -311,7 +315,7 @@ main p{
   padding: 15px 30px; /* Adjust padding to change the size */
   font-size: 18px; /* Adjust font size */
   color: white; /* Text color */
-  background-color: black; /* Button color */
+  background-color: orangered; /* Button color */
   border-radius: 5px; /* Rounded corners */
   text-align: center;
   text-decoration: none; /* Remove underline */
