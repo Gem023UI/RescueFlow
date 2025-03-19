@@ -1,5 +1,4 @@
 <?php
-ob_start();
 require '../includes/config.php';
 include('../includes/restrict_admin.php');
 include('../includes/check_admin.php');
