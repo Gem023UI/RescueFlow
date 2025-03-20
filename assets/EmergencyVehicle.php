@@ -4,17 +4,7 @@ include('../includes/config.php');
 
 // Restrict if not Admin Function
 $user_id = $_SESSION['user_id'] ?? null;
-$role_id = null;
-
-if ($user_id) {
-    $query = "SELECT role_id FROM users WHERE user_id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    $stmt->bind_result($role_id);
-    $stmt->fetch();
-    $stmt->close();
-}
+$role_id = $_SESSION['role'] ?? null; // Fetch RoleID from session
 
 $categoryID = 7; // Change this value to filter by a different category
 
@@ -91,7 +81,7 @@ $result = $stmt->get_result();
         </li>
         </li>
         <li>
-            <a href="../personnel/PersonnelIndex.php">
+            <a href="../personnels/PersonnelIndex.php">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="M440-280h320v-22q0-45-44-71.5T600-400q-72 0-116 26.5T440-302v22Zm160-160q33 0 56.5-23.5T680-520q0-33-23.5-56.5T600-600q-33 0-56.5 23.5T520-520q0 33 23.5 56.5T600-440ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Z"/></svg>
             <span>Personnels</span>
             </a>
@@ -106,7 +96,7 @@ $result = $stmt->get_result();
     </nav>
     <main>
     <h1 class="asset-header">ASSET MANAGEMENT</h1>
-    <h2>Emergency Vehicle</h2>
+    <h2>FIRE TRUCK 1</h2>
     <?php if ($role_id == 4): // Only show for admin ?>
         <div class="admin-button">
             <a href="AssetCreate.php" class="add-button">ADD ASSET</a>
