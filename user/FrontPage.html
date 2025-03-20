@@ -75,11 +75,28 @@
             transition: 0.3s ease;
             position: absolute;
             top: 350px; /* Adjust position */
+            left: 700px;
+            transform: translate(-50%, -50%);
+        }
+
+        .report-button {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 18px;
+            color: white;
+            background: black; /* Blue color */
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
+            transition: 0.3s ease;
+            position: absolute;
+            top: 350px; /* Adjust position */
             left: 480px;
             transform: translate(-50%, -50%);
         }
 
-        .custom-button:hover {
+        .custom-button:hover, .report-button:hover {
             color: black;
             background: white;
         }
@@ -92,7 +109,8 @@
             <p class="subtitle">BFP NCR STATION 1</p>
             <h1 class="title">TAGUIG CITY</h1>
             <p class="subtitle">RESPONDING WITH RESOLVE, PROTECTING WITH PRIDE</p>
-            <a href="LoginRegister.php" class="custom-button">CONTINUE</a>
+            <a href="../reports/ReportIndex.php" class="report-button">REPORT NOW</a>
+            <a href="LoginRegister.php" class="custom-button">LOGIN / REGISTER</a>
             <p class="hotlines">
                 HOTLINES: 8837-0740 / 8837-4496 / 0906-2110919<br>
                 CRU.BFPTAGUIGCFS@GMAIL.COM
