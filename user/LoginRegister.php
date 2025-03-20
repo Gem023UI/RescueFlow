@@ -8,39 +8,43 @@ if (isset($_SESSION['message'])) {
 }
 
 if (isset($_POST['submit'])) {
+    $uname = trim($_POST['uname']); // Username from form
+    $pass = trim($_POST['password']); // Password from form
 
-$uname = trim($_POST['uname']); // Match with form input name
-$pass = sha1(trim($_POST['password'])); // Match with form input name
+    // Query the Personnel table
+    $sql = "SELECT PersonnelID, FirstName, LastName, Email, RoleID, Password FROM Personnel WHERE Email = ? LIMIT 1";
+    $stmt = mysqli_prepare($conn, $sql);
 
-// Corrected query to match the actual table name and column names
-$sql = "SELECT user_id, username, role_id, member_id FROM users WHERE username = ? AND password_hash = ? LIMIT 1";
-$stmt = mysqli_prepare($conn, $sql);
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, "s", $uname);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
 
-if ($stmt) {
-    mysqli_stmt_bind_param($stmt, "ss", $uname, $pass);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_store_result($stmt);
+        if (mysqli_stmt_num_rows($stmt) === 1) {
+            mysqli_stmt_bind_result($stmt, $personnel_id, $first_name, $last_name, $email, $role_id, $hashed_password);
+            mysqli_stmt_fetch($stmt);
 
-    if (mysqli_stmt_num_rows($stmt) === 1) {
-        mysqli_stmt_bind_result($stmt, $user_id, $username, $role_id, $member_id);
-        mysqli_stmt_fetch($stmt);
+            // Verify the password
+            if (password_verify($pass, $hashed_password)) {
+                // Store user data in session
+                $_SESSION['username'] = $first_name . " " . $last_name;
+                $_SESSION['user_id'] = $personnel_id;
+                $_SESSION['role'] = $role_id;
+                $_SESSION['email'] = $email;
 
-        // Store user data in session
-        $_SESSION['username'] = $username;
-        $_SESSION['user_id'] = $user_id;
-        $_SESSION['role'] = $role_id;
-        $_SESSION['member_id'] = $member_id;
+                header("Location: ../dashboard/RescueFlowIndex.php");
+                exit();
+            } else {
+                $_SESSION['message'] = 'Wrong username or password';
+            }
+        } else {
+            $_SESSION['message'] = 'Wrong username or password';
+        }
 
-        header("Location: ../dashboard/RescueFlowIndex.php");
-        exit();
+        mysqli_stmt_close($stmt);
     } else {
-        $_SESSION['message'] = 'Wrong username or password';
+        $_SESSION['message'] = 'Database error';
     }
-
-    mysqli_stmt_close($stmt);
-} else {
-    $_SESSION['message'] = 'Database error';
-}
 }
 ?>
 
@@ -62,7 +66,7 @@ if ($stmt) {
                 <h1>LOGIN</h1>
                 <!-- Username input -->
                 <div class="input-box">
-                    <input type="text" name="uname" placeholder="Name" required />
+                    <input type="text" name="uname" placeholder="Email" required />
                     <input type="password" name="password" placeholder="Password" required />
                 </div>
                 <button type="submit" class="btn" name="submit">LOGIN</button>
@@ -71,38 +75,21 @@ if ($stmt) {
         <div class="form-container sign-in">
             <form action="RegisterStore.php" method="POST">
                 <h1>REGISTER</h1>
-                <!-- Username input -->
+                <!-- Name and Email inputs -->
                 <div class="input-box">
-                    <input type="text" class="form-control" id="uname" name="uname" placeholder="Name" required />
+                    <input type="text" class="form-control" id="uname" name="uname" placeholder="First Name" required />
                     <input type="email" class="form-control" id="email" name="email" placeholder="Email" required />
                 </div>
-                <!-- Password input -->
+                <!-- Phone Number input -->
+                <div class="input-box">
+                    <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone Number" required />
+                </div>
+                <!-- Password inputs -->
                 <div class="input-box">
                     <input type="password" class="form-control" id="password" name="password" placeholder="Password" required />
                     <input type="password" class="form-control" id="password2" name="confirmPass" placeholder="Confirm Password" required />
                 </div>
-                <!-- Role selection -->
-                <div class="dropdown-btn">
-                    <select class="form-control" id="roles" name="role_id" required>
-                        <option value="">Select role</option>
-                        <?php
-                        // Ensure connection is established before querying
-                        if ($conn) {
-                            $sql = "SELECT role_id, role_name FROM roles WHERE role_id != 4"; // Exclude admin
-                            $result = mysqli_query($conn, $sql);
-                            if ($result) {
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    echo "<option value=\"{$row['role_id']}\">{$row['role_name']}</option>";
-                                }
-                            } else {
-                                echo "<option value=''>Error loading roles</option>";
-                            }
-                        } else {
-                            echo "<option value=''>Database connection error</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
+                <!-- Submit button -->
                 <button type="submit" class="btn" name="submit">REGISTER</button>
             </form>
         </div>

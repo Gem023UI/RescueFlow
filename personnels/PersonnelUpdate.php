@@ -6,20 +6,22 @@ include('../includes/restrict_admin.php');
 // Check if the request method is POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Ensure all required fields are set
-    if (isset($_POST['member_id'], $_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['role_id'], $_POST['rank_id'])) {
+    if (isset($_POST['PersonnelID'], $_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['phone'], $_POST['role_id'], $_POST['rank_id'], $_POST['shift_id'])) {
         
         // Sanitize inputs
-        $member_id = intval($_POST['member_id']);
+        $personnel_id = intval($_POST['PersonnelID']);
         $first_name = mysqli_real_escape_string($conn, $_POST['first_name']);
         $last_name = mysqli_real_escape_string($conn, $_POST['last_name']);
         $email = mysqli_real_escape_string($conn, $_POST['email']);
+        $phone = mysqli_real_escape_string($conn, $_POST['phone']);
         $role_id = intval($_POST['role_id']);
         $rank_id = intval($_POST['rank_id']);
+        $shift_id = intval($_POST['shift_id']);
 
         // Handle image upload
         $image = $_POST['old_image']; // Default to the old image
         if (!empty($_FILES['image']['name'])) {
-            $target_dir = "../personnel/images/";
+            $target_dir = "../personnels/profiles/";
             $image_name = basename($_FILES["image"]["name"]);
             $image_file_type = strtolower(pathinfo($image_name, PATHINFO_EXTENSION));
             $unique_image_name = uniqid() . "." . $image_file_type; // Generate a unique name for the image
@@ -43,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
             // Check if an old image exists and delete it (excluding default.jpg)
-            if ($_POST['old_image'] && $_POST['old_image'] !== "default.jpg" && file_exists($target_dir . $_POST['old_image'])) {
+            if ($_POST['old_image'] && $_POST['old_image'] !== "default.png" && file_exists($target_dir . $_POST['old_image'])) {
                 unlink($target_dir . $_POST['old_image']);
             }
 
@@ -57,9 +59,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         // Update query using prepared statements
-        $query = "UPDATE members SET first_name = ?, last_name = ?, email = ?, role_id = ?, rank_id = ?, image = ? WHERE member_id = ?";
+        $query = "UPDATE Personnel SET FirstName = ?, LastName = ?, Email = ?, PhoneNumber = ?, RoleID = ?, RankID = ?, ShiftID = ?, Profile = ? WHERE PersonnelID = ?";
         $stmt = mysqli_prepare($conn, $query);
-        mysqli_stmt_bind_param($stmt, "sssissi", $first_name, $last_name, $email, $role_id, $rank_id, $image, $member_id);
+        mysqli_stmt_bind_param($stmt, "ssssiiisi", $first_name, $last_name, $email, $phone, $role_id, $rank_id, $shift_id, $image, $personnel_id);
 
         // Execute the query
         if (mysqli_stmt_execute($stmt)) {

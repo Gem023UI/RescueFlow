@@ -229,7 +229,7 @@ main p{
 /* Card styling */
 .card {
   width: 250px; /* Fixed size */
-  height: 320px; /* Fixed size */
+  height: fit-content;
   background: rgba(10, 0, 0, 0.274);
   border-radius: 10px;
   backdrop-filter: blur(10px);

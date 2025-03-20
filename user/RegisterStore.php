@@ -4,9 +4,12 @@ include("../includes/config.php");
 
 // Sanitize and fetch form data
 $email = trim($_POST['email']);
-$uname = trim($_POST['uname']);
+$first_name = trim($_POST['uname']); // Assuming 'uname' is the first name
 $password = trim($_POST['password']);
-$role_id = $_POST['role_id']; // fetch role_id directly
+$phone = ''; // Add phone field if needed in the form
+$rank_id = 1; // Default rank for new personnel
+$shift_id = 1; // Default shift for new personnel
+$role_id = 1; // Default role for new personnel
 
 // Validate email format
 if (!preg_match("/^\w+@\w+\.\w+/", $email)) {
@@ -30,36 +33,16 @@ if ($password !== $confirmPass) {
     exit();
 }
 
-// Check if the selected role_id exists in the roles table
-$sql = "SELECT role_id FROM roles WHERE role_id = ?";
-$stmt = mysqli_prepare($conn, $sql);
-if ($stmt) {
-    mysqli_stmt_bind_param($stmt, "i", $role_id);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_store_result($stmt);
+// Hash the password for secure storage
+$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    if (mysqli_stmt_num_rows($stmt) == 0) {
-        $_SESSION['message'] = 'Invalid role selected';
-        header("Location: LoginRegister.php");
-        exit();
-    }
-
-    mysqli_stmt_close($stmt);
-} else {
-    $_SESSION['message'] = 'Database error: Unable to check role';
-    header("Location: LoginRegister.php");
-    exit();
-}
-
-// Encrypt the password
-$password = sha1($password);
-
-// Insert the new user into the database
-$sql = "INSERT INTO users (username,email, password_hash, role_id) VALUES (?, ?, ?, ?)";
+// Insert the new personnel into the Personnel table
+$sql = "INSERT INTO Personnel (FirstName, Email, PhoneNumber, Password, RankID, ShiftID, RoleID) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)";
 $stmt = mysqli_prepare($conn, $sql);
 
 if ($stmt) {
-    mysqli_stmt_bind_param($stmt, "sssi",$uname, $email, $password, $role_id);
+    mysqli_stmt_bind_param($stmt, "ssssiii", $first_name, $email, $phone, $hashed_password, $rank_id, $shift_id, $role_id);
     $execute = mysqli_stmt_execute($stmt);
 
     if ($execute) {
@@ -67,13 +50,13 @@ if ($stmt) {
         header("Location: LoginRegister.php");
         exit();
     } else {
-        $_SESSION['message'] = 'Error during registration';
+        $_SESSION['message'] = 'Error during registration: ' . mysqli_error($conn);
         header("Location: LoginRegister.php");
         exit();
     }
     mysqli_stmt_close($stmt);
 } else {
-    $_SESSION['message'] = 'Database error';
+    $_SESSION['message'] = 'Database error: Unable to prepare statement';
     header("Location: LoginRegister.php");
     exit();
 }

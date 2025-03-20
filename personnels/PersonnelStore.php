@@ -10,12 +10,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $phone = $_POST['phone'] ?? '';
     $role_id = $_POST['role_id'] ?? null;
     $rank_id = $_POST['rank_id'] ?? null;
-    
+    $shift_id = $_POST['shift_id'] ?? null; // Added shift_id
+    $password = $_POST['password'] ?? ''; // Added password
+
     $image = null; // Default value
 
     // Handle file upload
     if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-        $target_dir = "../personnel/images/";  // Ensure correct folder path
+        $target_dir = "../personnels/profiles/";  // Ensure correct folder path
         $image = time() . "_" . basename($_FILES["image"]["name"]); // Prevent duplicate filenames
         $target_file = $target_dir . $image;
 
@@ -27,9 +29,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Insert into the database
-    $sql = "INSERT INTO members (first_name, last_name, email, phone, role_id, rank_id, image) 
-            VALUES ('$first_name', '$last_name', '$email', '$phone', $role_id, $rank_id, '$image')";
+    // Hash the password for secure storage
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+    // Insert into the Personnel table
+    $sql = "INSERT INTO Personnel (FirstName, LastName, Email, PhoneNumber, RoleID, RankID, ShiftID, Profile, Password) 
+            VALUES ('$first_name', '$last_name', '$email', '$phone', $role_id, $rank_id, $shift_id, '$image', '$hashed_password')";
 
     if ($conn->query($sql) === TRUE) {
         header("Location: PersonnelIndex.php");

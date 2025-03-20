@@ -4,26 +4,16 @@ include('../includes/config.php');
 include('../dispatch/dispatchbutton.html');
 
 $user_id = $_SESSION['user_id'] ?? null;
-$role_id = null;
+$role_id = $_SESSION['role'] ?? null; // Fetch RoleID from session
 
-if ($user_id) {
-    $query = "SELECT role_id FROM users WHERE user_id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    $stmt->bind_result($role_id);
-    $stmt->fetch();
-    $stmt->close();
-}
-
-$sql = "SELECT members.member_id, members.first_name, members.last_name, members.email, members.phone, members.image, 
-               ranks.rank_name, roles.role_name 
-        FROM members
-        LEFT JOIN ranks ON members.rank_id = ranks.rank_id
-        LEFT JOIN roles ON members.role_id = roles.role_id";
+// Fetch personnel data
+$sql = "SELECT Personnel.PersonnelID, Personnel.FirstName, Personnel.LastName, Personnel.Email, Personnel.PhoneNumber, Personnel.Profile, 
+               ranks.rank_name, roles.role_name, shifts.start_time, shifts.end_time, shifts.shift_day
+        FROM Personnel
+        LEFT JOIN ranks ON Personnel.RankID = ranks.rank_id
+        LEFT JOIN roles ON Personnel.RoleID = roles.role_id
+        LEFT JOIN shifts ON Personnel.ShiftID = shifts.shift_id";
 $result = $conn->query($sql);
-
-
 ?>
 
 <!DOCTYPE html>
@@ -36,7 +26,7 @@ $result = $conn->query($sql);
     <script type="text/javascript" src="PersonnelIndex.js" defer></script>
 </head>
 <body>
-<nav id="sidebar">
+    <nav id="sidebar">
         <ul>
         <li>
             <span class="logo"><a href="../dashboard/RescueFlowIndex.php">BFP NCR Taguig S1</a></span>
@@ -111,23 +101,23 @@ $result = $conn->query($sql);
             <div class="card">
                 <!-- Image Section -->
                 <div class="personnel-image">
-                    <?php if (!empty($row['image']) && file_exists("../personnel/images/" . $row['image'])): ?>
-                        <img src="../personnel/images/<?= htmlspecialchars($row['image']); ?>" alt="Personnel Image">
+                    <?php if (!empty($row['Profile']) && file_exists("../personnels/profiles/" . $row['Profile'])): ?>
+                        <img src="../personnels/profiles/<?= htmlspecialchars($row['Profile']); ?>" alt="Personnel Image">
                     <?php else: ?>
-                        <img src="../personnel/images/default.jpg" alt="Default Image">
+                        <img src="../personnels/profiles/default.png" alt="Default Image">
                     <?php endif; ?>
                 </div>
                 <!-- Details Section -->
                 <div class="personnel-details">
-                    <h2><?= htmlspecialchars($row['first_name'] . " " . $row['last_name']); ?></h2>
-                    <p><?= htmlspecialchars($row['email']); ?></p>
-                    <p><strong>Phone:</strong> <?= htmlspecialchars($row['phone']); ?></p>
+                    <h2><?= htmlspecialchars($row['FirstName'] . " " . $row['LastName']); ?></h2>
+                    <p><?= htmlspecialchars($row['Email']); ?></p>
+                    <p><strong>Phone:</strong> <?= htmlspecialchars($row['PhoneNumber']); ?></p>
                     <p><strong>Rank:</strong> <?= $row['rank_name'] ?? 'N/A'; ?></p>
                     <p><strong>Role:</strong> <?= $row['role_name'] ?? 'N/A'; ?></p>
 
                     <?php if ($role_id == 4): // Only show for admin ?>
-                        <a href="personneledit.php?member_id=<?= $row['member_id']; ?>" class="btn edit-btn">Edit</a>
-                        <a href="personneldelete.php?member_id=<?= $row['member_id']; ?>" class="btn delete-btn" onclick="return confirm('Are you sure?');">Delete</a>
+                        <a href="personneledit.php?PersonnelID=<?= $row['PersonnelID']; ?>" class="btn edit-btn">Edit</a>
+                        <a href="personneldelete.php?PersonnelID=<?= $row['PersonnelID']; ?>" class="btn delete-btn" onclick="return confirm('Are you sure?');">Delete</a>
                     <?php endif; ?>
                 </div>
             </div>

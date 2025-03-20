@@ -3,28 +3,30 @@ session_start();
 include('../includes/config.php');
 include('../includes/restrict_admin.php');
 
-// Get the member details
-$member_id = $_GET['member_id'] ?? null;
-if (!$member_id) {
-    die("Error: Invalid or missing member ID.");
+// Get the personnel details
+$personnel_id = $_GET['PersonnelID'] ?? null;
+if (!$personnel_id) {
+    die("Error: Invalid or missing personnel ID.");
 }
 
-$query = "SELECT first_name, last_name, email, phone, role_id, rank_id, image FROM members WHERE member_id = ?";
+// Fetch personnel details from the Personnel table
+$query = "SELECT PersonnelID, FirstName, LastName, Email, PhoneNumber, RoleID, RankID, ShiftID, Profile FROM Personnel WHERE PersonnelID = ?";
 $stmt = mysqli_prepare($conn, $query);
-mysqli_stmt_bind_param($stmt, "i", $member_id);
+mysqli_stmt_bind_param($stmt, "i", $personnel_id);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 
 if ($row = mysqli_fetch_assoc($result)) {
-    $first_name = $row['first_name'];
-    $last_name = $row['last_name'];
-    $email = $row['email'];
-    $phone = $row['phone'];
-    $role_id = $row['role_id'];
-    $rank_id = $row['rank_id'];
-    $old_image = $row['image']; // Store the old image
+    $first_name = $row['FirstName'];
+    $last_name = $row['LastName'];
+    $email = $row['Email'];
+    $phone = $row['PhoneNumber'];
+    $role_id = $row['RoleID'];
+    $rank_id = $row['RankID'];
+    $shift_id = $row['ShiftID'];
+    $old_image = $row['Profile']; // Store the old image
 } else {
-    die("Error: Member not found.");
+    die("Error: Personnel not found.");
 }
 mysqli_stmt_close($stmt);
 
@@ -36,17 +38,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $phone = $_POST['phone'];
     $role_id = $_POST['role_id'];
     $rank_id = $_POST['rank_id'];
+    $shift_id = $_POST['shift_id'];
 
     $image = $old_image; // Default to the old image if no new one is uploaded
 
     // Handle image upload
     if (!empty($_FILES['image']['name'])) {
-        $target_dir = "../personnel/images/";
+        $target_dir = "../personnels/profiles/";
         $image_name = basename($_FILES["image"]["name"]);
         $target_file = $target_dir . $image_name;
 
         // Check if an old image exists and delete it (excluding default.jpg)
-        if ($old_image && $old_image !== "default.jpg" && file_exists($target_dir . $old_image)) {
+        if ($old_image && $old_image !== "default.png" && file_exists($target_dir . $old_image)) {
             unlink($target_dir . $old_image);
         }
 
@@ -60,9 +63,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Update database with new values
-    $update_query = "UPDATE members SET first_name=?, last_name=?, email=?, phone=?, role_id=?, rank_id=?, image=? WHERE member_id=?";
+    $update_query = "UPDATE Personnel SET FirstName=?, LastName=?, Email=?, PhoneNumber=?, RoleID=?, RankID=?, ShiftID=?, Profile=? WHERE PersonnelID=?";
     $stmt = mysqli_prepare($conn, $update_query);
-    mysqli_stmt_bind_param($stmt, "sssiissi", $first_name, $last_name, $email, $phone, $role_id, $rank_id, $image, $member_id);
+    mysqli_stmt_bind_param($stmt, "ssssiiisi", $first_name, $last_name, $email, $phone, $role_id, $rank_id, $shift_id, $image, $personnel_id);
 
     if (mysqli_stmt_execute($stmt)) {
         header("Location: PersonnelIndex.php?status=updated");
@@ -89,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="personnel-header">EDIT PERSONNEL</div>
         <div class="personnel-container">
             <form method="POST" action="PersonnelUpdate.php" enctype="multipart/form-data" class="personnel-info">
-                <input type="hidden" name="member_id" value="<?= htmlspecialchars($member_id) ?>">
+                <input type="hidden" name="PersonnelID" value="<?= htmlspecialchars($personnel_id) ?>">
                 <div class="personnel-picture">
                     <img src="../personnel/images/<?= htmlspecialchars($old_image) ?>" alt="Profile Picture">
                     <div class="profile-input">
@@ -111,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="personnel-details">
                         <label>Phone</label>
-                        <input type="phone" name="phone" value="<?= htmlspecialchars($phone) ?>" required>
+                        <input type="text" name="phone" value="<?= htmlspecialchars($phone) ?>" required>
                     </div>
                     <div class="personnel-details">
                         <label>Role</label>
@@ -132,6 +135,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <option value="5" <?= $rank_id == 5 ? 'selected' : '' ?>>Chief</option>
                         </select>
                     </div>
+                    <div class="personnel-details">
+                        <label>Shift</label>
+                        <select name="shift_id">
+                            <?php
+                            // Fetch shifts from the shifts table
+                            $shift_query = "SELECT shift_id, shift_day, start_time, end_time FROM shifts";
+                            $shift_result = $conn->query($shift_query);
+                            while ($shift_row = $shift_result->fetch_assoc()):
+                                $shift_value = $shift_row['shift_id'];
+                                $shift_label = $shift_row['shift_day'] . " (" . $shift_row['start_time'] . " - " . $shift_row['end_time'] . ")";
+                            ?>
+                                <option value="<?= $shift_value ?>" <?= $shift_id == $shift_value ? 'selected' : '' ?>><?= $shift_label ?></option>
+                            <?php endwhile; ?>
+                        </select>
+                    </div>
                     <div class="personnel-button">
                         <button type="submit" class="update-btn">Update</button>
                         <a href="PersonnelIndex.php" class="cancel-btn">Cancel</a>
@@ -142,4 +160,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </body>
 </html>
-
