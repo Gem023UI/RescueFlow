@@ -91,7 +91,8 @@ $user_id = $_SESSION['user_id'] ?? null;
 $role_id = null;
 
 if ($user_id) {
-    $query = "SELECT role_id FROM users WHERE user_id = ?";
+    // Fetch RoleID from personnel table
+    $query = "SELECT RoleID FROM personnel WHERE PersonnelID = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
@@ -112,7 +113,6 @@ $sql = "SELECT i.*,
         LEFT JOIN status st ON i.status_id = st.status_id
         LEFT JOIN barangays b ON i.barangay_id = b.barangay_id 
         ORDER BY i.reported_time DESC";
-
 
 $result = $conn->query($sql);
 ?>
@@ -178,7 +178,7 @@ $result = $conn->query($sql);
         </li>
         </li>
         <li>
-            <a href="../personnel/PersonnelIndex.php">
+            <a href="../personnels/PersonnelIndex.php">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="M440-280h320v-22q0-45-44-71.5T600-400q-72 0-116 26.5T440-302v22Zm160-160q33 0 56.5-23.5T680-520q0-33-23.5-56.5T600-600q-33 0-56.5 23.5T520-520q0 33 23.5 56.5T600-440ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Z"/></svg>
             <span>Personnels</span>
             </a>
