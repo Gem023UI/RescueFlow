@@ -2,20 +2,27 @@
 session_start();
 include('../includes/config.php');
 
-if (!isset($conn)) {
-    die("Database connection failed.");
+// Restrict if not Admin Function
+$user_id = $_SESSION['user_id'] ?? null;
+$role_id = null;
+
+if ($user_id) {
+    $query = "SELECT role_id FROM users WHERE user_id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $stmt->bind_result($role_id);
+    $stmt->fetch();
+    $stmt->close();
 }
 
-// Set the desired CategoryID manually
 $categoryID = 3; // Change this value to filter by a different category
 
-// SQL query to fetch assets with related details, filtering by CategoryID
-$sql = "SELECT a.AssetID, asst.AssetStatus, acnd.AssetCondition, a.Name, a.Description, a.PreviousMaintenance, a.ScheduledMaintenance, a.Attachments 
+// SQL query to fetch assets with related details, filtering by assetcategory_id
+$sql = "SELECT a.asset_id, a.asset_name, a.description, a.status, a.last_maintenance_date, ac.Category 
         FROM assets a
-        JOIN assetcategory ac ON a.CategoryID = ac.AssetCategoryID
-        JOIN assetstatus asst ON a.StatusID = asst.AssetStatusID
-        JOIN assetcondition acnd ON a.ConditionID = acnd.AssetConditionID
-        WHERE a.CategoryID = ?";
+        JOIN asset_category ac ON a.assetcategory_id = ac.AssetCategory_ID
+        WHERE a.assetcategory_id = ?";
 
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $categoryID);
@@ -28,10 +35,9 @@ $result = $stmt->get_result();
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="5"> <!-- Refresh page every 5 seconds -->
   <title>BFP NCR Taguig City</title>
-  <link rel="stylesheet" href="AssetsIndex.css">
-  <script type="text/javascript" src="app.js" defer></script>
+  <link rel="stylesheet" href="AssetIndex.css">
+  <script type="text/javascript" src="AssetIndex.js" defer></script>
 </head>
 <body>
     <nav id="sidebar">
@@ -98,37 +104,44 @@ $result = $stmt->get_result();
         </li>
         </ul>
     </nav>
-  <main>
-    <div class="container">
-    <h2>Asset List (Category ID: <?= $categoryID ?>)</h2>
-    <table border='1'>
-        <tr>
-            <th>Asset ID</th>
-            <th>Status</th>
-            <th>Condition</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Previous Maintenance</th>
-            <th>Scheduled Maintenance</th>
-            <th>Attachments</th>
-        </tr>
-        <?php if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) { ?>
-                <tr>
-                    <td><?= $row["AssetID"] ?></td>
-                    <td><?= $row["AssetStatus"] ?></td>
-                    <td><?= $row["AssetCondition"] ?></td>
-                    <td><?= $row["Name"] ?></td>
-                    <td><?= $row["Description"] ?></td>
-                    <td><?= $row["PreviousMaintenance"] ?></td>
-                    <td><?= $row["ScheduledMaintenance"] ?></td>
-                    <td><a href='<?= $row["Attachments"] ?>' target='_blank'>View</a></td>
-                </tr>
-            <?php }
-        } else { ?>
-            <tr><td colspan='9'>No records found</td></tr>
-        <?php } ?>
-    </table>
+    <main>
+    <h1 class="asset-header">ASSET MANAGEMENT</h1>
+    <h2>FIRE TRUCK 3</h2>
+    <?php if ($role_id == 4): // Only show for admin ?>
+        <div class="admin-button">
+            <a href="AssetCreate.php" class="add-button">ADD ASSET</a>
+        </div>
+    <?php endif; ?>
+    <div class="asset-container">
+    <?php while ($row = $result->fetch_assoc()): ?>
+            <div class="asset-structure">
+                <div class="asset-picture">
+                    <?php
+                        $asset_id = $row['asset_id'];
+                        $img_query = "SELECT img_path FROM assets_image WHERE asset_id = $asset_id";
+                        $img_result = $conn->query($img_query);
+                        
+                        while ($img_row = $img_result->fetch_assoc()) {
+                            echo '<img src="../' . $img_row['img_path'] . '">';
+                        }
+                    ?>
+                </div>
+                <div class="asset-info">
+                    <p class="asset-details">
+                        <strong>Name:</strong> <?php echo htmlspecialchars($row['asset_name']); ?><br>
+                        <strong>Description:</strong> <?php echo htmlspecialchars($row['description']); ?><br>
+                        <strong>Status:</strong> <?php echo htmlspecialchars($row['status']); ?><br>
+                        <strong>Previous Maintenance:</strong> <?php echo htmlspecialchars($row['last_maintenance_date']); ?><br>
+                    </p>
+                    <?php if ($role_id == 4): // Only show for admin ?>
+                        <div class="asset-button">
+                            <a class="edit-button" href="AssetEdit.php?id=<?php echo $row['asset_id']; ?>">Edit</a>
+                            <a class="delete-button"href="AssetDelete.php?id=<?php echo $row['asset_id']; ?>" onclick="return confirm('Are you sure?')">Delete</a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endwhile; ?>
     </div>
   </main>
 </body>
