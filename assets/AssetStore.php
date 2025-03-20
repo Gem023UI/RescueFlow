@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 if (move_uploaded_file($tmp_name, $targetPath)) {
                     // Save file path in the database
-                    $imgPath = "asset/images/" . $fileName;
+                    $imgPath = "assets/images/" . $fileName;
                     $conn->query("INSERT INTO assets_image (asset_id, img_path) VALUES ('$asset_id', '$imgPath')");
                 }
             }
