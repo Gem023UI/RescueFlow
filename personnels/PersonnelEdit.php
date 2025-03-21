@@ -140,11 +140,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <select name="shift_id">
                             <?php
                             // Fetch shifts from the shifts table
-                            $shift_query = "SELECT shift_id, shift_day, start_time, end_time FROM shifts";
+                            $shift_query = "SELECT shift_id, status FROM shifts";
                             $shift_result = $conn->query($shift_query);
                             while ($shift_row = $shift_result->fetch_assoc()):
                                 $shift_value = $shift_row['shift_id'];
-                                $shift_label = $shift_row['shift_day'] . " (" . $shift_row['start_time'] . " - " . $shift_row['end_time'] . ")";
+                                $shift_label = $shift_row['status'];
                             ?>
                                 <option value="<?= $shift_value ?>" <?= $shift_id == $shift_value ? 'selected' : '' ?>><?= $shift_label ?></option>
                             <?php endwhile; ?>

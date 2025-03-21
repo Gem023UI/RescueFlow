@@ -6,7 +6,7 @@ include('../includes/restrict_admin.php');
 // Fetch roles, ranks, and shifts for dropdowns
 $roles = $conn->query("SELECT role_id, role_name FROM roles");
 $ranks = $conn->query("SELECT rank_id, rank_name FROM ranks");
-$shifts = $conn->query("SELECT shift_id, shift_day, start_time, end_time FROM shifts");
+$shifts = $conn->query("SELECT shift_id, status FROM shifts");
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <option value="">Select Shift</option>
                         <?php while ($shift = $shifts->fetch_assoc()): ?>
                             <option value="<?= $shift['shift_id']; ?>">
-                                <?= $shift['shift_day'] . " (" . $shift['start_time'] . " - " . $shift['end_time'] . ")"; ?>
+                                <?= $shift['status']; ?>
                             </option>
                         <?php endwhile; ?>
                     </select>

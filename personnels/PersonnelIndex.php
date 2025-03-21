@@ -8,7 +8,7 @@ $role_id = $_SESSION['role'] ?? null; // Fetch RoleID from session
 
 // Fetch personnel data
 $sql = "SELECT Personnel.PersonnelID, Personnel.FirstName, Personnel.LastName, Personnel.Email, Personnel.PhoneNumber, Personnel.Profile, 
-               ranks.rank_name, roles.role_name, shifts.start_time, shifts.end_time, shifts.shift_day
+               ranks.rank_name, roles.role_name, shifts.status
         FROM Personnel
         LEFT JOIN ranks ON Personnel.RankID = ranks.rank_id
         LEFT JOIN roles ON Personnel.RoleID = roles.role_id
@@ -114,7 +114,7 @@ $result = $conn->query($sql);
                     <p><strong>Phone:</strong> <?= htmlspecialchars($row['PhoneNumber']); ?></p>
                     <p><strong>Rank:</strong> <?= $row['rank_name'] ?? 'N/A'; ?></p>
                     <p><strong>Role:</strong> <?= $row['role_name'] ?? 'N/A'; ?></p>
-
+                    <p><strong>Shift:</strong> <?= $row['status'] ?? 'N/A'; ?></p>
                     <?php if ($role_id == 4): // Only show for admin ?>
                         <a href="personneledit.php?PersonnelID=<?= $row['PersonnelID']; ?>" class="btn edit-btn">Edit</a>
                         <a href="personneldelete.php?PersonnelID=<?= $row['PersonnelID']; ?>" class="btn delete-btn" onclick="return confirm('Are you sure?');">Delete</a>

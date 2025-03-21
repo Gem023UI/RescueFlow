@@ -30,7 +30,7 @@ $conn->close();
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 </head>
 <body>
-<nav id="sidebar">
+    <nav id="sidebar">
         <ul>
         <li>
             <span class="logo"><a href="../dashboard/RescueFlowIndex.php">BFP NCR Taguig S1</a></span>
