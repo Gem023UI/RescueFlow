@@ -1,7 +1,8 @@
 <?php
 session_start();
 include('../includes/config.php');
-include('../dispatch/dispatchbutton.html');
+include('../dispatch/DispatchButton.html');
+include('../attendance/AttendanceButton.html');
 
 if (!isset($conn)) {
     die("Database connection failed.");
@@ -23,7 +24,6 @@ $conn->close();
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="5"> <!-- Refresh page every 5 seconds -->
   <title>BFP NCR Taguig City</title>
   <link rel="stylesheet" href="ShiftsIndex.css">
   <script type="text/javascript" src="ShiftsIndex.js" defer></script>
@@ -101,30 +101,7 @@ $conn->close();
     </nav>
     <main>
     <div class="container">
-      <h2>DISPATCH DASHBOARD</h2>
-      <?php if (empty($locations)): ?>
-        <p>The incident has been resolved.</p>
-        <?php else: ?>
-        <ul>
-            <?php foreach ($locations as $location): ?>
-                <li>
-                    <strong><?php echo htmlspecialchars($location['location']); ?></strong> 
-                    (Submitted on <?php echo $location['dispatched_at']; ?>)
-                    <br>
-                    <iframe width="100%" height="300" src="https://maps.google.com/maps?q=<?php echo urlencode($location['location']); ?>&output=embed"></iframe>
-                </li>
-                <hr>
-            <?php endforeach; ?>
-        </ul>
-        <?php endif; ?>
-    </div>
-    <div class="container">
-      <h2>TRAINING TODAY</h2>
-      <p>Lists of training scheduled to be held today.</p>
-    </div>
-    <div class="container">
-      <h2>ON SHIFT PERSONNELS</h2>
-      <p>Lists of personnels on duty as of today.</p>
+
     </div>
     </main>
 </body>
