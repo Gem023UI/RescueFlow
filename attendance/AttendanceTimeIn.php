@@ -43,7 +43,7 @@ if ($stmt->execute()) {
     $updateStmt->close();
 
     // Redirect to a customizable directory after successful time-in
-    $redirectPath = "../dashboard/RescueFlowIndex.php"; // Customize this path
+    $redirectPath = "../shifts/ShiftsIndex.php"; // Customize this path
     header("Location: " . $redirectPath);
     exit();
 } else {
