@@ -1,12 +1,14 @@
 <?php
 session_start();
 include('../includes/config.php');
-include('../includes/restrict_admin.php');
 include('../dispatch/DispatchButton.html');
 
 if (!isset($conn)) {
     die("Database connection failed.");
 }
+
+$user_id = $_SESSION['user_id'] ?? null;
+$role_id = $_SESSION['role'] ?? null; // Fetch RoleID from session
 
 // Mark notifications as read when clicked
 if (isset($_GET['mark_as_read'])) {
@@ -145,10 +147,13 @@ $result = $conn->query($sql);
                         <strong>Why:</strong> <?php echo htmlspecialchars($row['why']); ?><br>
                         <strong>Caller Name:</strong> <?php echo htmlspecialchars($row['caller_name']); ?><br>
                         <strong>Caller Phone:</strong> <?php echo htmlspecialchars($row['caller_phone']); ?><br>
-                        <div class="edit-button">
-                        <a href="ReportsIndex.php" class="read-button">Mark as Read</a>
-                        <a href="/RESCUEFLOW(1)/dispatch/DispatchIndex.php?location=<?php echo urlencode($row['where']); ?>" class="dispatch-button">DISPATCH</a>
-                        </div>
+                        <?php if ($role_id == 4): // Only show for admin ?>
+                            <div class="edit-button">
+                                <a href="ReportsIndex.php" class="read-button">Mark as Read</a>
+                                <a href="/RESCUEFLOW(1)/dispatch/DispatchIndex.php?location=<?php echo urlencode($row['where']); ?>" class="dispatch-button">DISPATCH</a>
+                            </div>
+                        <?php endif; ?>
+                        <strong>-------------------------------------------------------------------------------------------</strong>
             <?php endwhile; ?>
                 </ul>
             <?php else: ?>
@@ -156,7 +161,6 @@ $result = $conn->query($sql);
             <?php endif; ?>
         </div>  
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </main>
 </body>
 </html>

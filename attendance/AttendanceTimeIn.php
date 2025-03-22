@@ -29,7 +29,7 @@ $checkResult = $checkStmt->get_result();
 
 if ($checkResult->num_rows > 0) {
     // User already timed in today
-    echo "You already TIME IN. Wait for the Admin response for the TIME OUT availability.";
+    echo "<script>alert('You already TIME IN. Wait for the Admin response for the TIME OUT availability.'); window.location.href='/RESCUEFLOW(1)/shifts/ShiftsIndex.php';</script>";
     exit;
 }
 
@@ -70,20 +70,24 @@ if ($stmt->execute()) {
     $adminResult = $conn->query($adminQuery);
 
     if ($adminResult->num_rows > 0) {
-        // Load PHPMailer
-        require '../vendor/autoload.php'; // Ensure this path is correct
+        // Create a new PHPMailer instance
+        $mail = new PHPMailer(true); // Initialize $mail here
 
         try {
+            // Enable verbose debugging
+            $mail->SMTPDebug = 2; // 2 = Enable verbose debug output
+
             // Server settings
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com'; // Replace with your SMTP server
             $mail->SMTPAuth = true;
-            $mail->Username = 'bfpncrtaguigcityone.com'; // Replace with your email
+            $mail->Username = 'flintaxl.celetaria@gmail.com'; // Replace with your email
             $mail->Password = 'whif dedq ytly ryfo'; // Replace with your email password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Enable TLS encryption
             $mail->Port = 587;
 
             // Recipients
-            $mail->setFrom('bfpncrtaguigcityone', 'RescueFlow System'); // Replace with your email
+            $mail->setFrom('flintaxl.celetaria@gmail.com', 'RescueFlow System'); // Replace with your email
             while ($admin = $adminResult->fetch_assoc()) {
                 $mail->addAddress($admin['Email']); // Add each admin's email
             }
@@ -95,9 +99,12 @@ if ($stmt->execute()) {
 
             // Send the email
             $mail->send();
+            echo "Email sent successfully!";
         } catch (Exception $e) {
             echo "Email could not be sent. Error: {$mail->ErrorInfo}";
         }
+    } else {
+        echo "No admins on duty to notify.";
     }
 
     // Redirect to a customizable directory after successful time-in
@@ -112,4 +119,4 @@ if ($stmt->execute()) {
 $stmt->close();
 $checkStmt->close();
 $conn->close();
-?>
+?> 
