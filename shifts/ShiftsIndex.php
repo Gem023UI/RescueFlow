@@ -2,7 +2,7 @@
 session_start();
 include('../includes/config.php');
 include('../dispatch/DispatchButton.html');
-include('../attendance/AttendanceButton.php');
+include('../attendance/AttendanceButton.html');
 
 // Check database connection
 if (!isset($conn)) {
@@ -92,6 +92,7 @@ if (!isset($conn)) {
     </nav>
     <main>
     <div class="container">
+        <h1>tangina gumana din sa wakas</h1>
 
     </div>
     </main>
