@@ -115,47 +115,51 @@ $todayDate = date("F j, Y"); // Example output: "March 22, 2025"
         </ul>
     </nav>
     <main>
-    <div class="container">
+    <div class="shifts-container">
         <!-- Display the header with today's date -->
-        <h2>Attendance for <?php echo $todayDate; ?></h2>
-
-        <?php
+        <h2>ATTENDANCE AS OF <?php echo $todayDate; ?></h2>
+        <div class="attendance-table">
+            <?php
             if ($result) {
-            echo "<table border='1'>
-                <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Rank</th>
-                    <th>Time In</th>
-                    <th>Time Out</th>
-                    <th>Actions</th>
-                </tr>";
-
-            while ($row = mysqli_fetch_assoc($result)) {
-                echo "<tr>
-                    <td>{$row['FirstName']}</td>
-                    <td>{$row['LastName']}</td>
-                    <td>{$row['Rank']}</td>
-                    <td>{$row['TimeIn']}</td>
-                    <td>{$row['TimeOut']}</td>
-                    <td class='action-buttons'>";
-
-                // Show Edit and Delete buttons only for Admins (RoleID = 4)
+                echo "<table border='1'>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Rank</th>
+                            <th>Time In</th>
+                            <th>Time Out</th>";
+                // Show Actions column header only for Admins (RoleID = 4)
                 if ($role_id == 4) {
-                    echo "<button class='edit' onclick='editAttendance({$row['attendance_id']})'>Edit</button>
-                          <button class='delete' onclick='deleteAttendance({$row['attendance_id']})'>Delete</button>";
+                    echo "<th>Actions</th>";
                 }
 
-                echo "</td>
-                </tr>";
+                echo "</tr>";
+
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo "<tr>
+                            <td>{$row['FirstName']}</td>
+                            <td>{$row['LastName']}</td>
+                            <td>{$row['Rank']}</td>
+                            <td>{$row['TimeIn']}</td>
+                            <td>{$row['TimeOut']}</td>";
+
+                    // Show Actions column only for Admins (RoleID = 4)
+                    if ($role_id == 4) {
+                        echo "<td class='action-buttons'>
+                                <button class='edit' onclick='editAttendance({$row['attendance_id']})'>Edit</button>
+                                <button class='delete' onclick='deleteAttendance({$row['attendance_id']})'>Delete</button>
+                            </td>";
+                    }
+
+                    echo "</tr>";
+                }
+
+                echo "</table>";
+            } else {
+                echo "Error fetching attendance records: " . mysqli_error($conn);
             }
-
-            echo "</table>";
-        } else {
-            echo "Error fetching attendance records: " . mysqli_error($conn);
-        }
-        ?>
-
+            ?>
+        </div>
     </div>
     </main>
 </body>
