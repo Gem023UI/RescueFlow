@@ -4,9 +4,9 @@ include("../includes/config.php");
 
 // Sanitize and fetch form data
 $email = trim($_POST['email']);
-$first_name = trim($_POST['uname']); // Assuming 'uname' is the first name
+$first_name = trim($_POST['uname']); // First name
+$last_name = trim($_POST['lastname']); // Last name
 $password = trim($_POST['password']);
-$phone = ''; // Add phone field if needed in the form
 $rank_id = 1; // Default rank for new personnel
 $shift_id = 1; // Default shift for new personnel
 $role_id = 1; // Default role for new personnel
@@ -37,12 +37,12 @@ if ($password !== $confirmPass) {
 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
 // Insert the new personnel into the Personnel table
-$sql = "INSERT INTO Personnel (FirstName, Email, PhoneNumber, Password, RankID, ShiftID, RoleID) 
+$sql = "INSERT INTO Personnel (FirstName, LastName, Email, Password, RankID, ShiftID, RoleID) 
         VALUES (?, ?, ?, ?, ?, ?, ?)";
 $stmt = mysqli_prepare($conn, $sql);
 
 if ($stmt) {
-    mysqli_stmt_bind_param($stmt, "ssssiii", $first_name, $email, $phone, $hashed_password, $rank_id, $shift_id, $role_id);
+    mysqli_stmt_bind_param($stmt, "ssssiii", $first_name, $last_name, $email, $hashed_password, $rank_id, $shift_id, $role_id);
     $execute = mysqli_stmt_execute($stmt);
 
     if ($execute) {

@@ -1,9 +1,5 @@
 <?php
-// Start the session only if it hasn't been started yet
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
+session_start();
 include("../includes/config.php");
 
 // Display session messages (if any)
@@ -27,15 +23,15 @@ if (isset($_POST['submit'])) {
         mysqli_stmt_store_result($stmt);
 
         if (mysqli_stmt_num_rows($stmt) === 1) {
-            mysqli_stmt_bind_result($stmt, $personnel_id, $first_name, $last_name, $email, $role_id, $hashed_password);
+            mysqli_stmt_bind_result($stmt, $personnelID, $firstName, $lastName, $email, $roleID, $hashedPassword);
             mysqli_stmt_fetch($stmt);
 
             // Verify the password
-            if (password_verify($pass, $hashed_password)) {
+            if (password_verify($pass, $hashedPassword)) {
                 // Store user data in session
-                $_SESSION['username'] = $first_name . " " . $last_name;
-                $_SESSION['user_id'] = $personnel_id;
-                $_SESSION['role'] = $role_id;
+                $_SESSION['username'] = $firstName . " " . $lastName;
+                $_SESSION['PersonnelID'] = $personnelID; // Ensure this matches AttendanceButton.php
+                $_SESSION['role'] = $roleID;
                 $_SESSION['email'] = $email;
 
                 // Redirect to dashboard
@@ -83,11 +79,8 @@ if (isset($_POST['submit'])) {
                 <!-- Name and Email inputs -->
                 <div class="input-box">
                     <input type="text" class="form-control" id="uname" name="uname" placeholder="First Name" required />
+                    <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Last Name" required />
                     <input type="email" class="form-control" id="email" name="email" placeholder="Email" required />
-                </div>
-                <!-- Phone Number input -->
-                <div class="input-box">
-                    <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone Number" required />
                 </div>
                 <!-- Password inputs -->
                 <div class="input-box">

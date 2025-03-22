@@ -4,6 +4,21 @@ include('../includes/config.php');
 include('../dispatch/dispatchbutton.html');
 require_once('../vendor/tecnickcom/tcpdf/tcpdf.php');
 
+// Restrict if not Admin Function
+$user_id = $_SESSION['user_id'] ?? null;
+$role_id = null;
+
+if ($user_id) {
+    // Fetch RoleID from personnel table
+    $query = "SELECT RoleID FROM personnel WHERE PersonnelID = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $stmt->bind_result($role_id);
+    $stmt->fetch();
+    $stmt->close();
+}
+
 // Handle Create & Update
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $incident_id = $_POST['incident_id'] ?? null;
@@ -84,21 +99,6 @@ if (isset($_GET['delete'])) {
         header("Location: IncidentIndex.php");
         exit();
     }
-}
-
-// Restrict if not Admin Function
-$user_id = $_SESSION['user_id'] ?? null;
-$role_id = null;
-
-if ($user_id) {
-    // Fetch RoleID from personnel table
-    $query = "SELECT RoleID FROM personnel WHERE PersonnelID = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    $stmt->bind_result($role_id);
-    $stmt->fetch();
-    $stmt->close();
 }
 
 // Fetch incidents with barangay name instead of location

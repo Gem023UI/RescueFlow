@@ -1,16 +1,5 @@
 <?php
-// Start the session only if it hasn't been started yet
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-// Check if the user is logged in
-if (!isset($_SESSION['PersonnelID'])) {
-    echo json_encode(['error' => 'User not logged in']);
-    exit;
-}
-
-// Include necessary files
+session_start();
 include('../includes/config.php');
 include('../dispatch/DispatchButton.html');
 include('../attendance/AttendanceButton.php');
