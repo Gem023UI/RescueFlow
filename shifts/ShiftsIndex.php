@@ -9,8 +9,8 @@ if (!isset($conn)) {
     die("Database connection failed.");
 }
 
-// Fetch the logged-in user's RoleID from the session
-$loggedInRoleID = $_SESSION['RoleID'] ?? null; // Ensure RoleID is set in the session during login
+$user_id = $_SESSION['user_id'] ?? null;
+$role_id = $_SESSION['role'] ?? null; // Fetch RoleID from session
 
 // Fetch data from the attendance table with joins to personnel and ranks
 $query = "
@@ -141,7 +141,7 @@ $todayDate = date("F j, Y"); // Example output: "March 22, 2025"
                     <td class='action-buttons'>";
 
                 // Show Edit and Delete buttons only for Admins (RoleID = 4)
-                if ($loggedInRoleID == 4) {
+                if ($role_id == 4) {
                     echo "<button class='edit' onclick='editAttendance({$row['attendance_id']})'>Edit</button>
                           <button class='delete' onclick='deleteAttendance({$row['attendance_id']})'>Delete</button>";
                 }

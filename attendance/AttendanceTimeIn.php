@@ -51,6 +51,8 @@ if ($stmt->execute()) {
     echo "Error recording attendance.";
 }
 
+
+
 $stmt->close();
 $checkStmt->close();
 $conn->close();

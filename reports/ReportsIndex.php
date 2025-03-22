@@ -39,7 +39,6 @@ $result = $conn->query($sql);
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="5"> <!-- Refresh page every 5 seconds -->
   <title>BFP NCR Taguig City</title>
   <link rel="stylesheet" href="ReportsIndex.css">
   <script type="text/javascript" src="ReportsIndex.js" defer></script>
@@ -128,32 +127,34 @@ $result = $conn->query($sql);
         </ul>
     </nav>
     <main>
-    <div class="container">
-    <h2 class="text-center text-primary">Notifications</h2>
+    <div class="report-container">
+    <h2 class="report-header">EMERGENCY REPORTS</h2>
+        <div class="report-info">
         <?php if (isset($_SESSION['success_message'])): ?>
-            <div class="alert alert-success"><?php echo $_SESSION['success_message']; unset($_SESSION['success_message']); ?></div>
-        <?php elseif (isset($_SESSION['error_message'])): ?>
-            <div class="alert alert-danger"><?php echo $_SESSION['error_message']; unset($_SESSION['error_message']); ?></div>
-        <?php endif; ?>
+                <div class="alert alert-success"><?php echo $_SESSION['success_message']; unset($_SESSION['success_message']); ?></div>
+            <?php elseif (isset($_SESSION['error_message'])): ?>
+                <div class="alert alert-danger"><?php echo $_SESSION['error_message']; unset($_SESSION['error_message']); ?></div>
+            <?php endif; ?>
 
-        <?php if ($result && $result->num_rows > 0): ?>
-            <ul class="list-group">
-            <?php while ($row = $result->fetch_assoc()): ?>
-                <li class="list-group-item">
-                    <strong>Notification:</strong> <?php echo htmlspecialchars($row['message']); ?><br>
-                    <strong>What:</strong> <?php echo htmlspecialchars($row['what']); ?><br>
-                    <strong>Where:</strong> <?php echo htmlspecialchars($row['where']); ?><br>
-                    <strong>Why:</strong> <?php echo htmlspecialchars($row['why']); ?><br>
-                    <strong>Caller Name:</strong> <?php echo htmlspecialchars($row['caller_name']); ?><br>
-                    <strong>Caller Phone:</strong> <?php echo htmlspecialchars($row['caller_phone']); ?><br>
-                    <a href="notif.php?mark_as_read=<?php echo $row['id']; ?>" class="btn btn-success btn-sm mt-2">Mark as Read</a>
-                    <a href="/RESCUEFLOW(1)/dispatch/DispatchIndex.php?location=<?php echo urlencode($row['where']); ?>" class="btn btn-primary btn-sm mt-2">Dispatch</a>
-                </li>
-        <?php endwhile; ?>
-            </ul>
-        <?php else: ?>
-            <p class="text-center text-muted">No new notifications.</p>
-        <?php endif; ?>
+            <?php if ($result && $result->num_rows > 0): ?>
+                <ul class="list-group">
+                <?php while ($row = $result->fetch_assoc()): ?>
+                        <strong>Notification:</strong> <?php echo htmlspecialchars($row['message']); ?><br>
+                        <strong>What:</strong> <?php echo htmlspecialchars($row['what']); ?><br>
+                        <strong>Where:</strong> <?php echo htmlspecialchars($row['where']); ?><br>
+                        <strong>Why:</strong> <?php echo htmlspecialchars($row['why']); ?><br>
+                        <strong>Caller Name:</strong> <?php echo htmlspecialchars($row['caller_name']); ?><br>
+                        <strong>Caller Phone:</strong> <?php echo htmlspecialchars($row['caller_phone']); ?><br>
+                        <div class="edit-button">
+                        <a href="ReportsIndex.php" class="read-button">Mark as Read</a>
+                        <a href="/RESCUEFLOW(1)/dispatch/DispatchIndex.php?location=<?php echo urlencode($row['where']); ?>" class="dispatch-button">DISPATCH</a>
+                        </div>
+            <?php endwhile; ?>
+                </ul>
+            <?php else: ?>
+                <p class="text-center text-muted">No new notifications.</p>
+            <?php endif; ?>
+        </div>  
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </main>

@@ -2,6 +2,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 require '../vendor/autoload.php'; // Adjust this path if necessary
+
 session_start();
 include('../includes/config.php');
 include('../includes/restrict_admin.php');
@@ -189,61 +190,8 @@ if (isset($_POST['submit_emergency_info'])) {
                 <button type="submit" name="submit_emergency_info" class="btn btn-warning w-100">Save Emergency Info</button>
             </form>
         </div>
-
-        <!-- Button to trigger emergency history view -->
-        <div class="dispatch-form">
-            <h2>View Emergency History</h2>
-            <button class="btn btn-info w-100" data-bs-toggle="collapse" data-bs-target="#emergencyHistory" aria-expanded="false" aria-controls="emergencyHistory">
-                View Emergency History
-            </button>
-
-            <!-- Emergency History (Carousel) -->
-            <div class="collapse mt-4" id="emergencyHistory">
-                <div id="historyCarousel" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        <?php foreach ($emergencyHistory as $index => $record): ?>
-                            <div class="carousel-item <?php echo ($index == 0) ? 'active' : ''; ?>">
-                                <div class="card p-4">
-                                    <h5><?php echo "Caller: " . htmlspecialchars($record['caller_name']); ?></h5>
-                                    <p><strong>What:</strong> <?php echo htmlspecialchars($record['what']); ?></p>
-                                    <p><strong>Where:</strong> <?php echo htmlspecialchars($record['where']); ?></p>
-                                    <p><strong>Why:</strong> <?php echo htmlspecialchars($record['why']); ?></p>
-                                    <p><strong>Caller Phone:</strong> <?php echo htmlspecialchars($record['caller_phone']); ?></p>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#historyCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#historyCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
-
-                <!-- Scroll Buttons -->
-                <div class="mt-3 text-center">
-                    <button class="btn btn-primary" id="scrollPrev">Scroll Previous</button>
-                    <button class="btn btn-primary" id="scrollNext">Scroll Next</button>
-                </div>
-            </div>
-        </div>
         <a href="../dashboard/RescueFlowIndex.php" class="btn btn-warning w-100">GO BACK</a>
     </div>
-    <script>
-        // Scroll to previous item in the carousel
-        document.getElementById('scrollPrev').addEventListener('click', function () {
-            var carousel = new bootstrap.Carousel(document.getElementById('historyCarousel'));
-            carousel.prev();
-        });
-
-        // Scroll to next item in the carousel
-        document.getElementById('scrollNext').addEventListener('click', function () {
-            var carousel = new bootstrap.Carousel(document.getElementById('historyCarousel'));
-            carousel.next();
-        });
-    </script>
+    </div>
 </body>
 </html>

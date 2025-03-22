@@ -4,20 +4,8 @@ include('../includes/config.php');
 include('../dispatch/dispatchbutton.html');
 require_once('../vendor/tecnickcom/tcpdf/tcpdf.php');
 
-// Restrict if not Admin Function
 $user_id = $_SESSION['user_id'] ?? null;
-$role_id = null;
-
-if ($user_id) {
-    // Fetch RoleID from personnel table
-    $query = "SELECT RoleID FROM personnel WHERE PersonnelID = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    $stmt->bind_result($role_id);
-    $stmt->fetch();
-    $stmt->close();
-}
+$role_id = $_SESSION['role'] ?? null; // Fetch RoleID from session
 
 // Handle Create & Update
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
