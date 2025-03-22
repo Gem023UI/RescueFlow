@@ -1,7 +1,9 @@
 <?php
-session_start(); // Start the session
+// Start the session only if it hasn't been started yet
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-// Include database connection
 include('../includes/config.php');
 
 // Check if the request contains PersonnelID

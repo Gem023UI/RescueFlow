@@ -1,5 +1,8 @@
 <?php
-session_start(); // Start the session
+// Start the session only if it hasn't been started yet
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Check if the user is logged in
 if (!isset($_SESSION['PersonnelID'])) {

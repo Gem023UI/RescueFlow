@@ -1,14 +1,20 @@
 <?php
-session_start();
+// Start the session only if it hasn't been started yet
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 include("../includes/config.php");
 
+// Display session messages (if any)
 if (isset($_SESSION['message'])) {
     echo "<p>{$_SESSION['message']}</p>";
     unset($_SESSION['message']);
 }
 
+// Handle login form submission
 if (isset($_POST['submit'])) {
-    $uname = trim($_POST['uname']); // Username from form
+    $uname = trim($_POST['uname']); // Username (email) from form
     $pass = trim($_POST['password']); // Password from form
 
     // Query the Personnel table
@@ -32,6 +38,7 @@ if (isset($_POST['submit'])) {
                 $_SESSION['role'] = $role_id;
                 $_SESSION['email'] = $email;
 
+                // Redirect to dashboard
                 header("Location: ../dashboard/RescueFlowIndex.php");
                 exit();
             } else {
@@ -50,7 +57,6 @@ if (isset($_POST['submit'])) {
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -58,7 +64,6 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="LoginRegister.css">
     <title>BFP - Login / Register</title>
 </head>
-
 <body>
     <div class="container" id="container">
         <div class="form-container sign-up">

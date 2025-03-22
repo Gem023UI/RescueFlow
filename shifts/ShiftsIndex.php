@@ -1,22 +1,24 @@
 <?php
-session_start();
+// Start the session only if it hasn't been started yet
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Check if the user is logged in
+if (!isset($_SESSION['PersonnelID'])) {
+    echo json_encode(['error' => 'User not logged in']);
+    exit;
+}
+
+// Include necessary files
 include('../includes/config.php');
 include('../dispatch/DispatchButton.html');
-include('../attendance/AttendanceButton.html');
+include('../attendance/AttendanceButton.php');
 
+// Check database connection
 if (!isset($conn)) {
     die("Database connection failed.");
 }
-
-$sql = "SELECT * FROM dispatches WHERE status_id != 3 ORDER BY dispatched_at DESC"; 
-$result = $conn->query($sql);
-
-$locations = [];
-while ($row = $result->fetch_assoc()) {
-    $locations[] = $row;
-}
-
-$conn->close();
 ?>
 
 <!DOCTYPE html>
