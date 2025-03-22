@@ -39,3 +39,38 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   });
 });
+
+// Function to edit the Time Out column
+function editAttendance(attendanceId) {
+    const newTimeOut = prompt("Enter the new Time Out (YYYY-MM-DD HH:MM:SS):");
+    if (newTimeOut) {
+        fetch(`AttendanceEdit.php?attendance_id=${attendanceId}&time_out=${newTimeOut}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Time Out updated successfully!");
+                    location.reload(); // Refresh the page to reflect changes
+                } else {
+                    alert("Failed to update Time Out.");
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+}
+
+// Function to delete a row
+function deleteAttendance(attendanceId) {
+    if (confirm("Are you sure you want to delete this record?")) {
+        fetch(`AttendanceDelete.php?attendance_id=${attendanceId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Record deleted successfully!");
+                    location.reload(); // Refresh the page to reflect changes
+                } else {
+                    alert("Failed to delete record.");
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+}

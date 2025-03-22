@@ -8,6 +8,30 @@ include('../attendance/AttendanceButton.html');
 if (!isset($conn)) {
     die("Database connection failed.");
 }
+
+// Fetch the logged-in user's RoleID from the session
+$loggedInRoleID = $_SESSION['RoleID'] ?? null; // Ensure RoleID is set in the session during login
+
+// Fetch data from the attendance table with joins to personnel and ranks
+$query = "
+    SELECT 
+        a.attendance_id,
+        p.FirstName,
+        p.LastName,
+        r.rank_name AS Rank,
+        a.timestamp AS TimeIn,
+        a.time_out AS TimeOut
+    FROM 
+        attendance a
+    JOIN 
+        personnel p ON a.personnel_id = p.PersonnelID
+    JOIN 
+        ranks r ON p.RankID = r.rank_id
+";
+$result = mysqli_query($conn, $query);
+
+// Get today's date in the desired format (e.g., "March 22, 2025")
+$todayDate = date("F j, Y"); // Example output: "March 22, 2025"
 ?>
 
 <!DOCTYPE html>
@@ -72,19 +96,19 @@ if (!isset($conn)) {
         </li>
         <li>
             <a href="../personnels/PersonnelIndex.php">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="M440-280h320v-22q0-45-44-71.5T600-400q-72 0-116 26.5T440-302v22Zm160-160q33 0 56.5-23.5T680-520q0-33-23.5-56.5T600-600q-33 0-56.5 23.5T520-520q0 33 23.5 56.5T600-440ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="M440-280h320v-22q0-45-44-71.5T600-400q-72 0-116 26.5T440-302v22Zm160-160q33 0 56.5-23.5T680-520q0-33-23.5-56.5T600-600q-33 0-56.5 23.5T520-520q0 33 23.5 56.5T600-440ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h560v-400H447l-80-80H160v480Zm0 0v-480 480Z"/></svg>
             <span>Personnels</span>
             </a>
         </li>
         <li>
             <a href="../training/TrainingIndex.php">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="m216-160-56-56 384-384H440v80h-80v-160h233q16 0 31 6t26 17l120 119q27 27 66 42t84 16v80q-62 0-112.5-19T718-476l-40-42-88 88 90 90-262 151-40-69 172-99-68-68-266 265Zm-96-280v-80h200v80H120ZM40-560v-80h200v80H40Zm739-80q-33 0-57-23.5T698-720q0-33 24-56.5t57-23.5q33 0 57 23.5t24 56.5q0 33-24 56.5T779-640Zm-659-40v-80h200v80H120Z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="m216-160-56-56 384-384H440v80h-80v-160h233q16 0 31 6t26 17l120 119q27 27 66 42t84 16v80q-62 0-112.5-19T718-476l-40-42-88 88 90 90-262 151-40-69 172-99-68-68-266 265Zm-96-280v-120H600v-80h120v-120h80v120h120v80H800v120h-80Z"/></svg>
             <span>Training</span>
             </a>
         </li>
         <li>
             <a href="../shifts/ShiftsIndex.php">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M438-226 296-368l58-58 84 84 168-168 58 58-226 226ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M438-226 296-368l58-58 84 84 168-168 58 58-226 226ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T880-720v560q0 33-23.5 56.5T800-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z"/></svg>
             <span>Shifts</span>
             </a>
         </li>
@@ -92,7 +116,45 @@ if (!isset($conn)) {
     </nav>
     <main>
     <div class="container">
-        <h1>tangina gumana din sa wakas</h1>
+        <!-- Display the header with today's date -->
+        <h2>Attendance for <?php echo $todayDate; ?></h2>
+
+        <?php
+            if ($result) {
+            echo "<table border='1'>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Rank</th>
+                    <th>Time In</th>
+                    <th>Time Out</th>
+                    <th>Actions</th>
+                </tr>";
+
+            while ($row = mysqli_fetch_assoc($result)) {
+                echo "<tr>
+                    <td>{$row['FirstName']}</td>
+                    <td>{$row['LastName']}</td>
+                    <td>{$row['Rank']}</td>
+                    <td>{$row['TimeIn']}</td>
+                    <td>{$row['TimeOut']}</td>
+                    <td class='action-buttons'>";
+
+                // Show Edit and Delete buttons only for Admins (RoleID = 4)
+                if ($loggedInRoleID == 4) {
+                    echo "<button class='edit' onclick='editAttendance({$row['attendance_id']})'>Edit</button>
+                          <button class='delete' onclick='deleteAttendance({$row['attendance_id']})'>Delete</button>";
+                }
+
+                echo "</td>
+                </tr>";
+            }
+
+            echo "</table>";
+        } else {
+            echo "Error fetching attendance records: " . mysqli_error($conn);
+        }
+        ?>
 
     </div>
     </main>
