@@ -34,10 +34,11 @@ if (isset($_POST["submit_location"])) {
     if (mysqli_query($conn, $sql)) {
         echo "<p style='color: green;'>Location saved successfully!</p>";
 
-        // Fetch on-duty members
-        $onDutyQuery = "SELECT m.email FROM shifts s 
-                        JOIN members m ON s.member_id = m.member_id 
-                        WHERE NOW() BETWEEN s.start_time AND s.end_time";
+        // Fetch on-duty personnel (statusID = 2)
+        $onDutyQuery = "SELECT p.Email 
+                        FROM personnel p 
+                        JOIN shifts s ON p.ShiftID = s.shift_id 
+                        WHERE s.status = 'On Duty'";  // Assuming 'On Duty' corresponds to statusID = 2
         $onDutyResult = mysqli_query($conn, $onDutyQuery);
 
         // Email details
@@ -58,9 +59,9 @@ if (isset($_POST["submit_location"])) {
             $mail->setFrom('flintaxl.celetaria@gmail.com', 'RescueFlow Dispatch');
             $mail->isHTML(false);  // Plain text email
 
-            // Send email to each on-duty member
+            // Send email to each on-duty personnel
             while ($row = mysqli_fetch_assoc($onDutyResult)) {
-                $mail->addAddress($row['email']);
+                $mail->addAddress($row['Email']);
                 $mail->Subject = $subject;
                 $mail->Body = $message;
                 $mail->send();
@@ -100,14 +101,24 @@ if (isset($_POST['submit_emergency_info'])) {
     $caller_name = mysqli_real_escape_string($conn, $_POST['caller_name']);
     $caller_phone = mysqli_real_escape_string($conn, $_POST['caller_phone']);
     $dispatch_id = $_POST['dispatch_id']; 
+    $status = mysqli_real_escape_string($conn, $_POST['status']); // Get the status from the form
 
-    $sql = "INSERT INTO emergency_details (dispatch_id, what, `where`, `why`, caller_name, caller_phone) 
-    VALUES ('$dispatch_id', '$what', '$where', '$why', '$caller_name', '$caller_phone')";
+    // Validate the status value
+    $statusCheckQuery = "SELECT status_id FROM status WHERE status_id = '$status'";
+    $statusCheckResult = mysqli_query($conn, $statusCheckQuery);
 
-    if (mysqli_query($conn, $sql)) {
-        echo "<p style='color: green;'>Emergency information saved successfully!</p>";
+    if (mysqli_num_rows($statusCheckResult) > 0) {
+        // Include the status in the SQL query
+        $sql = "INSERT INTO emergency_details (dispatch_id, what, `where`, `why`, caller_name, caller_phone, status) 
+                VALUES ('$dispatch_id', '$what', '$where', '$why', '$caller_name', '$caller_phone', '$status')";
+
+        if (mysqli_query($conn, $sql)) {
+            echo "<p style='color: green;'>Emergency information saved successfully!</p>";
+        } else {
+            echo "<p style='color: red;'>Error: " . mysqli_error($conn) . "</p>";
+        }
     } else {
-        echo "<p style='color: red;'>Error: " . mysqli_error($conn) . "</p>";
+        echo "<p style='color: red;'>Error: Invalid status value.</p>";
     }
 }
 ?>
@@ -186,6 +197,15 @@ if (isset($_POST['submit_emergency_info'])) {
                 <div class="mb-3">
                     <label for="caller_phone">Caller Phone Number</label>
                     <input type="text" class="form-control" name="caller_phone" placeholder="Enter caller's phone number" required>
+                </div>
+                <!-- Add a status dropdown -->
+                <div class="mb-3">
+                    <label for="status">Status</label>
+                    <select name="status" class="form-select" required>
+                        <?php foreach ($statuses as $status): ?>
+                            <option value="<?php echo $status['status_id']; ?>"><?php echo $status['status_name']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
                 <button type="submit" name="submit_emergency_info" class="btn btn-warning w-100">Save Emergency Info</button>
             </form>
