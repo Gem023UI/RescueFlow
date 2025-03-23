@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Handle image upload
     $image = "default.jpg"; // Default image if no file is uploaded
     if (!empty($_FILES['image']['name'])) {
-        $target_dir = "../personnel/images/";
+        $target_dir = "../personnels/profiles/";
         $image_name = basename($_FILES["image"]["name"]);
         $image_file_type = strtolower(pathinfo($image_name, PATHINFO_EXTENSION));
         $unique_image_name = uniqid() . "." . $image_file_type; // Generate a unique name for the image
