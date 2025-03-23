@@ -1,7 +1,6 @@
 <?php
 header('Content-Type: application/json');
 include('../includes/config.php');
-include('../includes/restrict_admin.php');
 
 $data = [];
 

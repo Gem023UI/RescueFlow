@@ -10,30 +10,12 @@ if (!isset($conn)) {
 $user_id = $_SESSION['user_id'] ?? null;
 $role_id = $_SESSION['role'] ?? null; // Fetch RoleID from session
 
-// Mark notifications as read when clicked
-if (isset($_GET['mark_as_read'])) {
-    $notif_id = intval($_GET['mark_as_read']);
-    $update_sql = "UPDATE notifications SET status = 1 WHERE id = $notif_id";
-
-    if ($conn->query($update_sql)) {
-        $_SESSION['success_message'] = "Notification marked as read successfully!";
-    } else {
-        $_SESSION['error_message'] = "Error marking notification as read.";
-    }
-
-    // Redirect to avoid reloading the same request
-    header("Location: ReportsIndex.php");
-    exit();
-}
-
-// Fetch unread notifications
-$sql = "SELECT n.id, n.message, e.what, e.`where`, e.why, e.caller_name, e.caller_phone, n.created_at 
-        FROM notifications n
-        JOIN emergency_details e ON n.dispatch_id = e.id
-        WHERE n.status = 0
-        ORDER BY n.created_at DESC";
+// Fetch all emergency details and join with status table
+$sql = "SELECT e.id, e.what, e.`where`, e.why, e.caller_name, e.caller_phone, e.timestamp, s.status_name 
+        FROM emergency_details e
+        LEFT JOIN status s ON e.status = s.status_id
+        ORDER BY e.timestamp DESC";
 $result = $conn->query($sql);
-
 ?>
 
 <!DOCTYPE html>
@@ -141,15 +123,15 @@ $result = $conn->query($sql);
             <?php if ($result && $result->num_rows > 0): ?>
                 <ul class="list-group">
                 <?php while ($row = $result->fetch_assoc()): ?>
-                        <strong>Notification:</strong> <?php echo htmlspecialchars($row['message']); ?><br>
                         <strong>What:</strong> <?php echo htmlspecialchars($row['what']); ?><br>
                         <strong>Where:</strong> <?php echo htmlspecialchars($row['where']); ?><br>
                         <strong>Why:</strong> <?php echo htmlspecialchars($row['why']); ?><br>
                         <strong>Caller Name:</strong> <?php echo htmlspecialchars($row['caller_name']); ?><br>
                         <strong>Caller Phone:</strong> <?php echo htmlspecialchars($row['caller_phone']); ?><br>
+                        <strong>Status:</strong> <?php echo htmlspecialchars($row['status_name']); ?><br>
                         <?php if ($role_id == 4): // Only show for admin ?>
                             <div class="edit-button">
-                                <a href="ReportsIndex.php" class="read-button">Mark as Read</a>
+                                <a href="ReportsMarkedasRead.php?mark_as_resolved=<?php echo $row['id']; ?>" class="read-button">Mark as Resolved</a>
                                 <a href="/RESCUEFLOW(1)/dispatch/DispatchIndex.php?location=<?php echo urlencode($row['where']); ?>" class="dispatch-button">DISPATCH</a>
                             </div>
                         <?php endif; ?>
@@ -157,7 +139,7 @@ $result = $conn->query($sql);
             <?php endwhile; ?>
                 </ul>
             <?php else: ?>
-                <p class="text-center text-muted">No new notifications.</p>
+                <p class="text-center text-muted">No new emergency reports.</p>
             <?php endif; ?>
         </div>  
     </div>
