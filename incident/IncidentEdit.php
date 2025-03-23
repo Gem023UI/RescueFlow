@@ -26,7 +26,7 @@ if (!$incident) {
 }
 
 // Fetch members for dropdown
-$members_sql = "SELECT member_id, CONCAT(first_name, ' ', last_name) AS full_name FROM members ORDER BY first_name ASC";
+$members_sql = "SELECT PersonnelID, CONCAT(FirstName, ' ', LastName) AS full_name FROM personnel ORDER BY FirstName ASC";
 $members_result = $conn->query($members_sql);
 
 // Fetch severity levels for dropdown
@@ -36,7 +36,6 @@ $severity_result = $conn->query($severity_sql);
 // Fetch barangays for dropdown
 $barangay_sql = "SELECT barangay_id, barangay_name FROM barangays ORDER BY barangay_name ASC";
 $barangay_result = $conn->query($barangay_sql);
-
 
 // Fetch ENUM values for cause
 $cause_enum_query = "SHOW COLUMNS FROM incidents LIKE 'cause'";

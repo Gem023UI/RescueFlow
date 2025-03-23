@@ -243,6 +243,7 @@ main p{
   padding: 20px;
   border: 1px solid white;
   border-radius: 8px;
+  width: 90%;
 }
 
 .training-container {
@@ -268,6 +269,7 @@ main p{
   padding: 20px;
   border: 1px solid white;
   border-radius: 8px;
+  width: 90%;
 }
 
 .attendance-table {
