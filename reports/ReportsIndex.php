@@ -132,7 +132,7 @@ $result = $conn->query($sql);
                         <?php if ($role_id == 4): // Only show for admin ?>
                             <div class="edit-button">
                                 <a href="ReportsMarkedasRead.php?mark_as_resolved=<?php echo $row['id']; ?>" class="read-button">Mark as Resolved</a>
-                                <a href="/RESCUEFLOW(1)/dispatch/DispatchIndex.php?location=<?php echo urlencode($row['where']); ?>" class="dispatch-button">DISPATCH</a>
+                                <a href="ReportsDispatch.php?emergency_id=<?php echo $row['id']; ?>" class="dispatch-button">DISPATCH</a>
                             </div>
                         <?php endif; ?>
                         <strong>-------------------------------------------------------------------------------------------</strong>
