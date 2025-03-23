@@ -53,6 +53,25 @@ $query_all = "
 ";
 $result_all = mysqli_query($conn, $query_all);
 
+// Fetch shift schedule data
+$query_shift_schedule = "
+    SELECT 
+        sa.shiftID AS scheduleID,  -- Include the primary key for edit/delete actions
+        p.FirstName,
+        p.LastName,
+        r.rank_name AS Rank,
+        sa.day AS Day,
+        sa.scheduled_timein AS TimeIn,
+        sa.scheduled_timeout AS TimeOut
+    FROM 
+        shift_assign sa
+    JOIN 
+        personnel p ON sa.shiftID = p.ShiftID
+    JOIN 
+        ranks r ON p.RankID = r.rank_id
+";
+$result_shift_schedule = mysqli_query($conn, $query_shift_schedule);
+
 ?>
 
 <!DOCTYPE html>
@@ -234,6 +253,52 @@ $result_all = mysqli_query($conn, $query_all);
                     echo "</table>";
                 } else {
                     echo "Error fetching all attendance records: " . mysqli_error($conn);
+                }
+                ?>
+            </div>
+
+            <h2>SHIFT SCHEDULE</h2>
+            <div class="attendance-table">
+                <?php
+                if ($result_shift_schedule) {
+                    echo "<table border='1'>
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Rank</th>
+                                <th>Day</th>
+                                <th>Time In</th>
+                                <th>Time Out</th>";
+                    // Show Actions column header only for Admins (RoleID = 4)
+                    if ($role_id == 4) {
+                        echo "<th>Actions</th>";
+                    }
+
+                    echo "</tr>";
+
+                    while ($row = mysqli_fetch_assoc($result_shift_schedule)) {
+                        echo "<tr>
+                                <td>{$row['FirstName']}</td>
+                                <td>{$row['LastName']}</td>
+                                <td>{$row['Rank']}</td>
+                                <td>{$row['Day']}</td>
+                                <td>{$row['TimeIn']}</td>
+                                <td>{$row['TimeOut']}</td>";
+
+                        // Show Actions column only for Admins (RoleID = 4)
+                        if ($role_id == 4) {
+                            echo "<td class='action-buttons'>
+                                    <button class='edit' onclick='editShiftSchedule({$row['scheduleID']})'>Edit</button>
+                                    <button class='delete' onclick='deleteShiftSchedule({$row['scheduleID']})'>Delete</button>
+                                </td>";
+                        }
+
+                        echo "</tr>";
+                    }
+
+                    echo "</table>";
+                } else {
+                    echo "Error fetching shift schedule records: " . mysqli_error($conn);
                 }
                 ?>
             </div>
