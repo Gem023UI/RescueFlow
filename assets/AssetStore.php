@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         // Handle multiple file uploads
         if (!empty($_FILES['images']['name'][0])) {
-            $uploadDir = "../asset/images/"; // Ensure this directory exists
+            $uploadDir = "../assets/images/"; // Ensure this directory exists
             
             foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
                 $fileName = basename($_FILES['images']['name'][$key]);
