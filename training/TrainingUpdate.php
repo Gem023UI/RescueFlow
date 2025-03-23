@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     mysqli_stmt_bind_param($stmt, "sssi", $training_name, $description, $scheduled_date, $training_id);
 
     if (mysqli_stmt_execute($stmt)) {
-        header("Location: index.php");
+        header("Location: TrainingIndex.php");
         exit();
     } else {
         echo "Error updating training: " . mysqli_error($conn);

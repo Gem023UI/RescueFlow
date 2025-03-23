@@ -1,7 +1,5 @@
 <?php
 session_start();
-include('../includes/check_admin.php');
-
 include('../includes/config.php');
 include('../includes/restrict_admin.php');
 // Initialize variables
@@ -37,25 +35,31 @@ if (isset($_GET['training_id']) && is_numeric($_GET['training_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Training</title>
+    <title>Edit Incident Report</title>
+    <link rel="stylesheet" href="TrainingEdit.css">
 </head>
 <body>
-    <h2>Edit Training</h2>
-    
-    <form action="update_training.php" method="POST">
-        <input type="hidden" name="training_id" value="<?= htmlspecialchars($training_id) ?>">
-
-        <label>Training Name:</label>
-        <input type="text" name="training_name" value="<?= htmlspecialchars($training_name) ?>" required><br>
-
-        <label>Description:</label>
-        <textarea name="description" required><?= htmlspecialchars($description) ?></textarea><br>
-
-        <label>Scheduled Date:</label>
-        <input type="date" name="scheduled_date" value="<?= htmlspecialchars($scheduled_date) ?>" required><br>
-
-        <button type="submit">Update</button>
-        <a href="index.php">Cancel</a>
-    </form>
+    <div class="training-container">
+        <h2 class="training-header">EDIT TRAINING</h2>
+        <div class="training-info">
+            <form action="TrainingUpdate.php" method="POST">
+                <div class="training-details">
+                    <input type="hidden" name="training_id" value="<?= htmlspecialchars($training_id) ?>">
+                    <label>Training Name:</label>
+                    <input type="text" name="training_name" value="<?= htmlspecialchars($training_name) ?>" required><br>
+                    <label>Scheduled Date:</label>
+                    <input type="date" name="scheduled_date" value="<?= htmlspecialchars($scheduled_date) ?>" required><br>
+                </div>
+                <div class="training-details">
+                    <label>Description:</label>
+                    <textarea name="description" required><?= htmlspecialchars($description) ?></textarea><br>
+                </div>
+                <div class="training-button">
+                    <button type="submit" class="update-btn">Update</button>
+                    <a href="TrainingIndex.php" class="cancel-btn">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

@@ -7,13 +7,42 @@ if (!isset($conn)) {
     die("Database connection failed.");
 }
 
-$sql = "SELECT * FROM dispatches WHERE status_id != 3 ORDER BY dispatched_at DESC"; 
-$result = $conn->query($sql);
+// Fetch dispatches data
+$sql_dispatches = "SELECT * FROM dispatches WHERE status_id != 3 ORDER BY dispatched_at DESC"; 
+$result_dispatches = $conn->query($sql_dispatches);
 
 $locations = [];
-while ($row = $result->fetch_assoc()) {
+while ($row = $result_dispatches->fetch_assoc()) {
     $locations[] = $row;
 }
+
+// Fetch attendance data with joins to personnel and ranks
+$query_attendance = "
+    SELECT 
+        a.attendance_id,
+        p.FirstName,
+        p.LastName,
+        r.rank_name AS Rank,
+        a.timestamp AS TimeIn,
+        a.time_out AS TimeOut
+    FROM 
+        attendance a
+    JOIN 
+        personnel p ON a.personnel_id = p.PersonnelID
+    JOIN 
+        ranks r ON p.RankID = r.rank_id
+";
+$result_attendance = mysqli_query($conn, $query_attendance);
+
+// Fetch training data for today
+$todayDate = date("Y-m-d"); // Format for SQL query
+$sql_training = "SELECT trainings.training_id, trainings.training_name, trainings.description, trainings.scheduled_date 
+    FROM trainings 
+    WHERE DATE(trainings.scheduled_date) = '$todayDate'";
+$result_training = $conn->query($sql_training);
+
+// Get today's date in the desired format (e.g., "March 22, 2025")
+$todayDateFormatted = date("F j, Y"); // Example output: "March 22, 2025"
 
 $conn->close();
 ?>
@@ -112,32 +141,81 @@ $conn->close();
         </ul>
     </nav>
     <main>
-    <div class="container">
-      <h2>DISPATCH DASHBOARD</h2>
-      <?php if (empty($locations)): ?>
-        <p>The incident has been resolved.</p>
-        <?php else: ?>
-        <ul>
-            <?php foreach ($locations as $location): ?>
-                <li>
-                    <strong><?php echo htmlspecialchars($location['location']); ?></strong> 
-                    (Submitted on <?php echo $location['dispatched_at']; ?>)
-                    <br>
-                    <iframe width="100%" height="300" src="https://maps.google.com/maps?q=<?php echo urlencode($location['location']); ?>&output=embed"></iframe>
-                </li>
-                <hr>
-            <?php endforeach; ?>
-        </ul>
-        <?php endif; ?>
-    </div>
-    <div class="container">
-      <h2>TRAINING TODAY</h2>
-      <p>Lists of training scheduled to be held today.</p>
-    </div>
-    <div class="container">
-      <h2>ON SHIFT PERSONNELS</h2>
-      <p>Lists of personnels on duty as of today.</p>
-    </div>
+        <h1>DATE TODAY: <?php echo $todayDateFormatted; ?></h1>
+        <div class="dashboard-container">
+            <div class="dispatch-container">
+                <h2>DISPATCH</h2>
+                <?php if (empty($locations)): ?>
+                    <p>The incident has been resolved.</p>
+                <?php else: ?>
+                    <ul>
+                        <?php foreach ($locations as $location): ?>
+                            <li>
+                                <strong><?php echo htmlspecialchars($location['location']); ?></strong> 
+                                (Submitted on <?php echo $location['dispatched_at']; ?>)
+                                <br>
+                                <iframe width="900px" height="300px" src="https://maps.google.com/maps?q=<?php echo urlencode($location['location']); ?>&output=embed"></iframe>
+                            </li>
+                            <hr>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <!-- Training Today Section -->
+        <div class="dashboard-container">
+            <div class="training-container">
+                <h2>TRAINING TODAY</h2>
+                <p>Lists of training scheduled to be held today.</p>
+                    <?php if ($result_training->num_rows > 0): ?>
+                        <?php while ($row = $result_training->fetch_assoc()): ?>
+                            <div class="training-info">
+                                <h3><strong>TRAINING NAME: </strong><?= $row['training_name']; ?></h3>
+                                <p><strong>Description: </strong><?= $row['description']; ?></p>
+                                <p><strong>Date & Time: </strong><?= $row['scheduled_date']; ?></p>
+                            </div>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <p>No training scheduled for today.</p>
+                    <?php endif; ?>
+            </div>
+        </div>
+
+        <!-- Attendance Section -->
+        <div class="dashboard-container">
+            <div class="shifts-container">
+                <h2>ATTENDANCE AS OF <?php echo $todayDateFormatted; ?></h2>
+                <div class="attendance-table">
+                    <?php
+                    if ($result_attendance) {
+                        echo "<table border='1'>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Rank</th>
+                                    <th>Time In</th>
+                                    <th>Time Out</th>
+                                </tr>";
+
+                        while ($row = mysqli_fetch_assoc($result_attendance)) {
+                            echo "<tr>
+                                    <td>{$row['FirstName']}</td>
+                                    <td>{$row['LastName']}</td>
+                                    <td>{$row['Rank']}</td>
+                                    <td>{$row['TimeIn']}</td>
+                                    <td>{$row['TimeOut']}</td>
+                                </tr>";
+                        }
+
+                        echo "</table>";
+                    } else {
+                        echo "Error fetching attendance records: " . mysqli_error($conn);
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
     </main>
 </body>
 </html>

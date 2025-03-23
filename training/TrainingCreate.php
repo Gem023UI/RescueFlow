@@ -1,7 +1,5 @@
 <?php
 session_start();
-include('../includes/check_admin.php');
-
 include('../includes/config.php');
 include('../includes/restrict_admin.php');
 // Handle form submission
@@ -30,28 +28,32 @@ exit();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add New Training</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <title>Edit Incident Report</title>
+    <link rel="stylesheet" href="TrainingCreate.css">
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="mb-4">Add New Training</h1>
-        <form method="POST" action="store_training.php" >
-            <div class="mb-3">
-                <label for="training_name" class="form-label">Training Name</label>
-                <input type="text" name="training_name" id="training_name" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="description" class="form-label">Training Description</label>
-                <textarea name="description" id="description" class="form-control" required></textarea>
-            </div>
-            <div class="mb-3">
-                <label for="scheduled_date" class="form-label">Scheduled Date</label>
-                <input type="date" name="scheduled_date" id="scheduled_date" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-success">Save</button>
-            <a href="index.php" class="btn btn-secondary">Cancel</a>
-        </form>
+    <div class="training-container">
+        <h2 class="training-header">ADD NEW TRAINING</h2>
+        <div class="training-info">
+            <form method="POST" action="TrainingStore.php">
+                <div class="training-details">
+                    <label>Training Name:</label>
+                    <input type="text" name="training_name" id="training_name" required><br>
+                </div>
+                <div class="training-details">
+                    <label>Scheduled Date:</label>
+                    <input type="date" name="scheduled_date" id="scheduled_date" required><br>
+                </div>
+                <div class="training-details">
+                    <label>Description:</label>
+                    <textarea name="description" id="description" required></textarea><br>
+                </div>
+                <div class="training-button">
+                    <button type="submit" class="update-btn">Save</button>
+                    <a href="TrainingIndex.php" class="cancel-btn">Cancel</a>
+                </div>
+            </form>
+        </div>
     </div>
 </body>
 </html>

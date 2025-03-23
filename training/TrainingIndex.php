@@ -2,18 +2,9 @@
 session_start();
 include('../includes/config.php');
 
+// Restrict if not Admin Function
 $user_id = $_SESSION['user_id'] ?? null;
-$role_id = null;
-
-if ($user_id) {
-    $query = "SELECT role_id FROM users WHERE user_id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    $stmt->bind_result($role_id);
-    $stmt->fetch();
-    $stmt->close();
-}
+$role_id = $_SESSION['role'] ?? null; // Fetch RoleID from session
 
 $sql = "SELECT trainings.training_id, trainings.training_name, trainings.description, trainings.scheduled_date 
     FROM trainings";
@@ -43,6 +34,12 @@ $result = $conn->query($sql);
             <a href="../dashboard/RescueFlowIndex.php" >
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M240-200h120v-200q0-17 11.5-28.5T400-440h160q17 0 28.5 11.5T600-400v200h120v-360L480-740 240-560v360Zm-80 0v-360q0-19 8.5-36t23.5-28l240-180q21-16 48-16t48 16l240 180q15 11 23.5 28t8.5 36v360q0 33-23.5 56.5T720-120H560q-17 0-28.5-11.5T520-160v-200h-80v200q0 17-11.5 28.5T400-120H240q-33 0-56.5-23.5T160-200Zm320-270Z"/></svg>
             <span>Dashboard</span>
+            </a>
+        </li>
+        <li>
+            <a href="../reports/ReportsIndex.php" >
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M200-160v-80h64l79-263q8-26 29.5-41.5T420-560h120q26 0 47.5 15.5T617-503l79 263h64v80H200Zm148-80h264l-72-240H420l-72 240Zm92-400v-200h80v200h-80Zm238 99-57-57 142-141 56 56-141 142Zm42 181v-80h200v80H720ZM282-541 141-683l56-56 142 141-57 57ZM40-360v-80h200v80H40Zm440 120Z"/></svg>
+            <span>Reports</span>
             </a>
         </li>
         <li>
@@ -82,7 +79,7 @@ $result = $conn->query($sql);
         </li>
         </li>
         <li>
-            <a href="../personnel/PersonnelIndex.php">
+            <a href="../personnels/PersonnelIndex.php">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="M440-280h320v-22q0-45-44-71.5T600-400q-72 0-116 26.5T440-302v22Zm160-160q33 0 56.5-23.5T680-520q0-33-23.5-56.5T600-600q-33 0-56.5 23.5T520-520q0 33 23.5 56.5T600-440ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Z"/></svg>
             <span>Personnels</span>
             </a>
@@ -93,26 +90,43 @@ $result = $conn->query($sql);
             <span>Training</span>
             </a>
         </li>
+        <li>
+            <a href="../shifts/ShiftsIndex.php">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M438-226 296-368l58-58 84 84 168-168 58 58-226 226ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z"/></svg>
+            <span>Shifts</span>
+            </a>
+        </li>
+        <li>
+            <a href="../user/Logout.php">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/></svg>
+            <span>Logout</span>
+            </a>
+        </li>
         </ul>
     </nav>
-    <div class="training-header">TRAINING MANAGEMENT
-        <?php if ($role_id == 4): // Only show for admin ?>
-            <a href="TrainingCreate.php" class="custom-button">ADD TRAINING</a>
-        <?php endif; ?>
-    </div>
-    <div class="training-container">
-        <?php while ($row = $result->fetch_assoc()): ?>
-        <div class="training-info">
-            <h3><strong>TRAINING NAME: </strong><?= $row['training_name']; ?></h3>
-            <p><strong>Description: </strong><?= $row['description']; ?></p>
-            <p><strong>Date & Time: </strong><?= $row['scheduled_date']; ?></p>
-
+    <div class="training-section">
+        <div class="training-header">TRAINING MANAGEMENT
             <?php if ($role_id == 4): // Only show for admin ?>
-                <a href="edit_training.php?training_id=<?= $row['training_id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                <a href="delete_training.php?training_id=<?= $row['training_id']; ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this record?');">Delete</a>
+                <a href="TrainingCreate.php" class="custom-button">ADD TRAINING</a>
             <?php endif; ?>
         </div>
-        <?php endwhile; ?>
+        <div class="training-blocks">
+            <div class="training-container">
+                <?php while ($row = $result->fetch_assoc()): ?>
+                <div class="training-info">
+                    <h3><strong>TRAINING NAME: </strong><?= $row['training_name']; ?></h3>
+                    <p><strong>Description: </strong><?= $row['description']; ?></p>
+                    <p><strong>Date & Time: </strong><?= $row['scheduled_date']; ?></p>
+                    <div class="admin-buttons">
+                        <?php if ($role_id == 4): // Only show for admin ?>
+                            <a href="TrainingEdit.php?training_id=<?= $row['training_id']; ?>" class="edit-btn">Edit</a>
+                            <a href="TrainingDelete.php?training_id=<?= $row['training_id']; ?>" class="delete-btn" onclick="return confirm('Are you sure you want to delete this record?');">Delete</a>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php endwhile; ?>
+            </div>
+        </div>
     </div>
 </body>
 </html>

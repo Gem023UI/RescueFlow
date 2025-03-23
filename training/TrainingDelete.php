@@ -11,7 +11,7 @@ if (isset($_GET['training_id'])) {
     $sql = "DELETE FROM trainings WHERE training_id = '$training_id'";
 
     if ($conn->query($sql) === TRUE) {
-        header("Location: ../trainings/index.php"); // Redirect to index.php after deletion
+        header("Location: ../training/TrainingIindex.php"); // Redirect to index.php after deletion
         exit();
     } else {
         echo "Error deleting record: " . $conn->error;

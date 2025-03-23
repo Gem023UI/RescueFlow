@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Execute the query
     if ($stmt->execute()) {
-        header("Location: index.php");
+        header("Location: TrainingIndex.php");
         exit();
     } else {
         echo "Error: " . $stmt->error;

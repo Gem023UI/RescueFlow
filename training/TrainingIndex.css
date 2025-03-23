@@ -17,12 +17,12 @@ html{
 }
 body{
   background: url('LoginRegister.png') no-repeat center center/cover;
-  height: 100%;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  
+  
+  display: grid;
+  grid-template-columns: auto 1fr;
 }
 #sidebar{
   box-sizing: border-box;
@@ -129,9 +129,13 @@ body{
 
 main{
   padding: min(30px, 7%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
 }
 main p{
-  color: var(--secondary-text-clr);
   margin-top: 5px;
   margin-bottom: 15px;
 }
@@ -220,33 +224,95 @@ main p{
 .training-header {
   font-size: 50px;
   font-weight: 600;
-  margin-bottom: 20px;
+  margin: 30px;
   color: white;
-  padding: 20px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
+}
+
+.custom-button {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+  color: white;
+  background-color: orangered;
+  border-radius: 5px;
+  margin: 30px;
+  padding: 15px 30px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  text-decoration: none;
+  width: 50%;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.custom-button:hover {
+  color: black;
+  background-color: white;
 }
 
 .training-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: block;
   gap: 20px;
   padding: 20px;
+  width: 90%;
+
 }
 
 .training-info {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: left;
+  justify-content: left;
   border: 1px solid white;
   border-radius: 5px;
+  padding: 20px;
+  margin: 20px;
+  color: white;
+  background: rgba(0, 0, 0, 0.3);
+  width: 100%;
+  gap: 15px;
+}
+
+.admin-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+}
+
+.edit-btn, .delete-btn:hover {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 10px;
   margin: 10px;
+  text-decoration: none;
+  font-weight: 400;
+  color: black;
+  background-color: white;
+  border-radius: 5px;
+  width: 100%;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.edit-btn:hover, .delete-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  margin: 10px;
+  text-decoration: none;
+  font-weight: 400;
   color: white;
-  background: rgba(0, 0, 0, 0.5);
-  width: 100%; /* Ensure the training info spans the full width of the container */
+  background-color: black;
+  border-radius: 5px;
+  width: 100%;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
