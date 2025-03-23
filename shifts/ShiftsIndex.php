@@ -213,6 +213,7 @@ $result_shift_schedule = mysqli_query($conn, $query_shift_schedule);
                 }
                 ?>
             </div>
+            <?php if ($role_id == 4): // Only show for admin ?>
             <h2>ATTENDANCE RECORD</h2>
             <div class="attendance-table">
                 <?php
@@ -256,7 +257,8 @@ $result_shift_schedule = mysqli_query($conn, $query_shift_schedule);
                 }
                 ?>
             </div>
-
+            <?php endif; ?>
+            <?php if ($role_id == 4): // Only show for admin ?>
             <h2>SHIFT SCHEDULE</h2>
             <div class="attendance-table">
                 <?php
@@ -302,6 +304,7 @@ $result_shift_schedule = mysqli_query($conn, $query_shift_schedule);
                 }
                 ?>
             </div>
+            <?php endif; ?>
         </div>
     </main>
 </body>
