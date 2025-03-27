@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 21, 2025 at 12:43 AM
+-- Generation Time: Mar 23, 2025 at 02:02 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -48,7 +48,8 @@ INSERT INTO `assets` (`asset_id`, `assetcategory_id`, `asset_name`, `description
 (18, 1, 'bidet', 'mahina na', 'Damaged', '2025-03-01'),
 (19, 2, 'water hose', 'malakas, magastos sa tubig', 'In Use', '2025-03-26'),
 (20, 7, 'crowbar', 'matibay, pamukpok sa pabigat na kagroup', 'In Use', '2025-03-11'),
-(21, 6, 'ladder', 'kaya abutin pati pangarap mo', 'Available', '2025-02-25');
+(21, 6, 'ladder', 'kaya abutin pati pangarap mo', 'Available', '2025-02-25'),
+(25, 6, 'granada', 'malakas putok', 'Available', '2025-03-10');
 
 -- --------------------------------------------------------
 
@@ -76,7 +77,8 @@ INSERT INTO `assets_image` (`asset_id`, `img_path`) VALUES
 (21, 'assets/images/2025.png'),
 (16, 'assets/images/2025.png'),
 (18, 'assets/images/2025.png'),
-(20, 'assets/images/OPERATING SYSTEMS.png');
+(20, 'assets/images/OPERATING SYSTEMS.png'),
+(25, 'assets/images/download.jfif');
 
 -- --------------------------------------------------------
 
@@ -109,11 +111,24 @@ INSERT INTO `asset_category` (`AssetCategory_ID`, `Category`) VALUES
 
 CREATE TABLE `attendance` (
   `attendance_id` int(11) NOT NULL,
-  `member_id` int(11) DEFAULT NULL,
+  `personnel_id` int(11) DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
   `shift_id` int(11) DEFAULT NULL,
   `time_out` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `attendance`
+--
+
+INSERT INTO `attendance` (`attendance_id`, `personnel_id`, `timestamp`, `shift_id`, `time_out`) VALUES
+(45, 9, '2025-03-22 06:12:59', 2, '2025-03-23 21:00:00'),
+(46, 4, '2025-03-22 07:11:55', 2, '2025-03-23 21:00:00'),
+(47, 10, '2025-03-22 13:01:57', 2, NULL),
+(48, 11, '2025-03-22 13:07:03', 2, NULL),
+(51, 8, '2025-03-22 13:46:34', 2, NULL),
+(52, 3, '2025-03-23 12:19:27', 2, '2025-03-23 21:00:00'),
+(53, 8, '2025-03-23 12:26:24', 2, NULL);
 
 -- --------------------------------------------------------
 
@@ -212,7 +227,8 @@ INSERT INTO `dispatches` (`disp_id`, `incident_id`, `location`, `dispatched_unit
 (20, NULL, 'arca south taguig city', 'Firetruck', '2025-03-18 01:16:48', 3),
 (21, NULL, 'arca south taguig city', 'Firetruck', '2025-03-18 01:17:07', 3),
 (22, NULL, 'arca south taguig city', 'Firetruck', '2025-03-18 01:17:25', 3),
-(23, NULL, 'baranggay western bicutan taguig city', 'Firetruck', '2025-03-18 01:25:20', 2);
+(23, NULL, 'baranggay western bicutan taguig city', 'Firetruck', '2025-03-18 01:25:20', 3),
+(24, NULL, 'arca south taguig city', 'Firetruck', '2025-03-22 20:14:36', 3);
 
 -- --------------------------------------------------------
 
@@ -228,25 +244,31 @@ CREATE TABLE `emergency_details` (
   `why` text NOT NULL,
   `caller_name` varchar(255) NOT NULL,
   `caller_phone` varchar(20) NOT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT current_timestamp()
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `emergency_details`
 --
 
-INSERT INTO `emergency_details` (`id`, `dispatch_id`, `what`, `where`, `why`, `caller_name`, `caller_phone`, `timestamp`) VALUES
-(14, 1, 'apoy', 'kiki', 'lu', 'lo', '0909', '2025-03-15 02:06:07'),
-(20, NULL, 'jna', 'jna', 'jan', 'kjkj', '0900', '2025-03-16 02:39:25'),
-(21, NULL, 'ksi', 'ksi', 'ksi', 'ksii', '123', '2025-03-16 02:44:54'),
-(22, NULL, 'ne', 'ne', 'ne', 'ne', '0909009', '2025-03-16 02:47:19'),
-(23, NULL, 'li', 'li', 'li', 'li', '09099', '2025-03-16 02:49:55'),
-(24, NULL, 'tty', 'ty', 'ty', 'rtrt', '0909', '2025-03-16 02:52:29'),
-(25, NULL, 'cv', 'cv', 'cv', 'we', '132', '2025-03-16 02:57:30'),
-(26, NULL, 'loh', 'lk', 'lk', 'lk', '123', '2025-03-16 10:02:27'),
-(27, NULL, 'ki', 'ki', 'ki', 'ki', '090908', '2025-03-16 10:09:00'),
-(28, NULL, 'unog', 'kajs', 'kjskj', 'wkjdk', '9898', '2025-03-16 10:12:20'),
-(29, NULL, 'nagkaroon ng malalang sunog', 'sa tup taguig branch', 'sunog malamang', 'flint celetaria', '2123231', '2025-03-20 14:54:10');
+INSERT INTO `emergency_details` (`id`, `dispatch_id`, `what`, `where`, `why`, `caller_name`, `caller_phone`, `timestamp`, `status`) VALUES
+(14, 1, 'apoy', 'kiki', 'lu', 'lo', '0909', '2025-03-15 02:06:07', 1),
+(20, NULL, 'jna', 'jna', 'jan', 'kjkj', '0900', '2025-03-16 02:39:25', 1),
+(21, NULL, 'ksi', 'ksi', 'ksi', 'ksii', '123', '2025-03-16 02:44:54', 1),
+(22, NULL, 'ne', 'ne', 'ne', 'ne', '0909009', '2025-03-16 02:47:19', 1),
+(23, NULL, 'li', 'li', 'li', 'li', '09099', '2025-03-16 02:49:55', 1),
+(24, NULL, 'tty', 'ty', 'ty', 'rtrt', '0909', '2025-03-16 02:52:29', 1),
+(25, NULL, 'cv', 'cv', 'cv', 'we', '132', '2025-03-16 02:57:30', 1),
+(26, NULL, 'loh', 'lk', 'lk', 'lk', '123', '2025-03-16 10:02:27', 1),
+(27, NULL, 'ki', 'ki', 'ki', 'ki', '090908', '2025-03-16 10:09:00', 1),
+(28, NULL, 'unog', 'kajs', 'kjskj', 'wkjdk', '9898', '2025-03-16 10:12:20', 1),
+(29, NULL, 'nagkaroon ng malalang sunog', 'sa tup taguig branch', 'sunog malamang', 'flint celetaria', '2123231', '2025-03-20 14:54:10', 1),
+(30, 1, 'fire emergency', 'bandang western bicutan', 'sunog malaki', '1234567890', 'rovic abonita', '2025-03-22 09:55:51', 3),
+(31, 1, 'inuman', 'kila juliane', 'bagsak tatlo', 'sharwin', '12353465', '2025-03-22 20:12:07', 3),
+(32, 1, 'inuman', 'kila juliane', 'bagsak tatlo', 'sharwin', '21312413', '2025-03-22 20:16:06', 3),
+(33, 1, 'gumawa ng arduino', 'kila boss juliane', 'de joke tambay lang', 'evan piad', '1234124133', '2025-03-22 20:41:52', 2),
+(34, 1, 'transport strike sa metro manila', 'metro manila', 'kasi walang masakyan', 'evan piad', '12342341', '2025-03-23 12:16:53', 3);
 
 -- --------------------------------------------------------
 
@@ -274,36 +296,8 @@ CREATE TABLE `incidents` (
 --
 
 INSERT INTO `incidents` (`incident_id`, `incident_type`, `severity_id`, `location`, `address`, `reported_by`, `reported_time`, `status_id`, `cause`, `attachments`, `actions_taken`, `barangay_id`) VALUES
-(52, 'Fire', 2, '', 'Duhat Street, Brgy. Western Bicutan, Taguig City', 'jazmine', '2025-03-19 10:18:06', NULL, 'Electrical Faults', '../uploads/1742350686_438089781_964928398193670_8243827508647878314_n.jpg', '', 19),
-(53, 'Fire', 1, '', 'bandang eskinita', 'flint', '2025-03-19 19:15:40', NULL, 'Smoking Indoors', '../uploads/1742382940_WIN_20240118_20_02_58_Pro.jpg', '', 3);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `notifications`
---
-
-CREATE TABLE `notifications` (
-  `id` int(11) NOT NULL,
-  `message` text NOT NULL,
-  `status` tinyint(1) DEFAULT 0,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `dispatch_id` int(11) DEFAULT NULL,
-  `what` text DEFAULT NULL,
-  `where` text DEFAULT NULL,
-  `why` text DEFAULT NULL,
-  `caller_name` varchar(255) DEFAULT NULL,
-  `caller_phone` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `notifications`
---
-
-INSERT INTO `notifications` (`id`, `message`, `status`, `created_at`, `dispatch_id`, `what`, `where`, `why`, `caller_name`, `caller_phone`) VALUES
-(15, 'New emergency report: What - ki, Where - ki, Why - ki, Caller - ki, Phone - 090908.', 1, '2025-03-16 10:09:00', 27, 'ki', 'ki', 'ki', 'ki', '090908'),
-(16, 'New emergency report: What - unog, Where - kajs, Why - kjskj, Caller - wkjdk, Phone - 9898.', 0, '2025-03-16 10:12:20', 28, 'unog', 'kajs', 'kjskj', 'wkjdk', '9898'),
-(17, 'New emergency report: What - nagkaroon ng malalang sunog, Where - sa tup taguig branch, Why - sunog malamang, Caller - flint celetaria, Phone - 2123231.', 0, '2025-03-20 14:54:10', 29, 'nagkaroon ng malalang sunog', 'sa tup taguig branch', 'sunog malamang', 'flint celetaria', '2123231');
+(53, 'Fire', 1, '', 'bandang eskinita', 'flint', '2025-03-19 19:15:40', NULL, 'Smoking Indoors', '../uploads/1742382940_WIN_20240118_20_02_58_Pro.jpg', '', 3),
+(55, 'Fire', 1, '', 'Duhat Street, Brgy. Western Bicutan, Taguig City', 'josh bernabe', '2025-03-23 19:30:17', NULL, 'Unattended Cooking', '../uploads/1742729417_download.jpg', '', 38);
 
 -- --------------------------------------------------------
 
@@ -329,8 +323,13 @@ CREATE TABLE `personnel` (
 --
 
 INSERT INTO `personnel` (`PersonnelID`, `RoleID`, `RankID`, `ShiftID`, `FirstName`, `LastName`, `Email`, `PhoneNumber`, `Password`, `Profile`) VALUES
-(3, 4, 5, 1, 'Jemuel ', 'Malaga', 'malagajemuel@gmail.com', '09994617537', '$2y$10$ekR8aP7d9uG/jn6DUHX9WepX9Dmv92j5EA0KZ7jRu5fUrgVO3Q9q2', NULL),
-(4, 1, 1, 1, 'Flint Axl', 'Celetaria', 'gemmalfaro023@gmail.com', '09994617539', '$2y$10$pL7d8o9M0Lcv8BALHvvGZuDJ.cF6WVv.D2u7/xuWp7YwyKX.rDcwi', NULL);
+(3, 4, 5, 2, 'Jemuel ', 'Malaga', 'malagajemuel@gmail.com', '09994617537', '$2y$10$ekR8aP7d9uG/jn6DUHX9WepX9Dmv92j5EA0KZ7jRu5fUrgVO3Q9q2', '67dff75cee3cb.png'),
+(4, 1, 1, 2, 'Flint Axl', 'Celetaria', 'gemmalfaro023@gmail.com', '09994617539', '$2y$10$pL7d8o9M0Lcv8BALHvvGZuDJ.cF6WVv.D2u7/xuWp7YwyKX.rDcwi', NULL),
+(8, 1, 1, 2, 'Josh Christian', '', 'joshbernabe@gmail.com', '', '$2y$10$D1XeZTbh6eEb57ZVwBl/f.pYCxEspNv7FE6UPI4aDAPQ1buTIE1li', NULL),
+(9, 1, 1, 2, 'Venus', 'Page', 'venuspage18@gmail.com', '', '$2y$10$A9YYck8XWAKgcP5ePuXwD.X8PVAoUV/YLb05dUyasuZYzX72IkJO.', NULL),
+(10, 1, 1, 2, 'Sharwin', 'Marbella', 'marbellasharwinjohn@gmail.com', '', '$2y$10$T95AGeT95SLjwfQxvq6ak.Veq051n2bYF4DTABoglD.ssrnAWIUri', NULL),
+(11, 1, 1, 2, 'Krsmur Chelvin', 'Lacorte', 'kclacorte27@gmail.com', '', '$2y$10$WfwnaUPtiyXhIpcyO.kirudQUxOGe1xQabk67CuSDJdy4/QWumf3e', NULL),
+(12, 3, 3, 1, 'Mary Jazmine', 'Malaga', 'malagamaryjazmine@gmail.com', '092423543235', '$2y$10$chBU/BUbEYRdoqlk/2yXGOMxq482/75pYQicprmCz26BnHXSl0c1a', '67dff6af4dd72.png');
 
 -- --------------------------------------------------------
 
@@ -405,32 +404,43 @@ INSERT INTO `severity` (`id`, `level`) VALUES
 
 CREATE TABLE `shifts` (
   `shift_id` int(11) NOT NULL,
-  `start_time` time NOT NULL,
-  `end_time` time NOT NULL,
-  `status` varchar(20) DEFAULT 'Off Duty',
-  `shift_day` enum('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday') NOT NULL
+  `status` varchar(20) DEFAULT 'Off Duty'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `shifts`
 --
 
-INSERT INTO `shifts` (`shift_id`, `start_time`, `end_time`, `status`, `shift_day`) VALUES
-(1, '00:00:00', '00:00:00', 'Pending', 'Sunday'),
-(34, '06:00:00', '06:00:00', 'Off Duty', 'Sunday'),
-(35, '06:00:00', '06:00:00', 'Off Duty', 'Monday'),
-(36, '06:00:00', '06:00:00', 'Off Duty', 'Tuesday'),
-(37, '06:00:00', '06:00:00', 'Off Duty', 'Wednesday'),
-(38, '06:00:00', '06:00:00', 'Off Duty', 'Thursday'),
-(39, '06:00:00', '06:00:00', 'Off Duty', 'Friday'),
-(40, '06:00:00', '06:00:00', 'Off Duty', 'Saturday'),
-(41, '06:00:00', '06:00:00', 'On Duty', 'Sunday'),
-(42, '06:00:00', '06:00:00', 'On Duty', 'Monday'),
-(43, '06:00:00', '06:00:00', 'On Duty', 'Tuesday'),
-(44, '06:00:00', '06:00:00', 'On Duty', 'Wednesday'),
-(45, '06:00:00', '06:00:00', 'On Duty', 'Thursday'),
-(46, '06:00:00', '06:00:00', 'On Duty', 'Friday'),
-(47, '06:00:00', '06:00:00', 'On Duty', 'Saturday');
+INSERT INTO `shifts` (`shift_id`, `status`) VALUES
+(1, 'Pending'),
+(2, 'On Duty'),
+(3, 'Off Duty');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `shift_assign`
+--
+
+CREATE TABLE `shift_assign` (
+  `shiftID` int(11) NOT NULL,
+  `scheduled_timein` time NOT NULL,
+  `scheduled_timeout` time NOT NULL,
+  `day` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `shift_assign`
+--
+
+INSERT INTO `shift_assign` (`shiftID`, `scheduled_timein`, `scheduled_timeout`, `day`) VALUES
+(1, '08:00:00', '08:00:00', 'Monday to Tuesday'),
+(2, '08:00:00', '08:00:00', 'Tuesday to Wednesday'),
+(3, '08:00:00', '08:00:00', 'Wednesday to Thursday'),
+(4, '08:00:00', '08:00:00', 'Thursday to Friday'),
+(5, '08:00:00', '08:00:00', 'Friday to Saturday'),
+(6, '08:00:00', '08:00:00', 'Saturday to Sunday'),
+(7, '08:00:00', '08:00:00', 'Sunday to Monday');
 
 -- --------------------------------------------------------
 
@@ -470,8 +480,10 @@ CREATE TABLE `trainings` (
 --
 
 INSERT INTO `trainings` (`training_id`, `training_name`, `description`, `scheduled_date`) VALUES
-(2, 'bimbang', 'qw', '2025-02-14'),
-(3, 'bembangan', 'ok', '2025-02-27');
+(2, 'physical training', 'military type test/training to be held at arca south taguig at 6am to 10am. bring your hygiene and fueling necessities.', '2025-03-08'),
+(3, 'bembangan', 'ok', '2025-02-27'),
+(4, 'testing training only', 'testing training only for demonstration purposes.', '2025-03-23'),
+(6, 'testing again ', 'testing again testing again testing again', '2025-03-23');
 
 --
 -- Indexes for dumped tables
@@ -495,8 +507,8 @@ ALTER TABLE `asset_category`
 --
 ALTER TABLE `attendance`
   ADD PRIMARY KEY (`attendance_id`),
-  ADD KEY `member_id` (`member_id`),
-  ADD KEY `fk_shifts` (`shift_id`);
+  ADD KEY `fk_shifts` (`shift_id`),
+  ADD KEY `fk_attendance_personnel` (`personnel_id`);
 
 --
 -- Indexes for table `barangays`
@@ -516,7 +528,8 @@ ALTER TABLE `dispatches`
 --
 ALTER TABLE `emergency_details`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `dispatch_id` (`dispatch_id`);
+  ADD KEY `dispatch_id` (`dispatch_id`),
+  ADD KEY `fk_emergency_details_status` (`status`);
 
 --
 -- Indexes for table `incidents`
@@ -527,12 +540,6 @@ ALTER TABLE `incidents`
   ADD KEY `fk_severity` (`severity_id`),
   ADD KEY `fk_status` (`status_id`),
   ADD KEY `fk_barangay` (`barangay_id`);
-
---
--- Indexes for table `notifications`
---
-ALTER TABLE `notifications`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `personnel`
@@ -570,6 +577,12 @@ ALTER TABLE `shifts`
   ADD PRIMARY KEY (`shift_id`);
 
 --
+-- Indexes for table `shift_assign`
+--
+ALTER TABLE `shift_assign`
+  ADD PRIMARY KEY (`shiftID`);
+
+--
 -- Indexes for table `status`
 --
 ALTER TABLE `status`
@@ -589,7 +602,7 @@ ALTER TABLE `trainings`
 -- AUTO_INCREMENT for table `assets`
 --
 ALTER TABLE `assets`
-  MODIFY `asset_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `asset_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `asset_category`
@@ -601,7 +614,7 @@ ALTER TABLE `asset_category`
 -- AUTO_INCREMENT for table `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `attendance_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `attendance_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `barangays`
@@ -613,31 +626,25 @@ ALTER TABLE `barangays`
 -- AUTO_INCREMENT for table `dispatches`
 --
 ALTER TABLE `dispatches`
-  MODIFY `disp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `disp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `emergency_details`
 --
 ALTER TABLE `emergency_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `incidents`
 --
 ALTER TABLE `incidents`
-  MODIFY `incident_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
-
---
--- AUTO_INCREMENT for table `notifications`
---
-ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `incident_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `personnel`
 --
 ALTER TABLE `personnel`
-  MODIFY `PersonnelID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `PersonnelID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `ranks`
@@ -655,13 +662,19 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `shifts`
 --
 ALTER TABLE `shifts`
-  MODIFY `shift_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `shift_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+
+--
+-- AUTO_INCREMENT for table `shift_assign`
+--
+ALTER TABLE `shift_assign`
+  MODIFY `shiftID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `trainings`
 --
 ALTER TABLE `trainings`
-  MODIFY `training_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `training_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
@@ -677,13 +690,15 @@ ALTER TABLE `assets`
 -- Constraints for table `attendance`
 --
 ALTER TABLE `attendance`
+  ADD CONSTRAINT `fk_attendance_personnel` FOREIGN KEY (`personnel_id`) REFERENCES `personnel` (`PersonnelID`),
   ADD CONSTRAINT `fk_shifts` FOREIGN KEY (`shift_id`) REFERENCES `shifts` (`shift_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `emergency_details`
 --
 ALTER TABLE `emergency_details`
-  ADD CONSTRAINT `emergency_details_ibfk_1` FOREIGN KEY (`dispatch_id`) REFERENCES `dispatches` (`disp_id`);
+  ADD CONSTRAINT `emergency_details_ibfk_1` FOREIGN KEY (`dispatch_id`) REFERENCES `dispatches` (`disp_id`),
+  ADD CONSTRAINT `fk_emergency_details_status` FOREIGN KEY (`status`) REFERENCES `status` (`status_id`);
 
 --
 -- Constraints for table `incidents`
