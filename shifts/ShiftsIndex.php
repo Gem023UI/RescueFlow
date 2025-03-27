@@ -11,6 +11,7 @@ if (!isset($conn)) {
 
 $user_id = $_SESSION['user_id'] ?? null;
 $role_id = $_SESSION['role'] ?? null; // Fetch RoleID from session
+$is_admin = ($role_id == 4); // Check if user is admin
 
 // Get today's date in the desired format (e.g., "March 22, 2025")
 $todayDateFormatted = date("F j, Y"); // Example output: "March 22, 2025"
@@ -54,23 +55,63 @@ $query_all = "
 $result_all = mysqli_query($conn, $query_all);
 
 // Fetch shift schedule data
-$query_shift_schedule = "
-    SELECT 
-        sa.shiftID AS scheduleID,  -- Include the primary key for edit/delete actions
-        p.FirstName,
-        p.LastName,
-        r.rank_name AS Rank,
-        sa.day AS Day,
-        sa.scheduled_timein AS TimeIn,
-        sa.scheduled_timeout AS TimeOut
-    FROM 
-        shift_assign sa
-    JOIN 
-        personnel p ON sa.shiftID = p.ShiftID
-    JOIN 
-        ranks r ON p.RankID = r.rank_id
-";
-$result_shift_schedule = mysqli_query($conn, $query_shift_schedule);
+if ($is_admin) {
+    // Admins see all shifts
+    $query = "
+        SELECT 
+            ss.schedule_id,
+            p.PersonnelID,
+            p.FirstName,
+            p.LastName,
+            r.rank_name AS Rank,
+            TIME_FORMAT(ss.start_time, '%h:%i %p') AS start_time,
+            TIME_FORMAT(ss.end_time, '%h:%i %p') AS end_time,
+            ss.status,
+            ss.shift_day
+        FROM 
+            shift_schedule ss
+        JOIN 
+            personnel p ON ss.PersonnelID = p.PersonnelID
+        JOIN 
+            ranks r ON p.RankID = r.rank_id
+        ORDER BY p.LastName ASC, FIELD(ss.shift_day, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
+    ";
+} else {
+    // Regular users see only their shifts
+    $query = "
+        SELECT 
+            ss.schedule_id,
+            p.PersonnelID,
+            p.FirstName,
+            p.LastName,
+            r.rank_name AS Rank,
+            TIME_FORMAT(ss.start_time, '%h:%i %p') AS start_time,
+            TIME_FORMAT(ss.end_time, '%h:%i %p') AS end_time,
+            ss.status,
+            ss.shift_day
+        FROM 
+            shift_schedule ss
+        JOIN 
+            personnel p ON ss.PersonnelID = p.PersonnelID
+        JOIN 
+            ranks r ON p.RankID = r.rank_id
+        WHERE 
+            p.PersonnelID = " . intval($user_id) . "
+        ORDER BY FIELD(ss.shift_day, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
+    ";
+}
+
+$result = mysqli_query($conn, $query);
+
+// Organize shifts by personnel
+$shifts = [];
+while ($row = mysqli_fetch_assoc($result)) {
+    $shifts[$row['PersonnelID']]['name'] = $row['FirstName'] . ' ' . $row['LastName'];
+    $shifts[$row['PersonnelID']]['rank'] = $row['Rank'];
+    $shifts[$row['PersonnelID']]['status'] = $row['status'];
+    $shifts[$row['PersonnelID']]['shifts'][$row['shift_day']] = $row['start_time'] . ' - ' . $row['end_time'];
+    $shifts[$row['PersonnelID']]['schedule_id'] = $row['schedule_id'];
+}
 
 ?>
 
@@ -258,53 +299,74 @@ $result_shift_schedule = mysqli_query($conn, $query_shift_schedule);
                 ?>
             </div>
             <?php endif; ?>
-            <?php if ($role_id == 4): // Only show for admin ?>
             <h2>SHIFT SCHEDULE</h2>
-            <div class="attendance-table">
-                <?php
-                if ($result_shift_schedule) {
-                    echo "<table border='1'>
-                            <tr>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Rank</th>
-                                <th>Day</th>
-                                <th>Time In</th>
-                                <th>Time Out</th>";
-                    // Show Actions column header only for Admins (RoleID = 4)
-                    if ($role_id == 4) {
-                        echo "<th>Actions</th>";
-                    }
+            <div class="container mt-5">
+                <div class="card shadow-lg">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="text-center">Shift Management</h4>
+                    </div>
+                    <div class="card-body">
+                        <?php if ($role_id == 4): ?>
+                            <div class="d-flex justify-content-between mb-3">
+                                <a href="ShiftsCreate.php" class="btn btn-success">
+                                    <i class="fas fa-plus"></i> Add New Shift
+                                </a>
+                            </div>
+                        <?php endif; ?>
 
-                    echo "</tr>";
-
-                    while ($row = mysqli_fetch_assoc($result_shift_schedule)) {
-                        echo "<tr>
-                                <td>{$row['FirstName']}</td>
-                                <td>{$row['LastName']}</td>
-                                <td>{$row['Rank']}</td>
-                                <td>{$row['Day']}</td>
-                                <td>{$row['TimeIn']}</td>
-                                <td>{$row['TimeOut']}</td>";
-
-                        // Show Actions column only for Admins (RoleID = 4)
-                        if ($role_id == 4) {
-                            echo "<td class='action-buttons'>
-                                    <button class='edit' onclick='editShiftSchedule({$row['scheduleID']})'>Edit</button>
-                                    <button class='delete' onclick='deleteShiftSchedule({$row['scheduleID']})'>Delete</button>
-                                </td>";
-                        }
-
-                        echo "</tr>";
-                    }
-
-                    echo "</table>";
-                } else {
-                    echo "Error fetching shift schedule records: " . mysqli_error($conn);
-                }
-                ?>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Personnel</th>
+                                        <th>Rank</th>
+                                        <th>Status</th>
+                                        <th>Monday</th>
+                                        <th>Tuesday</th>
+                                        <th>Wednesday</th>
+                                        <th>Thursday</th>
+                                        <th>Friday</th>
+                                        <th>Saturday</th>
+                                        <th>Sunday</th>
+                                        <?php if ($role_id == 4): ?>
+                                            <th>Actions</th>
+                                        <?php endif; ?>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($shifts as $personnel_id => $personnelData): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($personnelData['name']); ?></td>
+                                            <td><?= htmlspecialchars($personnelData['rank']); ?></td>
+                                            <td><?= htmlspecialchars($personnelData['status']); ?></td>
+                                            <?php 
+                                                $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+                                                foreach ($days as $day) {
+                                                    echo "<td>" . (isset($personnelData['shifts'][$day]) ? htmlspecialchars($personnelData['shifts'][$day]) : '-') . "</td>";                                                }
+                                            ?>
+                                            <?php if ($role_id == 4): ?>
+                                                <td>
+                                                    <a href="ShiftsEdit.php?schedule_id=<?= $personnelData['schedule_id'] ?>" class="btn btn-warning btn-sm">
+                                                        <i class="fas fa-edit"></i> Edit
+                                                    </a>
+                                                    <a href="ShiftsDelete.php?schedule_id=<?= $personnelData['schedule_id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">
+                                                        <i class="fas fa-trash"></i> Delete
+                                                    </a>
+                                                </td>
+                                            <?php endif; ?>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                    <?php if (empty($shifts)): ?>
+                                        <tr>
+                                            <td colspan="<?= ($role_id == 4) ? 11 : 10 ?>" class="text-center text-muted">No shifts assigned yet.</td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <?php endif; ?>
         </div>
     </main>
 </body>
