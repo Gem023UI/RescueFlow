@@ -14,7 +14,7 @@ $pdf->SetAutoPageBreak(TRUE, 20);
 $pdf->AddPage();
 
 // Add BFP Logo
-$logoPath = $_SERVER['DOCUMENT_ROOT'] . '/RESCUEFLOW/incidents/uploads/bfplgo.png';
+$logoPath = $_SERVER['DOCUMENT_ROOT'] . '/RESCUEFLOW/incident/uploads/bfpncrlogo.png';
 $pdf->Image($logoPath, 85, 10, 40, 40, 'PNG', '', '', true);
 
 // Add Header Text
