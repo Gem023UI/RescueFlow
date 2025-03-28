@@ -12,7 +12,7 @@ $shift_id = 1; // Default shift for new personnel
 $role_id = 1; // Default role for new personnel
 
 // Validate email format
-if (!preg_match("/^\w+@\w+\.\w+/", $email)) {
+if (!preg_match("/^\w+@\w+\w+/", $email)) {
     $_SESSION['message'] = 'Invalid email format';
     header("Location: LoginRegister.php");
     exit();
