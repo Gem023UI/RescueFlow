@@ -129,9 +129,13 @@ body{
 
 main{
   padding: min(30px, 7%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
 }
 main p{
-  color: var(--secondary-text-clr);
   margin-top: 5px;
   margin-bottom: 15px;
 }
@@ -217,17 +221,60 @@ main p{
   }
 }
 
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  padding: 20px;
+  margin: 20px;
+  gap: 10px;
+  width: 100%;
+}
+
+.dispatch-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  border: 1px solid white;
+  border-radius: 8px;
+  width: 90%;
+}
+
+.training-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  border: 1px solid white;
+  border-radius: 8px;
+  width: 90%;
+}
+
 .shifts-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  border: 1px solid white;
+  border-radius: 8px;
+  width: 90%;
 }
 
 .attendance-table {
   color: white;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.1);
   border: 1px solid white;
   border-radius: 5px;
   margin: 30px;
@@ -245,46 +292,26 @@ main p{
   border-collapse: collapse;
 }
 
-.action-buttons {
-  display: flex;
-  gap: 5px;
-}
-.action-buttons button {
-  padding: 5px 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  text-decoration: none;
-}
-.action-buttons button.edit {
-  background-color: #4CAF50;
+.training-info {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 15px;
+  width: 90%;
   color: white;
-}
-.action-buttons button.delete {
-  background-color: #f44336;
-  color: white;
-}
-
-.shift-buttons {
+  margin: 10px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  justify-content: left;
+  align-items: left;
 }
 
-.edit, .delete {
-  padding: 5px 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  text-decoration: none;
+.training-info h3 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
 }
 
-.edit {
-  background-color: #4CAF50;
-  color: white;
-}
-
-.delete {
-  background-color: #f44336;
-  color: white;
+.training-info p {
+  margin: 5px 0;
+  font-size: 14px;
 }

@@ -4,17 +4,15 @@ include('../includes/config.php');
 include('../dispatch/DispatchButton.html');
 include('../attendance/AttendanceButton.html');
 
-// Check database connection
 if (!isset($conn)) {
     die("Database connection failed.");
 }
 
-$user_id = $_SESSION['user_id'] ?? null;
-$role_id = $_SESSION['role'] ?? null; // Fetch RoleID from session
-$is_admin = ($role_id == 4); // Check if user is admin
+$user_id = $_SESSION['PersonnelID'] ?? null ;
+$role_id = $_SESSION['role'] ?? null;
+$is_admin = ($role_id == 4);
 
-// Get today's date in the desired format (e.g., "March 22, 2025")
-$todayDateFormatted = date("F j, Y"); // Example output: "March 22, 2025"
+$todayDateFormatted = date("F j, Y"); 
 
 // Fetch today's attendance records
 $query_today = "
@@ -55,7 +53,7 @@ $query_all = "
 $result_all = mysqli_query($conn, $query_all);
 
 // Fetch shift schedule data
-if ($is_admin) {
+if ($is_admin || $role_id == 4) { // Assuming both $is_admin and role_id 4 indicate admin
     // Admins see all shifts
     $query = "
         SELECT 
@@ -300,13 +298,13 @@ while ($row = mysqli_fetch_assoc($result)) {
             </div>
             <?php endif; ?>
             <h2>SHIFT SCHEDULE</h2>
-            <div class="container mt-5">
+            
                 <div class="card shadow-lg">
                     <div class="card-header bg-primary text-white">
                         <h4 class="text-center">Shift Management</h4>
                     </div>
                     <div class="card-body">
-                        <?php if ($role_id == 4): ?>
+                        <?php if ($is_admin || $role_id == 4): ?>
                             <div class="d-flex justify-content-between mb-3">
                                 <a href="ShiftsCreate.php" class="btn btn-success">
                                     <i class="fas fa-plus"></i> Add New Shift
@@ -314,7 +312,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                             </div>
                         <?php endif; ?>
 
-                        <div class="table-responsive">
+                        <div class="attendance-table">
                             <table class="table table-bordered table-striped">
                                 <thead class="table-dark">
                                     <tr>
@@ -328,7 +326,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                                         <th>Friday</th>
                                         <th>Saturday</th>
                                         <th>Sunday</th>
-                                        <?php if ($role_id == 4): ?>
+                                        <?php if ($is_admin || $role_id == 4): ?>
                                             <th>Actions</th>
                                         <?php endif; ?>
                                     </tr>
@@ -342,23 +340,20 @@ while ($row = mysqli_fetch_assoc($result)) {
                                             <?php 
                                                 $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
                                                 foreach ($days as $day) {
-                                                    echo "<td>" . (isset($personnelData['shifts'][$day]) ? htmlspecialchars($personnelData['shifts'][$day]) : '-') . "</td>";                                                }
+                                                    echo "<td>" . (isset($personnelData['shifts'][$day]) ? htmlspecialchars($personnelData['shifts'][$day]) : '-') . "</td>";
+                                                }
                                             ?>
-                                            <?php if ($role_id == 4): ?>
-                                                <td>
-                                                    <a href="ShiftsEdit.php?schedule_id=<?= $personnelData['schedule_id'] ?>" class="btn btn-warning btn-sm">
-                                                        <i class="fas fa-edit"></i> Edit
-                                                    </a>
-                                                    <a href="ShiftsDelete.php?schedule_id=<?= $personnelData['schedule_id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">
-                                                        <i class="fas fa-trash"></i> Delete
-                                                    </a>
+                                            <?php if ($is_admin || $role_id == 4): ?>
+                                                <td class="shift-buttons">
+                                                    <a href="ShiftsEdit.php?schedule_id=<?= $personnelData['schedule_id'] ?>" class="edit">Edit</a>
+                                                    <a href="ShiftsDelete.php?schedule_id=<?= $personnelData['schedule_id'] ?>" class="delete" onclick="return confirm('Are you sure?');">Delete</a>
                                                 </td>
                                             <?php endif; ?>
                                         </tr>
                                     <?php endforeach; ?>
                                     <?php if (empty($shifts)): ?>
                                         <tr>
-                                            <td colspan="<?= ($role_id == 4) ? 11 : 10 ?>" class="text-center text-muted">No shifts assigned yet.</td>
+                                            <td colspan="<?= ($is_admin || $role_id == 4) ? 11 : 10 ?>" class="text-center text-muted">No shifts assigned yet.</td>
                                         </tr>
                                     <?php endif; ?>
                                 </tbody>
@@ -366,7 +361,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                         </div>
                     </div>
                 </div>
-            </div>
+            
         </div>
     </main>
 </body>
