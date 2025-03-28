@@ -1,20 +1,8 @@
-<?php
-session_start();
-include('../includes/config.php');
-include('../dispatch/dispatchbutton.html');
-
-if (!isset($conn)) {
-    die("Database connection failed.");
-}
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="5"> <!-- Refresh page every 5 seconds -->
   <title>BFP NCR Taguig City</title>
   <link rel="stylesheet" href="BFPIndex.css">
   <script type="text/javascript" src="BFPIndex.js" defer></script>
@@ -23,7 +11,7 @@ if (!isset($conn)) {
     <nav id="sidebar">
         <ul>
         <li>
-            <span class="logo"><a href="../dashboard/RescueFlowIndex.php">BFP NCR Taguig S1</a></span>
+            <span class="logo"><a href="../bfp/BFPIndex.php">BFP NCR Taguig S1</a></span>
             <button onclick=toggleSidebar() id="toggle-btn">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z"/></svg>
             </button>
@@ -104,8 +92,121 @@ if (!isset($conn)) {
     </nav>
     <main>
         <div class="dashboard-container">
+            <h1 class="section-title">BUREAU OF FIRE PROTECTION - TAGUIG CITY STATION 1</h1>
             
+            <!-- Image Carousel -->
+            <div class="carousel-container">
+                <div class="carousel-slides">
+                    <div class="carousel-slide active">
+                        <img src="images/bfp1.jpg" alt="BFP Taguig Fire Safety Campaign">
+                        <div class="carousel-caption">
+                            <h3>SA PAG-IWAS SA SUNOG, HINDI KA NAG-IISA!</h3>
+                            <p>Bureau of Fire Protection - Taguig City Fire Station</p>
+                            <p>http://bfp.gov.ph/ | (02)8837-0740/0906-2110919</p>
+                        </div>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="images/bfp2.jpg" alt="BFP Taguig Emergency Hotline">
+                        <div class="carousel-caption">
+                            <h3>EMERGENCY HOTLINE NUMBERS</h3>
+                            <p>3337-4496 | 3337-0740 | 0206-210313</p>
+                            <p>Bureau of Fire Protection - Taguig City Fire Station</p>
+                        </div>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="images/bfp3.jpg" alt="BFP Taguig Complaints Hotline">
+                        <div class="carousel-caption">
+                            <h3>COMPLAINTS HOTLINE</h3>
+                            <p>For fire complaints, issues and other concerns: 0976-0615251</p>
+                            <p>Taguig City Fire Station</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-prev">&#10094;</button>
+                <button class="carousel-next">&#10095;</button>
+                <div class="carousel-indicators">
+                    <span class="indicator active"></span>
+                    <span class="indicator"></span>
+                    <span class="indicator"></span>
+                </div>
+            </div>
+            
+            <div class="mission-vision-container">
+                <div class="mission-vision-section">
+                    <h2>Vision</h2>
+                    <p>A modern fire service fully capable of ensuring a fire safe nation by 2034.</p>
+                </div>
+                
+                <div class="mission-vision-section">
+                    <h2>Mission</h2>
+                    <p>We commit to prevent and suppress destructive fires, investigate its causes; enforce Fire Code and other related laws; respond to man-made and natural disasters and other emergencies.</p>
+                </div>
+                
+                <div class="mission-vision-section">
+                    <h2>Mandates and Functions</h2>
+                    <p>The Bureau of Fire Protection was created by virtue of RA 6975 primarily to perform the following functions:</p>
+                    <ul class="mandates-list">
+                        <li>Be responsible for the prevention and suppression of all destructive fires on buildings, houses and other structures; forest; land transportation vehicles and equipment; ships and vessels docked at piers or wharves anchored in major sea ports; petroleum industry installations; plane crashes; and other similar activities</li>
+                        <li>Be responsible for the enforcement of the Fire Code of the Philippines (PD 1185) and other related laws</li>
+                        <li>Shall have the power to investigate all causes of fires and if necessary, file the proper complaint with the city or provincial prosecutor who has jurisdiction over the case</li>
+                        <li>In the time of national emergency, all elements of the BFP shall upon direction of the President, assist the AFP in meeting the national emergency</li>
+                        <li>Shall establish at least one (1) fire station with adequate personnel, firefighting facilities and equipment in every provincial capital, city and municipality subject to standard rules and regulations as maybe promulgated by the Department of the Interior and Local Government (DILG) (Sec 56)</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </main>
 </body>
+
+<script>
+    // Carousel Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const slides = document.querySelector('.carousel-slides');
+        const slideItems = document.querySelectorAll('.carousel-slide');
+        const prevBtn = document.querySelector('.carousel-prev');
+        const nextBtn = document.querySelector('.carousel-next');
+        const indicators = document.querySelectorAll('.indicator');
+        
+        let currentIndex = 0;
+        const totalSlides = slideItems.length;
+        
+        function updateCarousel() {
+            slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+            
+            // Update indicators
+            indicators.forEach((indicator, index) => {
+                if (index === currentIndex) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+            });
+        }
+        
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % totalSlides;
+            updateCarousel();
+        }
+        
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+        }
+        
+        // Button events
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+        
+        // Indicator events
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                currentIndex = index;
+                updateCarousel();
+            });
+        });
+        
+        // Auto-rotate every 5 seconds
+        setInterval(nextSlide, 5000);
+    });
+</script>
 </html>

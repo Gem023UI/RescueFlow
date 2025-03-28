@@ -16,8 +16,7 @@ while ($row = $result_dispatches->fetch_assoc()) {
     $locations[] = $row;
 }
 
-// Fetch attendance data with joins to personnel and ranks
-$query_attendance = "
+$query_today = "
     SELECT 
         a.attendance_id,
         p.FirstName,
@@ -31,8 +30,10 @@ $query_attendance = "
         personnel p ON a.personnel_id = p.PersonnelID
     JOIN 
         ranks r ON p.RankID = r.rank_id
+    WHERE 
+        DATE(a.timestamp) = CURDATE()
 ";
-$result_attendance = mysqli_query($conn, $query_attendance);
+$result_today = mysqli_query($conn, $query_today);
 
 // Fetch training data for today
 $todayDate = date("Y-m-d"); // Format for SQL query
@@ -61,7 +62,7 @@ $conn->close();
     <nav id="sidebar">
         <ul>
         <li>
-            <span class="logo"><a href="../dashboard/RescueFlowIndex.php">BFP NCR Taguig S1</a></span>
+            <span class="logo"><a href="../bfp/BFPIndex.php">BFP NCR Taguig S1</a></span>
             <button onclick=toggleSidebar() id="toggle-btn">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z"/></svg>
             </button>
@@ -187,33 +188,36 @@ $conn->close();
             <div class="shifts-container">
                 <h2>ATTENDANCE AS OF <?php echo $todayDateFormatted; ?></h2>
                 <div class="attendance-table">
-                    <?php
-                    if ($result_attendance) {
-                        echo "<table border='1'>
-                                <tr>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Rank</th>
-                                    <th>Time In</th>
-                                    <th>Time Out</th>
-                                </tr>";
+                <?php
+                if ($result_today) {
+                    echo "<table border='1'>
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Rank</th>
+                                <th>Time In</th>
+                                <th>Time Out</th>";
+                    // Show Actions column header only for Admins (RoleID = 4)
+                    echo "</tr>";
 
-                        while ($row = mysqli_fetch_assoc($result_attendance)) {
-                            echo "<tr>
-                                    <td>{$row['FirstName']}</td>
-                                    <td>{$row['LastName']}</td>
-                                    <td>{$row['Rank']}</td>
-                                    <td>{$row['TimeIn']}</td>
-                                    <td>{$row['TimeOut']}</td>
-                                </tr>";
-                        }
+                    while ($row = mysqli_fetch_assoc($result_today)) {
+                        echo "<tr>
+                                <td>{$row['FirstName']}</td>
+                                <td>{$row['LastName']}</td>
+                                <td>{$row['Rank']}</td>
+                                <td>{$row['TimeIn']}</td>
+                                <td>{$row['TimeOut']}</td>";
 
-                        echo "</table>";
-                    } else {
-                        echo "Error fetching attendance records: " . mysqli_error($conn);
+                        // Show Actions column only for Admins (RoleID = 4)
+                        echo "</tr>";
                     }
-                    ?>
-                </div>
+
+                    echo "</table>";
+                } else {
+                    echo "Error fetching today's attendance records: " . mysqli_error($conn);
+                }
+                ?>
+            </div>
             </div>
         </div>
     </main>
