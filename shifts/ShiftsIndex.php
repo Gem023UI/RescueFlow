@@ -297,18 +297,13 @@ while ($row = mysqli_fetch_assoc($result)) {
                 ?>
             </div>
             <?php endif; ?>
-            <h2>SHIFT SCHEDULE</h2>
+            <h1>SHIFT SCHEDULE</h1>
             
                 <div class="card shadow-lg">
-                    <div class="card-header bg-primary text-white">
-                        <h4 class="text-center">Shift Management</h4>
-                    </div>
                     <div class="card-body">
                         <?php if ($is_admin || $role_id == 4): ?>
-                            <div class="d-flex justify-content-between mb-3">
-                                <a href="ShiftsCreate.php" class="btn btn-success">
-                                    <i class="fas fa-plus"></i> Add New Shift
-                                </a>
+                            <div class="admin-button">
+                                <a href="ShiftsCreate.php" class="add">ADD SHIFT</a>
                             </div>
                         <?php endif; ?>
 
@@ -318,7 +313,6 @@ while ($row = mysqli_fetch_assoc($result)) {
                                     <tr>
                                         <th>Personnel</th>
                                         <th>Rank</th>
-                                        <th>Status</th>
                                         <th>Monday</th>
                                         <th>Tuesday</th>
                                         <th>Wednesday</th>
@@ -336,7 +330,6 @@ while ($row = mysqli_fetch_assoc($result)) {
                                         <tr>
                                             <td><?= htmlspecialchars($personnelData['name']); ?></td>
                                             <td><?= htmlspecialchars($personnelData['rank']); ?></td>
-                                            <td><?= htmlspecialchars($personnelData['status']); ?></td>
                                             <?php 
                                                 $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
                                                 foreach ($days as $day) {

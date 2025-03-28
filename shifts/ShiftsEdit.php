@@ -41,16 +41,8 @@ $personnel = $conn->query("SELECT PersonnelID, FirstName, LastName FROM personne
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Shift Schedule</title>
+    <link rel="stylesheet" href="ShiftsEdit.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .card {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-    </style>
 </head>
 <body class="bg-light">
 
@@ -95,15 +87,6 @@ $personnel = $conn->query("SELECT PersonnelID, FirstName, LastName FROM personne
                         <option value="Friday" <?= $shift['shift_day'] == 'Friday' ? 'selected' : '' ?>>Friday</option>
                         <option value="Saturday" <?= $shift['shift_day'] == 'Saturday' ? 'selected' : '' ?>>Saturday</option>
                         <option value="Sunday" <?= $shift['shift_day'] == 'Sunday' ? 'selected' : '' ?>>Sunday</option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Status:</label>
-                    <select name="status" class="form-select" required>
-                        <option value="Pending" <?= $shift['status'] == 'Pending' ? 'selected' : '' ?>>Pending</option>
-                        <option value="On Duty" <?= $shift['status'] == 'On Duty' ? 'selected' : '' ?>>On Duty</option>
-                        <option value="Off Duty" <?= $shift['status'] == 'Off Duty' ? 'selected' : '' ?>>Off Duty</option>
                     </select>
                 </div>
 

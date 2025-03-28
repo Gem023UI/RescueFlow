@@ -18,23 +18,14 @@ $personnel = $conn->query("SELECT PersonnelID, FirstName, LastName FROM personne
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Shift Schedule</title>
+    <link rel="stylesheet" href="ShiftsCreate.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .card {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-    </style>
 </head>
 <body class="bg-light">
-
 <div class="container mt-5">
     <div class="card shadow-lg">
         <div class="card-header bg-primary text-white">
-            <h4 class="text-center">Add Shift Schedule</h4>
+            <h4 class="text-center">ADD SHIFT SCHEDULE</h4>
         </div>
         <div class="card-body">
             <form action="ShiftsStore.php" method="post">
@@ -74,16 +65,7 @@ $personnel = $conn->query("SELECT PersonnelID, FirstName, LastName FROM personne
                         <option value="Sunday">Sunday</option>
                     </select>
                 </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Status:</label>
-                    <select name="status" class="form-select" required>
-                        <option value="Pending">Pending</option>
-                        <option value="On Duty" selected>On Duty</option>
-                        <option value="Off Duty">Off Duty</option>
-                    </select>
-                </div>
-
+                
                 <input type="hidden" name="assigned_by" value="<?= isset($_SESSION['user_id']) ? htmlspecialchars($_SESSION['user_id']) : '' ?>">
 
                 <div class="text-center mt-4">
