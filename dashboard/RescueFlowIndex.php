@@ -59,6 +59,7 @@ $conn->close();
   <script type="text/javascript" src="RescueFlowIndex.js" defer></script>
 </head>
 <body>
+    
     <nav id="sidebar">
         <ul>
         <li>
@@ -141,7 +142,11 @@ $conn->close();
         </li>
         </ul>
     </nav>
+    
     <main>
+    <button onclick="window.open('GeneratePDF.php', '_blank')">Print Dashboard</button>
+
+
         <h1>DATE TODAY: <?php echo $todayDateFormatted; ?></h1>
         <div class="dashboard-container">
             <div class="dispatch-container">
