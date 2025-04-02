@@ -142,10 +142,9 @@ $conn->close();
         </ul>
     </nav>
     <main>
-    <button onclick="window.open('GeneratePDF.php', '_blank')">Print Dashboard</button>
-
-
         <h1>DATE TODAY: <?php echo $todayDateFormatted; ?></h1>
+        <button onclick="window.open('GeneratePDF.php', '_blank')" class="pdf-btn">Print Dashboard</button>
+
         <div class="dashboard-container">
             <div class="dispatch-container">
                 <h2>DISPATCH</h2>

@@ -243,3 +243,15 @@ h2 {
   text-align: center; /* Center the text inside the box */
   color: white;
 }
+
+.pdf-btn {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  margin: 10px;
+  border: 1px solid white;
+  border-radius: 8px;
+  padding: 10px;
+  color: white;
+  background-color: orangered;
+}

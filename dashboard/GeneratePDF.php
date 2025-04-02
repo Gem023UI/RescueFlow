@@ -121,5 +121,5 @@ $html = ob_get_clean();
 $dompdf->loadHtml($html);
 $dompdf->setPaper('A4', 'portrait');
 $dompdf->render();
-$dompdf->stream("Rescue_Dashboard.pdf", ["Attachment" => 0]); // Opens in browser
+$dompdf->stream("RescueFlow Dashboard.pdf", ["Attachment" => 0]); // Opens in browser
 ?>

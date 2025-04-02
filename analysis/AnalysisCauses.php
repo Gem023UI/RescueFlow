@@ -114,6 +114,7 @@ $conn->close();
     </nav>
   <main>
   <h2>INCIDENT ANALYSIS</h2>
+  <button onclick="window.open('AnalysisPDF.php', '_blank')" class="pdf-btn">Print Analysis Data</button>
     <div class="chart-container">
         <!-- Pie Chart -->
         <div class="chart-box">

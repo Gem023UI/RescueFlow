@@ -315,3 +315,15 @@ main p{
   margin: 5px 0;
   font-size: 14px;
 }
+
+.pdf-btn {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  margin: 20px;
+  border: 1px solid white;
+  border-radius: 8px;
+  padding: 10px;
+  color: white;
+  background-color: orangered;
+}
