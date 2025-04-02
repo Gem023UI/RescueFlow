@@ -112,77 +112,116 @@ $conn->close();
         </li>
         </ul>
     </nav>
-  <main>
-  <h2>INCIDENT ANALYSIS</h2>
-  <button onclick="window.open('AnalysisPDF.php', '_blank')" class="pdf-btn">Print Analysis Data</button>
-    <div class="chart-container">
-        <!-- Pie Chart -->
-        <div class="chart-box">
-            <h3>Leading Causes of Incidents in Taguig City</h3>
-            <canvas id="causeChart"></canvas>
+    <main>
+        <h2>INCIDENT ANALYSIS</h2>
+        <button onclick="window.open('AnalysisPDF.php', '_blank')" class="pdf-btn">Print Analysis Data</button>
+        <div class="chart-container">
+            <!-- Pie Chart -->
+            <div class="chart-box">
+                <h3>Leading Causes of Incidents in Taguig City</h3>
+                <canvas id="causeChart"></canvas>
+            </div>
         </div>
-    </div>
-    <div class="chart-data">
-      <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch('AnalysisFetchData.php')
-                .then(response => response.json())
-                .then(data => {
-                  // ===== PIE CHART =====
-                    let causes = [];
-                    let counts = [];
-                    let totalIncidents = 0;
+        <div class="chart-data">
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    fetch('AnalysisFetchData.php')
+                        .then(response => response.json())
+                        .then(data => {
+                            // ===== PIE CHART =====
+                            let causes = [];
+                            let counts = [];
+                            let totalIncidents = 0;
 
-                    let colors = [
-                        "#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0",
-                        "#9966FF", "#FF9F40", "#C9CBCF", "#2A9D8F"
-                    ];
-                    data.causes.forEach((row, index) => {
-                        causes.push(row.cause);
-                        counts.push(row.count);
-                        totalIncidents += row.count;
-                    });
-                    new Chart(document.getElementById('causeChart'), {
-                        type: 'doughnut',
-                        data: {
-                            labels: causes,
-                            datasets: [{
-                                data: counts,
-                                backgroundColor: colors.slice(0, causes.length),
-                                hoverOffset: 10
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: { display: true, position: 'right' },
-                                tooltip: {
-                                    callbacks: {
-                                        label: function(tooltipItem) {
-                                            let value = tooltipItem.raw;
-                                            let percentage = ((value / totalIncidents) * 100).toFixed(1);
-                                            return ` ${tooltipItem.label}: ${value} (${percentage}%)`;
-                                        }
-                                    }
-                                },
-                                datalabels: {
-                                    color: '#fff',
-                                    formatter: (value, context) => {
-                                        let percentage = ((value / totalIncidents) * 100).toFixed(1);
-                                        return `${percentage}%`;
-                                    }
-                                }
-                            },
-                            animation: {
-                                animateRotate: true,
-                                animateScale: true
+                            // Standard rainbow color palette (ROYGBIV)
+                            const rainbowColors = [
+                                '#FF0000', // Red
+                                '#FF7F00', // Orange
+                                '#FFFF00', // Yellow
+                                '#00FF00', // Green
+                                '#0000FF', // Blue
+                                '#4B0082', // Indigo
+                                '#9400D3', // Violet
+                                '#FF1493', // Deep Pink (extra color if needed)
+                                '#00FFFF', // Cyan (extra color if needed)
+                                '#7CFC00'  // Lawn Green (extra color if needed)
+                            ];
+
+                            data.causes.forEach((row, index) => {
+                                causes.push(row.cause);
+                                counts.push(row.count);
+                                totalIncidents += row.count;
+                            });
+
+                            // Cycle through rainbow colors
+                            function getRainbowColor(index) {
+                                return rainbowColors[index % rainbowColors.length];
                             }
-                        }
-                    });
+
+                            const segmentColors = causes.map((_, index) => getRainbowColor(index));
+
+                            new Chart(document.getElementById('causeChart'), {
+                                type: 'doughnut',
+                                data: {
+                                    labels: causes,
+                                    datasets: [{
+                                        data: counts,
+                                        backgroundColor: segmentColors,
+                                        borderColor: '#ffffff', // White borders between segments
+                                        borderWidth: 2,
+                                        hoverOffset: 20
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    plugins: {
+                                        legend: { 
+                                            display: true, 
+                                            position: 'right',
+                                            labels: {
+                                                color: '#fff',
+                                                font: {
+                                                    size: 12,
+                                                    family: "'Helvetica Neue', 'Arial', sans-serif"
+                                                },
+                                                padding: 15,
+                                                usePointStyle: true
+                                            }
+                                        },
+                                        tooltip: {
+                                            callbacks: {
+                                                label: function(tooltipItem) {
+                                                    let value = tooltipItem.raw;
+                                                    let percentage = ((value / totalIncidents) * 100).toFixed(1);
+                                                    return ` ${tooltipItem.label}: ${value} (${percentage}%)`;
+                                                }
+                                            },
+                                            bodyColor: '#fff',
+                                            titleColor: '#fff',
+                                            backgroundColor: 'rgba(0,0,0,0.8)',
+                                            borderColor: '#fff',
+                                            borderWidth: 1,
+                                            padding: 12,
+                                            bodyFont: {
+                                                size: 12,
+                                                weight: 'normal'
+                                            }
+                                        }
+                                    },
+                                    animation: {
+                                        animateRotate: true,
+                                        animateScale: true,
+                                        duration: 1500
+                                    },
+                                    cutout: '55%',
+                                    borderRadius: 8,
+                                    spacing: 3
+                                }
+                            });
+                        });
                 });
-        });
-      </script>
-    </div>
-  </main>
+            </script>
+        </div>
+    </main>
 </body>
 </html>

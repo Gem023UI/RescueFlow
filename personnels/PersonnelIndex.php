@@ -12,7 +12,8 @@ $sql = "SELECT Personnel.PersonnelID, Personnel.FirstName, Personnel.LastName, P
         FROM Personnel
         LEFT JOIN ranks ON Personnel.RankID = ranks.rank_id
         LEFT JOIN roles ON Personnel.RoleID = roles.role_id
-        LEFT JOIN shifts ON Personnel.ShiftID = shifts.shift_id";
+        LEFT JOIN shifts ON Personnel.ShiftID = shifts.shift_id
+        WHERE Personnel.personnelstatus_id = 1";
 $result = $conn->query($sql);
 ?>
 
@@ -135,7 +136,7 @@ $result = $conn->query($sql);
                     <p><strong>Shift:</strong> <?= $row['status'] ?? 'N/A'; ?></p>
                     <?php if ($role_id == 4): // Only show for admin ?>
                         <a href="personneledit.php?PersonnelID=<?= $row['PersonnelID']; ?>" class="btn edit-btn">Edit</a>
-                        <a href="personneldelete.php?PersonnelID=<?= $row['PersonnelID']; ?>" class="btn delete-btn" onclick="return confirm('Are you sure?');">Delete</a>
+                        <a href="personneldelete.php?PersonnelID=<?= $row['PersonnelID']; ?>" class="btn delete-btn" onclick="return confirm('Are you sure?');">Archive</a>
                     <?php endif; ?>
                 </div>
             </div>

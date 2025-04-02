@@ -11,26 +11,20 @@ if (isset($_GET['PersonnelID'])) {
     $conn->begin_transaction();
 
     try {
-        // Step 1: Delete related records in the attendance table
-        $sql_delete_attendance = "DELETE FROM attendance WHERE personnel_id = '$personnel_id'";
-        if ($conn->query($sql_delete_attendance) !== TRUE) {
-            throw new Exception("Error deleting related attendance records: " . $conn->error);
+        // Step 1: Update the personnelstatus_id to 2 (Not Active) instead of deleting
+        $sql_update_personnel = "UPDATE Personnel SET personnelstatus_id = 2 WHERE PersonnelID = '$personnel_id'";
+        if ($conn->query($sql_update_personnel) !== TRUE) {
+            throw new Exception("Error updating personnel status: " . $conn->error);
         }
 
-        // Step 2: Delete the record from the Personnel table
-        $sql_delete_personnel = "DELETE FROM Personnel WHERE PersonnelID = '$personnel_id'";
-        if ($conn->query($sql_delete_personnel) !== TRUE) {
-            throw new Exception("Error deleting personnel record: " . $conn->error);
-        }
-
-        // Commit the transaction if both queries succeed
+        // Commit the transaction if the query succeeds
         $conn->commit();
 
-        // Redirect to PersonnelIndex.php after successful deletion
+        // Redirect to PersonnelIndex.php after successful update
         header("Location: PersonnelIndex.php");
         exit();
     } catch (Exception $e) {
-        // Rollback the transaction if any query fails
+        // Rollback the transaction if the query fails
         $conn->rollback();
         echo $e->getMessage(); // Display the error message
     }

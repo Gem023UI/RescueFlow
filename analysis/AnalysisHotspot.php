@@ -112,70 +112,127 @@ $conn->close();
         </li>
         </ul>
     </nav>
-  <main>
+    <main>
   <h2>INCIDENT ANALYSIS</h2>
-  <button onclick="window.open('AnalysisPDF.php', '_blank')" class="pdf-btn">Print Analysis Data</button>
-    <div class="chart-container">
-        <!-- Bar Chart -->
-        <div class="chart-box">
-            <h3>Incident Hotspot in Taguig City</h3>
-            <canvas id="incidentChart"></canvas>
+    <button onclick="window.open('AnalysisPDF.php', '_blank')" class="pdf-btn">Print Analysis Data</button>
+        <div class="chart-container">
+            <!-- Bar Chart -->
+            <div class="chart-box">
+                <h3>Incident Hotspot in Taguig City</h3>
+                <canvas id="incidentChart"></canvas>
+            </div>
         </div>
-    </div>
-    <div class="chart-data">
-      <script>
-          document.addEventListener("DOMContentLoaded", function() {
-              fetch('AnalysisFetchData.php')
-                  .then(response => response.json())
-                  .then(data => {
-                      // ===== BAR CHART =====
-                      let dates = [];
-                      let barangays = {};
-                      let barangayColors = {};
-                      // Assign random colors
-                      const getRandomColor = () => '#' + Math.floor(Math.random()*16777215).toString(16);
-                      data.incidents.forEach(row => {
-                          if (!dates.includes(row.incident_date)) {
-                              dates.push(row.incident_date);
-                          }
-                          if (!barangays[row.barangay]) {
-                              barangays[row.barangay] = {};
-                              barangayColors[row.barangay] = getRandomColor();
-                          }
-                          barangays[row.barangay][row.incident_date] = row.count;
-                      });
-                      let datasets = Object.keys(barangays).map(barangay => ({
-                          label: barangay,
-                          backgroundColor: barangayColors[barangay],
-                          data: dates.map(date => barangays[barangay][date] || 0)
-                      }));
-                      new Chart(document.getElementById('incidentChart'), {
-                          type: 'bar',
-                          data: {
-                              labels: dates,
-                              datasets: datasets
-                          },
-                          options: {
-                              responsive: true,
-                              plugins: {
-                                  legend: { display: true, position: 'top' },
-                                  tooltip: {
-                                      enabled: true,
-                                      callbacks: {
-                                          label: tooltipItem => ` ${tooltipItem.dataset.label}: ${tooltipItem.raw} incidents`
-                                      }
-                                  }
-                              },
-                              scales: {
-                                  x: { title: { display: true, text: 'Date of Incidents' } },
-                                  y: { beginAtZero: true, title: { display: true, text: 'Number of Incidents' } }
-                              }
-                          }
-                      });
-                  });
-          });
-      </script>
-    </div>
-  </main>
+        <div class="chart-data">
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                fetch('AnalysisFetchData.php')
+                    .then(response => response.json())
+                    .then(data => {
+                        // ===== BAR CHART =====
+                        let dates = [];
+                        let barangays = {};
+                        
+                        // Rainbow color palette (ROYGBIV)
+                        const rainbowColors = [
+                            '#FF0000', // Red
+                            '#FF7F00', // Orange
+                            '#FFFF00', // Yellow
+                            '#00FF00', // Green
+                            '#0000FF', // Blue
+                            '#4B0082', // Indigo
+                            '#9400D3'  // Violet
+                        ];
+                        
+                        data.incidents.forEach(row => {
+                            if (!dates.includes(row.incident_date)) {
+                                dates.push(row.incident_date);
+                            }
+                            if (!barangays[row.barangay]) {
+                                // Assign rainbow colors in sequence
+                                barangays[row.barangay] = {
+                                    counts: {},
+                                    color: rainbowColors[Object.keys(barangays).length % rainbowColors.length]
+                                };
+                            }
+                            barangays[row.barangay].counts[row.incident_date] = row.count;
+                        });
+                        
+                        let datasets = Object.keys(barangays).map((barangay, index) => ({
+                            label: barangay,
+                            backgroundColor: barangays[barangay].color,
+                            borderColor: '#fff',
+                            borderWidth: 1,
+                            data: dates.map(date => barangays[barangay].counts[date] || 0)
+                        }));
+                        
+                        new Chart(document.getElementById('incidentChart'), {
+                            type: 'bar',
+                            data: {
+                                labels: dates,
+                                datasets: datasets
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: { 
+                                        display: true, 
+                                        position: 'top',
+                                        labels: {
+                                            color: '#fff',
+                                            font: {
+                                                size: 12
+                                            }
+                                        }
+                                    },
+                                    tooltip: {
+                                        enabled: true,
+                                        callbacks: {
+                                            label: tooltipItem => ` ${tooltipItem.dataset.label}: ${tooltipItem.raw} incidents`
+                                        },
+                                        bodyColor: '#fff',
+                                        titleColor: '#fff',
+                                        backgroundColor: 'rgba(0,0,0,0.8)'
+                                    }
+                                },
+                                scales: {
+                                    x: { 
+                                        title: { 
+                                            display: true, 
+                                            text: 'Date of Incidents',
+                                            color: '#fff'
+                                        },
+                                        ticks: {
+                                            color: '#fff'
+                                        },
+                                        grid: {
+                                            color: 'rgba(255,255,255,0.1)'
+                                        }
+                                    },
+                                    y: { 
+                                        beginAtZero: true, 
+                                        title: { 
+                                            display: true, 
+                                            text: 'Number of Incidents',
+                                            color: '#fff'
+                                        },
+                                        ticks: {
+                                            color: '#fff',
+                                            stepSize: 1
+                                        },
+                                        grid: {
+                                            color: 'rgba(255,255,255,0.1)'
+                                        }
+                                    }
+                                },
+                                animation: {
+                                    duration: 1500
+                                }
+                            }
+                        });
+                    });
+            });
+        </script>
+        </div>
+    </main>
 </body>
 </html>
