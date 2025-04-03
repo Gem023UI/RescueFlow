@@ -46,11 +46,10 @@ if (!$conn) {
 if (!$result_dispatches) {
     die("Error in dispatch query: " . $conn->error);
 }
-//
             $result_dispatches = $conn->query($sql_dispatches);
             while ($row = $result_dispatches->fetch_assoc()) {
                 echo "<tr>
-                        <td>{$row['dispatch_id']}</td>
+                        <td>{$row['disp_id']}</td>
                         <td>{$row['status_id']}</td>
                         <td>{$row['dispatched_at']}</td>
                       </tr>";

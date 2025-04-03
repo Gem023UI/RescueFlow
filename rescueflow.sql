@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 23, 2025 at 02:02 PM
+-- Generation Time: Apr 03, 2025 at 08:08 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -44,12 +44,11 @@ INSERT INTO `assets` (`asset_id`, `assetcategory_id`, `asset_name`, `description
 (12, 2, 'Ambulance B', 'Emergency medical vehicle', 'In Use', '2024-12-20'),
 (13, 3, 'Rescue Boat C', 'Water rescue boat', 'Maintenance', '2025-02-10'),
 (14, 4, 'Helicopter D', 'Search and rescue helicopter', 'Damaged', '2024-11-05'),
-(16, 1, 'bidet', 'malakas', 'Available', '2025-03-11'),
-(18, 1, 'bidet', 'mahina na', 'Damaged', '2025-03-01'),
-(19, 2, 'water hose', 'malakas, magastos sa tubig', 'In Use', '2025-03-26'),
 (20, 7, 'crowbar', 'matibay, pamukpok sa pabigat na kagroup', 'In Use', '2025-03-11'),
 (21, 6, 'ladder', 'kaya abutin pati pangarap mo', 'Available', '2025-02-25'),
-(25, 6, 'granada', 'malakas putok', 'Available', '2025-03-10');
+(25, 6, 'granada', 'malakas putok', 'Available', '2025-03-10'),
+(26, 3, 'fire extinguisher', 'for demonstration', 'Maintenance', '2025-03-23'),
+(27, 1, 'ladder', 'for demo purposes only', 'In Use', '2025-02-24');
 
 -- --------------------------------------------------------
 
@@ -70,15 +69,14 @@ INSERT INTO `assets_image` (`asset_id`, `img_path`) VALUES
 (5, 'asset/images/celetaria_Completed Time.png'),
 (6, 'asset/images/celetaria_starttime_Activity 6.5.1.png'),
 (7, 'asset/images/1.jpg'),
-(19, 'assets/images/OPERATING SYSTEMS.png'),
 (13, 'assets/images/2025.png'),
 (14, 'assets/images/OPERATING SYSTEMS.png'),
 (12, 'assets/images/2025.png'),
 (21, 'assets/images/2025.png'),
-(16, 'assets/images/2025.png'),
-(18, 'assets/images/2025.png'),
 (20, 'assets/images/OPERATING SYSTEMS.png'),
-(25, 'assets/images/download.jfif');
+(25, 'assets/images/download.jfif'),
+(26, 'assets/images/2025.png'),
+(27, 'assets/images/download.jpg');
 
 -- --------------------------------------------------------
 
@@ -123,12 +121,14 @@ CREATE TABLE `attendance` (
 
 INSERT INTO `attendance` (`attendance_id`, `personnel_id`, `timestamp`, `shift_id`, `time_out`) VALUES
 (45, 9, '2025-03-22 06:12:59', 2, '2025-03-23 21:00:00'),
-(46, 4, '2025-03-22 07:11:55', 2, '2025-03-23 21:00:00'),
-(47, 10, '2025-03-22 13:01:57', 2, NULL),
-(48, 11, '2025-03-22 13:07:03', 2, NULL),
-(51, 8, '2025-03-22 13:46:34', 2, NULL),
-(52, 3, '2025-03-23 12:19:27', 2, '2025-03-23 21:00:00'),
-(53, 8, '2025-03-23 12:26:24', 2, NULL);
+(57, 15, '2025-03-23 14:47:07', 2, '2025-03-23 23:00:01'),
+(59, 15, '2025-03-24 04:46:27', 2, NULL),
+(60, 18, '2025-03-26 00:24:07', 2, NULL),
+(61, 19, '2025-03-26 00:31:49', 2, NULL),
+(62, 9, '2025-03-27 22:58:04', 2, NULL),
+(63, 3, '2025-03-27 23:56:58', 2, NULL),
+(64, 21, '2025-03-28 02:09:28', 2, NULL),
+(65, 3, '2025-04-03 01:21:46', 2, NULL);
 
 -- --------------------------------------------------------
 
@@ -228,7 +228,18 @@ INSERT INTO `dispatches` (`disp_id`, `incident_id`, `location`, `dispatched_unit
 (21, NULL, 'arca south taguig city', 'Firetruck', '2025-03-18 01:17:07', 3),
 (22, NULL, 'arca south taguig city', 'Firetruck', '2025-03-18 01:17:25', 3),
 (23, NULL, 'baranggay western bicutan taguig city', 'Firetruck', '2025-03-18 01:25:20', 3),
-(24, NULL, 'arca south taguig city', 'Firetruck', '2025-03-22 20:14:36', 3);
+(24, NULL, 'arca south taguig city', 'Firetruck', '2025-03-22 20:14:36', 3),
+(25, NULL, 'arca south taguig city', 'Firetruck', '2025-03-23 14:32:31', 3),
+(26, NULL, 'arca south taguig city', 'Firetruck', '2025-03-23 14:38:00', 3),
+(27, NULL, 'baranggay western bicutan taguig city', 'Firetruck', '2025-03-23 14:55:46', 3),
+(28, NULL, 'arca south taguig city', 'Firetruck', '2025-03-23 15:11:07', 3),
+(29, NULL, 'arca south taguig city', 'Firetruck', '2025-03-28 02:52:32', 3),
+(30, NULL, 'arca south taguig city', 'Firetruck', '2025-03-28 02:53:31', 3),
+(31, NULL, 'arca south taguig city', 'Firetruck', '2025-03-28 02:53:43', 3),
+(32, NULL, 'upper bicutan', 'Firetruck', '2025-03-28 02:53:43', 3),
+(33, NULL, 'arca south taguig city', 'Firetruck', '2025-03-28 03:10:04', 3),
+(34, NULL, 'arca south taguig city', 'Firetruck', '2025-03-28 03:10:44', 3),
+(35, NULL, 'arca south taguig city', 'Firetruck', '2025-04-03 01:22:48', 2);
 
 -- --------------------------------------------------------
 
@@ -256,19 +267,30 @@ INSERT INTO `emergency_details` (`id`, `dispatch_id`, `what`, `where`, `why`, `c
 (14, 1, 'apoy', 'kiki', 'lu', 'lo', '0909', '2025-03-15 02:06:07', 1),
 (20, NULL, 'jna', 'jna', 'jan', 'kjkj', '0900', '2025-03-16 02:39:25', 1),
 (21, NULL, 'ksi', 'ksi', 'ksi', 'ksii', '123', '2025-03-16 02:44:54', 1),
-(22, NULL, 'ne', 'ne', 'ne', 'ne', '0909009', '2025-03-16 02:47:19', 1),
+(22, NULL, 'ne', 'ne', 'ne', 'ne', '0909009', '2025-03-16 02:47:19', 3),
 (23, NULL, 'li', 'li', 'li', 'li', '09099', '2025-03-16 02:49:55', 1),
 (24, NULL, 'tty', 'ty', 'ty', 'rtrt', '0909', '2025-03-16 02:52:29', 1),
 (25, NULL, 'cv', 'cv', 'cv', 'we', '132', '2025-03-16 02:57:30', 1),
 (26, NULL, 'loh', 'lk', 'lk', 'lk', '123', '2025-03-16 10:02:27', 1),
 (27, NULL, 'ki', 'ki', 'ki', 'ki', '090908', '2025-03-16 10:09:00', 1),
 (28, NULL, 'unog', 'kajs', 'kjskj', 'wkjdk', '9898', '2025-03-16 10:12:20', 1),
-(29, NULL, 'nagkaroon ng malalang sunog', 'sa tup taguig branch', 'sunog malamang', 'flint celetaria', '2123231', '2025-03-20 14:54:10', 1),
+(29, NULL, 'nagkaroon ng malalang sunog', 'sa tup taguig branch', 'sunog malamang', 'flint celetaria', '2123231', '2025-03-20 14:54:10', 2),
 (30, 1, 'fire emergency', 'bandang western bicutan', 'sunog malaki', '1234567890', 'rovic abonita', '2025-03-22 09:55:51', 3),
 (31, 1, 'inuman', 'kila juliane', 'bagsak tatlo', 'sharwin', '12353465', '2025-03-22 20:12:07', 3),
 (32, 1, 'inuman', 'kila juliane', 'bagsak tatlo', 'sharwin', '21312413', '2025-03-22 20:16:06', 3),
 (33, 1, 'gumawa ng arduino', 'kila boss juliane', 'de joke tambay lang', 'evan piad', '1234124133', '2025-03-22 20:41:52', 2),
-(34, 1, 'transport strike sa metro manila', 'metro manila', 'kasi walang masakyan', 'evan piad', '12342341', '2025-03-23 12:16:53', 3);
+(34, 1, 'transport strike sa metro manila', 'metro manila', 'kasi walang masakyan', 'evan piad', '12342341', '2025-03-23 12:16:53', 3),
+(35, 1, 'fire emergency', 'baranggay western bicutan', 'widespread fire among residential area', 'evan piad', '123456789', '2025-03-23 14:17:58', 3),
+(36, 1, 'fire disaster', 'baranggay western bicutan', 'widespread fire incident in residential area', 'flint celetaria', '1233455646557', '2025-03-23 14:41:46', 1),
+(40, 1, 'apoy', 'bicutan', 'sunog', 'werf', '4234', '2025-03-23 15:04:09', 2),
+(41, 1, 'fire incident', 'arca south', 'wildfire potential', 'flint celetaria', '3431413', '2025-03-23 15:12:11', 2),
+(42, 1, 'earthquake', 'wester bicutan taguig city', 'basically it is an earthquake', 'rovic abonita', '12345678', '2025-03-26 00:29:58', 1),
+(43, 1, 'may sunog mga lods', 'dito lang samin', 'hahaha nasunog kaibigan ko ernz rabbi :(', 'Evan P. Garcia', '09382978477', '2025-03-26 00:40:35', 2),
+(44, 1, 'fire incident', 'baranggay western bicutan', 'rapid spread of fire in dense rural areas', 'Jemuel', '09382978477', '2025-03-28 00:41:14', 1),
+(45, 1, 'fire incident', 'baranggay western bicutan', 'rapid spread of fire in dense rural areas', 'Jemuel', '09382978477', '2025-03-28 00:42:40', 1),
+(46, 1, 'fire incident', 'baranggay western bicutan', 'rapid spread of fire in dense rural areas', 'Jemuel', '09382978477', '2025-03-28 00:44:00', 1),
+(47, 1, 'fire incident', 'baranggay western bicutan', 'rapid spread of fire in dense rural areas', 'Jemuel', '09382978477', '2025-03-28 00:44:49', 1),
+(48, 1, 'fire incident', 'baranggay western  bicutan', 'fire ', 'jett axel', '13124124134', '2025-03-28 01:59:33', 3);
 
 -- --------------------------------------------------------
 
@@ -296,8 +318,11 @@ CREATE TABLE `incidents` (
 --
 
 INSERT INTO `incidents` (`incident_id`, `incident_type`, `severity_id`, `location`, `address`, `reported_by`, `reported_time`, `status_id`, `cause`, `attachments`, `actions_taken`, `barangay_id`) VALUES
-(53, 'Fire', 1, '', 'bandang eskinita', 'flint', '2025-03-19 19:15:40', NULL, 'Smoking Indoors', '../uploads/1742382940_WIN_20240118_20_02_58_Pro.jpg', '', 3),
-(55, 'Fire', 1, '', 'Duhat Street, Brgy. Western Bicutan, Taguig City', 'josh bernabe', '2025-03-23 19:30:17', NULL, 'Unattended Cooking', '../uploads/1742729417_download.jpg', '', 38);
+(55, 'Fire', 1, '', 'Duhat Street, Brgy. Western Bicutan, Taguig City', 'josh bernabe', '2025-03-23 19:30:17', NULL, 'Unattended Cooking', '../uploads/1742729417_download.jpg', '', 38),
+(57, 'Fire', 2, '', 'Duhat Street, Brgy. Western Bicutan, Taguig City', 'jemuel', '2025-03-23 22:49:34', NULL, 'Gas Leaks', '../uploads/1742741374_download.jpg', '', 38),
+(59, 'Fire', 1, '', 'Duhat Street, Brgy. Western Bicutan, Taguig City', 'jemuel', '2025-03-28 10:13:23', NULL, 'Gas Leaks', '../uploads/1743128003_bfp1.jpg,../uploads/1743128003_bfp2.jpg', '', 17),
+(60, 'Fire', 1, '', 'bandang eskinita', 'flint', '2025-03-28 10:13:59', NULL, 'Unattended Cooking', '../uploads/1743128039_bfp3.jpg', '', 23),
+(61, 'Fire', 3, '', 'malayo dito', 'jemuel', '2025-03-28 10:14:36', NULL, 'Electrical Faults', '../uploads/1743128076_LoginRegister.png', '', 3);
 
 -- --------------------------------------------------------
 
@@ -315,21 +340,48 @@ CREATE TABLE `personnel` (
   `Email` varchar(100) NOT NULL,
   `PhoneNumber` varchar(20) NOT NULL,
   `Password` varchar(255) NOT NULL,
-  `Profile` varchar(255) DEFAULT NULL
+  `Profile` varchar(255) DEFAULT NULL,
+  `personnelstatus_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `personnel`
 --
 
-INSERT INTO `personnel` (`PersonnelID`, `RoleID`, `RankID`, `ShiftID`, `FirstName`, `LastName`, `Email`, `PhoneNumber`, `Password`, `Profile`) VALUES
-(3, 4, 5, 2, 'Jemuel ', 'Malaga', 'malagajemuel@gmail.com', '09994617537', '$2y$10$ekR8aP7d9uG/jn6DUHX9WepX9Dmv92j5EA0KZ7jRu5fUrgVO3Q9q2', '67dff75cee3cb.png'),
-(4, 1, 1, 2, 'Flint Axl', 'Celetaria', 'gemmalfaro023@gmail.com', '09994617539', '$2y$10$pL7d8o9M0Lcv8BALHvvGZuDJ.cF6WVv.D2u7/xuWp7YwyKX.rDcwi', NULL),
-(8, 1, 1, 2, 'Josh Christian', '', 'joshbernabe@gmail.com', '', '$2y$10$D1XeZTbh6eEb57ZVwBl/f.pYCxEspNv7FE6UPI4aDAPQ1buTIE1li', NULL),
-(9, 1, 1, 2, 'Venus', 'Page', 'venuspage18@gmail.com', '', '$2y$10$A9YYck8XWAKgcP5ePuXwD.X8PVAoUV/YLb05dUyasuZYzX72IkJO.', NULL),
-(10, 1, 1, 2, 'Sharwin', 'Marbella', 'marbellasharwinjohn@gmail.com', '', '$2y$10$T95AGeT95SLjwfQxvq6ak.Veq051n2bYF4DTABoglD.ssrnAWIUri', NULL),
-(11, 1, 1, 2, 'Krsmur Chelvin', 'Lacorte', 'kclacorte27@gmail.com', '', '$2y$10$WfwnaUPtiyXhIpcyO.kirudQUxOGe1xQabk67CuSDJdy4/QWumf3e', NULL),
-(12, 3, 3, 1, 'Mary Jazmine', 'Malaga', 'malagamaryjazmine@gmail.com', '092423543235', '$2y$10$chBU/BUbEYRdoqlk/2yXGOMxq482/75pYQicprmCz26BnHXSl0c1a', '67dff6af4dd72.png');
+INSERT INTO `personnel` (`PersonnelID`, `RoleID`, `RankID`, `ShiftID`, `FirstName`, `LastName`, `Email`, `PhoneNumber`, `Password`, `Profile`, `personnelstatus_id`) VALUES
+(3, 4, 5, 2, 'Jemuel ', 'Malaga', 'malagajemuel@gmail.com', '09994617537', '$2y$10$ekR8aP7d9uG/jn6DUHX9WepX9Dmv92j5EA0KZ7jRu5fUrgVO3Q9q2', '67dff75cee3cb.png', 1),
+(9, 1, 1, 2, 'Venus', 'Page', 'venuspage18@gmail.com', '', '$2y$10$A9YYck8XWAKgcP5ePuXwD.X8PVAoUV/YLb05dUyasuZYzX72IkJO.', NULL, 1),
+(10, 1, 1, 2, 'Sharwin', 'Marbella', 'marbellasharwinjohn@gmail.com', '', '$2y$10$T95AGeT95SLjwfQxvq6ak.Veq051n2bYF4DTABoglD.ssrnAWIUri', NULL, 1),
+(11, 1, 1, 2, 'Krsmur Chelvin', 'Lacorte', 'kclacorte27@gmail.com', '', '$2y$10$WfwnaUPtiyXhIpcyO.kirudQUxOGe1xQabk67CuSDJdy4/QWumf3e', NULL, 1),
+(12, 3, 3, 1, 'Mary Jazmine', 'Malaga', 'malagamaryjazmine@gmail.com', '092423543235', '$2y$10$chBU/BUbEYRdoqlk/2yXGOMxq482/75pYQicprmCz26BnHXSl0c1a', '67dff6af4dd72.png', 1),
+(13, 2, 3, 2, 'Jellian ', 'Malaga', 'jellianjesmalaga@gmail.com', '344141', '$2y$10$762wkyaacR9HtTJwnTPxm.GFn3S2XDLiUjPNstwqENsmk0mPv6xrK', '67e023f458ec6.png', 1),
+(14, 3, 4, 1, 'Flint Axl', 'Celetaria', 'flintaxl.celetaria@gmail.com', '12432413435', '$2y$10$k71a.hn76EQ0ud4vFDvuYODJUychrD2cNi5z1K0ZvKyzx.K4YPMmy', '67e01ac1072a4.png', 1),
+(15, 1, 1, 2, 'Jules Christian', 'Mayordo', 'juleschristianmayordo@gmail.com', '', '$2y$10$m7Wlxbh7sc5XGFPRfRGsn.afWQyh2xAeueLGw0DJW2ILlQXS5RVh2', NULL, 1),
+(17, 1, 4, 1, 'Josefina', 'Malaga', 'josefinamalaga@gmail.com', 'r12343141', '$2y$10$p7w9NA3VwkUMF2Jm2ivrEef4U7OeaWCp0MMu2DgTntDQsWtxIIgpe', 'default.jpg', 1),
+(18, 1, 1, 2, 'Alvin Symo', 'Yago', 'alvinsymo@gmaail.com', '', '$2y$10$QGXRPJ2hZSKklwuot5.uveunUeUaE6Gj15rQtI7gvgK9/KIy.Oox.', NULL, 1),
+(19, 1, 1, 2, 'rovic', 'abonita', 'curtleyabonits@gmail.com', '', '$2y$10$NbfmvBJTuzxEq75R0ICYm.zoGQxKQUM/BEIjl0bmMsXfY5nZpWOWC', NULL, 1),
+(20, 1, 1, 1, 'Gerald Loise', 'Garcia', 'loisegarcia07@gmail.com', '', '$2y$10$Cw66/dsUeEGIbTJ4Z64dEOHxLr5URYQ3DG48P26KOsXk.gJSx/Tc6', NULL, 1),
+(21, 1, 1, 2, 'Ernz', 'Llabore', 'ernzllabore@gmail.com', '', '$2y$10$7frVNcBMfMgHIaua8KV//ehZP6DJn7f8ADNeLV11/mNK6E8NRwLGq', NULL, 2),
+(22, 2, NULL, NULL, 'Gem', 'Alfaro', 'gemmalfaro023@gmail.com', '', '$2y$10$5Xr8XjGUUqSHk8GmAaP8COzgb6c/B0dIUitu9TOSRAvz8IEMmjLJq', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `personnelstatus`
+--
+
+CREATE TABLE `personnelstatus` (
+  `personnelstatus_id` int(11) NOT NULL,
+  `status` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `personnelstatus`
+--
+
+INSERT INTO `personnelstatus` (`personnelstatus_id`, `status`) VALUES
+(1, 'Active'),
+(2, 'Not Active');
 
 -- --------------------------------------------------------
 
@@ -445,6 +497,35 @@ INSERT INTO `shift_assign` (`shiftID`, `scheduled_timein`, `scheduled_timeout`, 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `shift_schedule`
+--
+
+CREATE TABLE `shift_schedule` (
+  `schedule_id` int(11) NOT NULL,
+  `PersonnelID` int(11) NOT NULL,
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL,
+  `assigned_by` int(11) DEFAULT NULL,
+  `assigned_time` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` varchar(20) DEFAULT 'Off Duty',
+  `shift_day` enum('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `shift_schedule`
+--
+
+INSERT INTO `shift_schedule` (`schedule_id`, `PersonnelID`, `start_time`, `end_time`, `assigned_by`, `assigned_time`, `status`, `shift_day`) VALUES
+(2, 3, '08:00:00', '16:00:00', NULL, '2025-03-26 05:34:00', 'On Duty', 'Thursday'),
+(5, 19, '13:19:00', '13:20:00', NULL, '2025-03-26 05:20:28', 'On Duty', 'Tuesday'),
+(6, 17, '13:31:00', '13:33:00', NULL, '2025-03-26 05:31:40', 'On Duty', 'Wednesday'),
+(7, 9, '09:32:00', '09:33:00', NULL, '2025-03-27 01:33:08', 'On Duty', 'Friday'),
+(8, 21, '10:15:00', '23:16:00', NULL, '2025-03-28 02:15:28', NULL, 'Monday'),
+(9, 21, '11:06:00', '23:06:00', NULL, '2025-03-28 03:06:13', NULL, 'Sunday');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `status`
 --
 
@@ -481,9 +562,11 @@ CREATE TABLE `trainings` (
 
 INSERT INTO `trainings` (`training_id`, `training_name`, `description`, `scheduled_date`) VALUES
 (2, 'physical training', 'military type test/training to be held at arca south taguig at 6am to 10am. bring your hygiene and fueling necessities.', '2025-03-08'),
-(3, 'bembangan', 'ok', '2025-02-27'),
+(3, 'mental training - testing', 'for demonstration purposes', '2025-02-28'),
 (4, 'testing training only', 'testing training only for demonstration purposes.', '2025-03-23'),
-(6, 'testing again ', 'testing again testing again testing again', '2025-03-23');
+(8, 'endurance training', 'for demonstration purposes', '2025-03-25'),
+(9, 'mema training', 'for demo purposes', '2025-03-28'),
+(10, 'ngayon', 'ngaypn', '2025-04-03');
 
 --
 -- Indexes for dumped tables
@@ -548,7 +631,14 @@ ALTER TABLE `personnel`
   ADD PRIMARY KEY (`PersonnelID`),
   ADD KEY `RoleID` (`RoleID`),
   ADD KEY `RankID` (`RankID`),
-  ADD KEY `ShiftID` (`ShiftID`);
+  ADD KEY `ShiftID` (`ShiftID`),
+  ADD KEY `fk_personnel_status` (`personnelstatus_id`);
+
+--
+-- Indexes for table `personnelstatus`
+--
+ALTER TABLE `personnelstatus`
+  ADD PRIMARY KEY (`personnelstatus_id`);
 
 --
 -- Indexes for table `ranks`
@@ -583,6 +673,14 @@ ALTER TABLE `shift_assign`
   ADD PRIMARY KEY (`shiftID`);
 
 --
+-- Indexes for table `shift_schedule`
+--
+ALTER TABLE `shift_schedule`
+  ADD PRIMARY KEY (`schedule_id`),
+  ADD KEY `fk_personnel` (`PersonnelID`),
+  ADD KEY `fk_assigned_by` (`assigned_by`);
+
+--
 -- Indexes for table `status`
 --
 ALTER TABLE `status`
@@ -602,7 +700,7 @@ ALTER TABLE `trainings`
 -- AUTO_INCREMENT for table `assets`
 --
 ALTER TABLE `assets`
-  MODIFY `asset_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `asset_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `asset_category`
@@ -614,7 +712,7 @@ ALTER TABLE `asset_category`
 -- AUTO_INCREMENT for table `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `attendance_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+  MODIFY `attendance_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT for table `barangays`
@@ -626,25 +724,31 @@ ALTER TABLE `barangays`
 -- AUTO_INCREMENT for table `dispatches`
 --
 ALTER TABLE `dispatches`
-  MODIFY `disp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `disp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `emergency_details`
 --
 ALTER TABLE `emergency_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `incidents`
 --
 ALTER TABLE `incidents`
-  MODIFY `incident_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `incident_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `personnel`
 --
 ALTER TABLE `personnel`
-  MODIFY `PersonnelID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `PersonnelID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+
+--
+-- AUTO_INCREMENT for table `personnelstatus`
+--
+ALTER TABLE `personnelstatus`
+  MODIFY `personnelstatus_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `ranks`
@@ -671,10 +775,16 @@ ALTER TABLE `shift_assign`
   MODIFY `shiftID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
+-- AUTO_INCREMENT for table `shift_schedule`
+--
+ALTER TABLE `shift_schedule`
+  MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
 -- AUTO_INCREMENT for table `trainings`
 --
 ALTER TABLE `trainings`
-  MODIFY `training_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `training_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables
@@ -712,9 +822,17 @@ ALTER TABLE `incidents`
 -- Constraints for table `personnel`
 --
 ALTER TABLE `personnel`
+  ADD CONSTRAINT `fk_personnel_status` FOREIGN KEY (`personnelstatus_id`) REFERENCES `personnelstatus` (`personnelstatus_id`) ON DELETE SET NULL,
   ADD CONSTRAINT `personnel_ibfk_1` FOREIGN KEY (`RoleID`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL,
   ADD CONSTRAINT `personnel_ibfk_2` FOREIGN KEY (`RankID`) REFERENCES `ranks` (`rank_id`) ON DELETE SET NULL,
   ADD CONSTRAINT `personnel_ibfk_3` FOREIGN KEY (`ShiftID`) REFERENCES `shifts` (`shift_id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `shift_schedule`
+--
+ALTER TABLE `shift_schedule`
+  ADD CONSTRAINT `fk_assigned_by` FOREIGN KEY (`assigned_by`) REFERENCES `personnel` (`PersonnelID`) ON DELETE SET NULL,
+  ADD CONSTRAINT `fk_personnel` FOREIGN KEY (`PersonnelID`) REFERENCES `personnel` (`PersonnelID`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

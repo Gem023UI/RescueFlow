@@ -123,6 +123,8 @@ $conn->close();
             </div>
         </div>
         <div class="chart-data">
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
             <script>
                 document.addEventListener("DOMContentLoaded", function() {
                     fetch('AnalysisFetchData.php')
@@ -160,6 +162,9 @@ $conn->close();
 
                             const segmentColors = causes.map((_, index) => getRainbowColor(index));
 
+                            // Register the plugin
+                            Chart.register(ChartDataLabels);
+
                             new Chart(document.getElementById('causeChart'), {
                                 type: 'doughnut',
                                 data: {
@@ -167,7 +172,7 @@ $conn->close();
                                     datasets: [{
                                         data: counts,
                                         backgroundColor: segmentColors,
-                                        borderColor: '#ffffff', // White borders between segments
+                                        borderColor: '#ffffff',
                                         borderWidth: 2,
                                         hoverOffset: 20
                                     }]
@@ -185,27 +190,41 @@ $conn->close();
                                                     family: "'Helvetica Neue', 'Arial', sans-serif"
                                                 },
                                                 padding: 15,
-                                                usePointStyle: true
+                                                usePointStyle: true,
+                                                generateLabels: function(chart) {
+                                                    const data = chart.data;
+                                                    if (data.labels.length && data.datasets.length) {
+                                                        return data.labels.map(function(label, i) {
+                                                            const value = data.datasets[0].data[i];
+                                                            const percentage = ((value / totalIncidents) * 100).toFixed(1);
+                                                            return {
+                                                                text: `${label}: ${value} (${percentage}%)`,
+                                                                fillStyle: data.datasets[0].backgroundColor[i],
+                                                                hidden: false,
+                                                                index: i
+                                                            };
+                                                        });
+                                                    }
+                                                    return [];
+                                                }
                                             }
                                         },
                                         tooltip: {
-                                            callbacks: {
-                                                label: function(tooltipItem) {
-                                                    let value = tooltipItem.raw;
-                                                    let percentage = ((value / totalIncidents) * 100).toFixed(1);
-                                                    return ` ${tooltipItem.label}: ${value} (${percentage}%)`;
-                                                }
+                                            enabled: false // Disable tooltips since we're showing labels directly
+                                        },
+                                        datalabels: {
+                                            color: '#fff',
+                                            font: {
+                                                weight: 'bold',
+                                                size: 12
                                             },
-                                            bodyColor: '#fff',
-                                            titleColor: '#fff',
-                                            backgroundColor: 'rgba(0,0,0,0.8)',
-                                            borderColor: '#fff',
-                                            borderWidth: 1,
-                                            padding: 12,
-                                            bodyFont: {
-                                                size: 12,
-                                                weight: 'normal'
-                                            }
+                                            formatter: (value, context) => {
+                                                const percentage = ((value / totalIncidents) * 100).toFixed(1);
+                                                return `${percentage}%`;
+                                            },
+                                            anchor: 'center',
+                                            align: 'center',
+                                            offset: 0
                                         }
                                     },
                                     animation: {
@@ -216,7 +235,8 @@ $conn->close();
                                     cutout: '55%',
                                     borderRadius: 8,
                                     spacing: 3
-                                }
+                                },
+                                plugins: [ChartDataLabels]
                             });
                         });
                 });
